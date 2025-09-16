@@ -1,6 +1,7 @@
 //326aa1fVyyBcs4Cx
 
 // server.jsconst express = require("express");
+const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -30,10 +31,7 @@ app.get("/", (req, res) => {
 // Database connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/climate_monitoring", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/climate_monitoring");
     console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("Database connection failed:", error);
@@ -49,11 +47,11 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Something went wrong!" });
 });
 
-app.use("*", (req, res) => {
+app.use("/", (req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

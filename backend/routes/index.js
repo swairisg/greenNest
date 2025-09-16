@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const climateRoutes = require('../climateRoutes');
-const operationRoutes = require('./operationRoutes');
-const automationRoutes = require('./automationRoutes');
+const climateRoutes = require('../routes/ClimateRoutes');
+const operationRoutes = require('../routes/operationRoutes');
+const automationRoutes = require('../routes/automationRoutes');
 
 router.use('/api/climate', climateRoutes);
 router.use('/api/operations', operationRoutes);

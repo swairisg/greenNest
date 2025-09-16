@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const operationController = require('./controllers/operationController');
+const operationController = require('../controllers/OperationController');
 
 // CREATE routes
 router.post('/events', operationController.logOperationEvent);

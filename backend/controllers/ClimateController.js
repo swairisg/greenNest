@@ -1,4 +1,180 @@
-const Sensor = require("../model/SensorModel");
+
+// backend/controllers/ClimateController.js - Clean version
+const ClimateRecord = require('../models/ClimateRecord');
+const axios = require('axios');
+
+// CREATE - Add new climate record from API
+exports.createClimateRecord = async (req, res) => {
+  try {
+    // For now, create manual record - later integrate Sensoterra API
+    const newRecord = new ClimateRecord(req.body);
+    const savedRecord = await newRecord.save();
+    res.status(201).json(savedRecord);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// CREATE - Manual climate record entry
+exports.createManualRecord = async (req, res) => {
+  try {
+    const { temperature, humidity, soilMoisture, location } = req.body;
+    
+    // Basic validation
+    if (!temperature || !humidity || !soilMoisture || !location) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    const newRecord = new ClimateRecord({
+      temperature,
+      humidity,
+      soilMoisture,
+      location,
+      sensorId: 'manual-entry',
+      timestamp: new Date()
+    });
+    
+    const savedRecord = await newRecord.save();
+    res.status(201).json(savedRecord);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// READ - Get all climate records with pagination and filters
+exports.getAllClimateRecords = async (req, res) => {
+  try {
+    const { page = 1, limit = 50, location, startDate, endDate } = req.query;
+    
+    let filter = {};
+    if (location) filter.location = location;
+    if (startDate || endDate) {
+      filter.timestamp = {};
+      if (startDate) filter.timestamp.$gte = new Date(startDate);
+      if (endDate) filter.timestamp.$lte = new Date(endDate);
+    }
+
+    const records = await ClimateRecord.find(filter)
+      .sort({ timestamp: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    const total = await ClimateRecord.countDocuments(filter);
+    
+    res.json({
+      records,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      total
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// READ - Get latest climate data
+exports.getLatestData = async (req, res) => {
+  try {
+    const { location } = req.query;
+    let filter = {};
+    if (location) filter.location = location;
+    
+    const latestRecord = await ClimateRecord.findOne(filter)
+      .sort({ timestamp: -1 });
+    
+    if (!latestRecord) {
+      return res.status(404).json({ message: "No climate data found" });
+    }
+    
+    res.status(200).json(latestRecord);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// READ - Get real-time dashboard data
+exports.getDashboardData = async (req, res) => {
+  try {
+    const { location } = req.query;
+    
+    // Get latest records for each location or specific location
+    const pipeline = [
+      ...(location ? [{ $match: { location } }] : []),
+      { $sort: { timestamp: -1 } },
+      {
+        $group: {
+          _id: '$location',
+          latestRecord: { $first: '$$ROOT' },
+          avgTemperature: { $avg: '$temperature' },
+          avgHumidity: { $avg: '$humidity' },
+          avgSoilMoisture: { $avg: '$soilMoisture' }
+        }
+      }
+    ];
+
+    const dashboardData = await ClimateRecord.aggregate(pipeline);
+    res.json(dashboardData);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// DELETE - Remove outdated climate logs
+exports.deleteOldRecords = async (req, res) => {
+  try {
+    const { daysOld = 90 } = req.body;
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+
+    const result = await ClimateRecord.deleteMany({
+      timestamp: { $lt: cutoffDate }
+    });
+
+    res.json({ 
+      message: `Deleted ${result.deletedCount} old climate records`,
+      deletedCount: result.deletedCount 
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// DELETE - Remove specific incorrect records
+exports.deleteIncorrectRecord = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedRecord = await ClimateRecord.findByIdAndDelete(id);
+    
+    if (!deletedRecord) {
+      return res.status(404).json({ error: 'Record not found' });
+    }
+
+    res.json({ message: 'Record deleted successfully', deletedRecord });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// External weather API integration (optional)
+exports.getExternalWeatherData = async (req, res) => {
+  const lat = 6.9607; // Colombo, Sri Lanka coordinates
+  const lng = 80.7693;
+  
+  try {
+    // You can replace this with your preferred weather API
+    res.status(200).json({ 
+      message: "External weather API integration - to be implemented",
+      coordinates: { lat, lng }
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching external weather data", error: error.message });
+  }
+};
+
+/*
+// backend/controllers/ClimateController.js
+const ClimateRecord = require('../model/ClimateRecord');
+const axios = require('axios');
 
 // Display all sensor data
 const getAllSensorData = async (req, res, next) => {
@@ -251,3 +427,4 @@ module.exports = {
   toggleManualOverride,
   getExternalWeatherData
 };
+*/
