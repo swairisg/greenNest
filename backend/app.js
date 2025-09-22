@@ -1,60 +1,91 @@
-//326aa1fVyyBcs4Cx
-
-// server.jsconst express = require("express");
+//Fz8NZ82Eqjp1V6hd
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const cors = require("cors");//enable CORS
+const bodyParser = require("body-parser");//parse JSON request bodies
+require("dotenv").config();//load env variables
+
 require("dotenv").config();
 
-const app = express();
+// Debug environment variables
+console.log('🔍 Environment Debug:');
+console.log('PORT:', process.env.PORT);
+console.log('MONGODB_URI:', process.env.MONGODB_URI);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('All env vars:', Object.keys(process.env).filter(key => key.includes('MONGO')));
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
 
-// Routes
+//import routes
 const climateRoutes = require("./routes/ClimateRoutes");
 const operationRoutes = require("./routes/operationRoutes");
 const automationRoutes = require("./routes/automationRoutes");
 
-// Apply routes
+const app = express();
+
+//abcf79bc-863f-11f0-a59f-0242ac130006-abcf7a2a-863f-11f0-a59f-0242ac130006
+
+// Environment variables
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://admin:Fz8NZ82Eqjp1V6hd@cluster0.u7lnqrz.mongodb.net/climateDB";
+
+// Middleware
+app.use(cors()); // Enable CORS first
+app.use(express.json()); // Parse JSON bodies
+app.use(bodyParser.json());
+
+// Routes
 app.use("/api/climate", climateRoutes);
 app.use("/api/operations", operationRoutes);
 app.use("/api/automation", automationRoutes);
+app.use("/records", climateRoutes);
 
-// Basic test route
+// Basic check route
 app.get("/", (req, res) => {
-  res.json({ message: "Climate Monitoring API is running!" });
+  res.json({ message: "Climate Monitoring API Server is running!",
+    endpoints:{
+      climate:"/api/climate",
+      operations:"/api/operations",
+      automation:"/api/automation",
+      records: "/records",
+      health: "/"
+    },
+    status: "OK",
+    timestamp: new Date().toISOString()
+   });
 });
 
-// Database connection
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/climate_monitoring");
-    console.log("MongoDB connected successfully");
-  } catch (error) {
-    console.error("Database connection failed:", error);
-    process.exit(1);
-  }
-};
-
-connectDB();
-
-// Error handling
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
+  res.status(500).json({ 
+    message: "Something went wrong!", 
+    error: err.message 
+  });
 });
 
-app.use("/", (req, res) => {
-  res.status(404).json({ error: "Route not found" });
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ 
+    message: "Route not found",
+    availableEndpoints: ["/api/climate", "/records", "/"]
+  });
 });
 
-const PORT = process.env.PORT || 5000;
+//db conn and server start
+const startServer = async () => {
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log("MongoDB connected");
 
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  }
+  catch (err) {
+    console.error("Database connection error:", err);
+    process.exit(1);
+  }
+}
+startServer();
 module.exports = app;
