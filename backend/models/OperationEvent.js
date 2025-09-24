@@ -1,26 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const operationEventSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ['watering', 'fertilization', 'manual_override'],
-    required: true,
+const operationSchema = new mongoose.Schema(
+  {
+    type: { 
+      type: String, 
+      enum: ["watering", "fertilization", "manualOverride"], 
+      required: true 
+    },
+    status: { type: String, enum: ["ON", "OFF"], required: true },
+    performedBy: { type: String, default: "system" }, // staff or system
+    notes: { type: String }, // optional notes about the event
+    location: { type: String }, // e.g., N_St01, S_St02
   },
-  description: String,
-  amount: Number, // for watering/fertilization amounts
-  duration: Number, // in minutes
-  staffId: String,
-  automated: {
-    type: Boolean,
-    default: false,
-  },
-  location: String,
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  }
-}, {
-  timestamps: true
-});
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('OperationEvent', operationEventSchema);
+module.exports = mongoose.model("OperationEvent", operationSchema);

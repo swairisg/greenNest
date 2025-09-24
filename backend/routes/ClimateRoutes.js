@@ -13,6 +13,8 @@ router.get("/test", (req, res) => {
   });
 })
 
+router.post("/fetch-external", climateController.fetchAndStoreExternalData);//fetch external data
+
 // CRUD routes for records
 router.get("/", climateController.getAllClimateRecords);//read all
 router.get("/latest", climateController.getLatestData);//read all
@@ -21,7 +23,6 @@ router.post("/", climateController.addClimateData);//create
 router.put("/:id", climateController.updateClimateData);//update
 router.delete("/:id", climateController.deleteClimateData);//delete
 
-//router.post("/fetch-external", climateController.fetchExternalWeatherData);//fetch external data
 
 module.exports = router;
 //

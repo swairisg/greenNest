@@ -1,59 +1,53 @@
-const OperationEvent = require('../models/OperationEvent');
+// controllers/OperationController.js
+const Operation = require("../models/OperationEvent"); // Mongoose model for events/logs
 
-// CREATE - Log watering/fertilization events
-exports.logOperationEvent = async (req, res) => {
+// Create a new operation/event
+const addEvent = async (req, res) => {
   try {
-    const newEvent = new OperationEvent(req.body);
-    const savedEvent = await newEvent.save();
-    res.status(201).json(savedEvent);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    const { type, status, performedBy } = req.body; // type: watering/fertilization/manualOverride
+    const newEvent = new Operation({ type, status, performedBy });
+    const saved = await newEvent.save();
+    res.status(201).json({ success: true, data: saved });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
-// CREATE - Log manual override actions
-exports.logManualOverride = async (req, res) => {
+// Read all events
+const getEvents = async (req, res) => {
   try {
-    const overrideEvent = new OperationEvent({
-      ...req.body,
-      type: 'manual_override'
-    });
-    
-    const savedEvent = await overrideEvent.save();
-    res.status(201).json(savedEvent);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    const events = await Operation.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: events });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
-// READ - Get all operation events
-exports.getAllOperationEvents = async (req, res) => {
+// Update event/operation status
+const updateEvent = async (req, res) => {
   try {
-    const { page = 1, limit = 50, type, location, startDate, endDate } = req.query;
-    
-    let filter = {};
-    if (type) filter.type = type;
-    if (location) filter.location = location;
-    if (startDate || endDate) {
-      filter.timestamp = {};
-      if (startDate) filter.timestamp.$gte = new Date(startDate);
-      if (endDate) filter.timestamp.$lte = new Date(endDate);
-    }
-
-    const events = await OperationEvent.find(filter)
-      .sort({ timestamp: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-
-    const total = await OperationEvent.countDocuments(filter);
-    
-    res.json({
-      events,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      total
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const updated = await Operation.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json({ success: true, data: updated });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
+
+// Delete old events/logs
+const deleteOldEvents = async (req, res) => {
+  try {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - (req.query.days || 30));
+    const result = await Operation.deleteMany({ createdAt: { $lt: cutoff } });
+    res.status(200).json({ success: true, deleted: result.deletedCount });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = {
+  addEvent,
+  getEvents,
+  updateEvent,
+  deleteOldEvents,
 };

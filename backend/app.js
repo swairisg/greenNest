@@ -1,32 +1,33 @@
 //Fz8NZ82Eqjp1V6hd
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");//enable CORS
+const router = express.Router();
 const bodyParser = require("body-parser");//parse JSON request bodies
+const {fetchAndStoreExternalData} = require('./controllers/ClimateController');
 require("dotenv").config();//load env variables
 
-require("dotenv").config();
+router.post("/fetch-external", fetchAndStoreExternalData);
+const app = express();
 
 // Debug environment variables
-console.log('🔍 Environment Debug:');
+console.log('Environment Debug:');
 console.log('PORT:', process.env.PORT);
 console.log('MONGODB_URI:', process.env.MONGODB_URI);
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('All env vars:', Object.keys(process.env).filter(key => key.includes('MONGO')));
-
-
-//import routes
-const climateRoutes = require("./routes/ClimateRoutes");
-const operationRoutes = require("./routes/operationRoutes");
-const automationRoutes = require("./routes/automationRoutes");
-
-const app = express();
 
 //abcf79bc-863f-11f0-a59f-0242ac130006-abcf7a2a-863f-11f0-a59f-0242ac130006
 
 // Environment variables
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://admin:Fz8NZ82Eqjp1V6hd@cluster0.u7lnqrz.mongodb.net/climateDB";
+
+//import routes
+const climateRoutes = require("./routes/ClimateRoutes");
+const operationRoutes = require("./routes/operationRoutes");
+const automationRoutes = require("./routes/automationRoutes");
 
 // Middleware
 app.use(cors()); // Enable CORS first
@@ -36,12 +37,13 @@ app.use(bodyParser.json());
 // Routes
 app.use("/api/climate", climateRoutes);
 app.use("/api/operations", operationRoutes);
-app.use("/api/automation", automationRoutes);
 app.use("/records", climateRoutes);
+app.use("/api/automation", automationRoutes);
 
 // Basic check route
 app.get("/", (req, res) => {
-  res.json({ message: "Climate Monitoring API Server is running!",
+  res.json({ 
+    message: "Climate Monitoring API Server is running!",
     endpoints:{
       climate:"/api/climate",
       operations:"/api/operations",
@@ -67,7 +69,13 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
   res.status(404).json({ 
     message: "Route not found",
-    availableEndpoints: ["/api/climate", "/records", "/"]
+    availableEndpoints: [
+      "/api/climate",
+      "/api/operations",
+      "/api/automation",
+      "/records",
+      "/"
+    ]
   });
 });
 
@@ -87,5 +95,7 @@ const startServer = async () => {
     process.exit(1);
   }
 }
+
 startServer();
 module.exports = app;
+//module.exports = router;
