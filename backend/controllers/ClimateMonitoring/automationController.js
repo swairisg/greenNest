@@ -1,4 +1,4 @@
-const Automation = require("../models/AutomationSettings");
+const Automation = require("../../models/ClimateMonitoring/AutomationSettings");
 
 // Create a new automation threshold
 const addThreshold = async (req, res) => {

@@ -22,12 +22,16 @@ console.log('All env vars:', Object.keys(process.env).filter(key => key.includes
 
 // Environment variables
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://admin:Fz8NZ82Eqjp1V6hd@cluster0.u7lnqrz.mongodb.net/climateDB";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://admin:Fz8NZ82Eqjp1V6hd@cluster0.u7lnqrz.mongodb.net/";
 
 //import routes
 const climateRoutes = require("./routes/ClimateRoutes");
 const operationRoutes = require("./routes/operationRoutes");
 const automationRoutes = require("./routes/automationRoutes");
+const inventoryRoutes = require("./routes/InventoryRoute");
+const supplierRoutes = require("./routes/SupplierRoute");
+const transactionRoutes = require("./routes/TransactionRoute");
+const orderRoutes = require("./routes/OrderRoute");
 
 // Middleware
 app.use(cors()); // Enable CORS first
@@ -39,6 +43,10 @@ app.use("/api/climate", climateRoutes);
 app.use("/api/operations", operationRoutes);
 app.use("/records", climateRoutes);
 app.use("/api/automation", automationRoutes);
+app.use("/items", inventoryRoutes);
+app.use("/suppliers", supplierRoutes);
+app.use("/transactions", transactionRoutes);
+app.use("/orders", orderRoutes);
 
 // Basic check route
 app.get("/", (req, res) => {

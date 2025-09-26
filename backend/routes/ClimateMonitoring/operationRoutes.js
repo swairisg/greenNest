@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const operationController = require("../controllers/OperationController");
+const operationController = require("../../controllers/ClimateMonitoring/OperationController");
 
 router.post("/", operationController.addEvent);
 router.get("/", operationController.getEvents);

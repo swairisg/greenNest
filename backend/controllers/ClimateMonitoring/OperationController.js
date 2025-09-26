@@ -1,5 +1,4 @@
-// controllers/OperationController.js
-const Operation = require("../models/OperationEvent"); // Mongoose model for events/logs
+const Operation = require("../../models/ClimateMonitoring/OperationEvent"); // Mongoose model for events/logs
 
 // Create a new operation/event
 const addEvent = async (req, res) => {

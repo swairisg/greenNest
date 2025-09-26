@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const automationController = require("../controllers/automationController");
+const automationController = require("../../controllers/ClimateMonitoring/automationController");
 
 // Test route
 router.get("/test", (req, res) =>
