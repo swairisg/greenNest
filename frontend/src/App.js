@@ -1,42 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+// frontend/src/App.js
+import "./App.css";
+import { useEffect, useState } from "react";
+import { api, API_BASE } from "./api";
 
 function App() {
+  const [msg, setMsg] = useState("loading...");
+
+  useEffect(() => {
+    api
+      .get("/") // backend root returns "Hello from backend"
+      .then((r) => setMsg(r.data))
+      .catch(() => setMsg(`Cannot reach API at ${API_BASE}`));
+  }, []);
+
   return (
     <div className="App">
       <h1>GreenNest Frontend</h1>
+      <p>API status: {msg}</p>
     </div>
   );
 }
 
 export default App;
-
-
-
-
-
-
-
-
-/*funtion App() part shoud be like this
-function App() {
-
-  return (
-    <div>
-      
-      <React.Fragment>
-        <Routes>
-          <Route path="/" element={<Home/>} />
-           <Route path="/mainhome" element={<Home/>}/>
-           <Route path="/adduser" element={<AddUser/>} />
-           <Route path="/userdetails" element={<Users/>} />
-            <Route path="/userdetails/:id" element={<UpdateUsers/>} />
-           
-        </Routes>
-      </React.Fragment> 
-    </div>
-  );
-}
-
-
-*/
