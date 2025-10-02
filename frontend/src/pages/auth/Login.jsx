@@ -30,18 +30,22 @@ export default function Login() {
     }
   };
 
+
   return (
-    <div style={{ maxWidth: 420, margin: "60px auto" }}>
-      <h2>Login</h2>
+  <div className="gn-container">
+    <div className="gn-card" style={{ maxWidth: 480, margin: "0 auto" }}>
+      <h2 style={{ marginTop: 0 }}>Login</h2>
       <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
-        <input placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
-        <input placeholder="Password" type="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
-        {err && <div style={{ color:"crimson" }}>{err}</div>}
-        <button type="submit">Login</button>
+        <input className="gn-input" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
+        <input className="gn-input" placeholder="Password" type="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
+        {err && <div className="gn-alert">{err}</div>}
+        <button type="submit" className="gn-btn primary">Login</button>
       </form>
-      <p style={{ marginTop: 10 }}>
+      <p className="text-muted" style={{ marginTop: 10 }}>
         New customer? <Link to="/auth/signup">Create account</Link>
       </p>
     </div>
-  );
+  </div>
+);
+
 }
