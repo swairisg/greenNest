@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
-import "./styles/app.css";   // make sure this file exists, or remove this line
+import "./styles/app.css";   // if this file doesn't exist, remove this line
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
