@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 export default function Farmer() {
   return(
   <div className="gn-container">
