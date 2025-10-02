@@ -51,6 +51,22 @@ const SEEDS = [
     department: "Finance",
     designation: "Finance Manager",
   },
+  {
+    email: process.env.SEED_FARMER_EMAIL || "farmer@greennest.local",
+    password: process.env.SEED_FARMER_PASSWORD || "Farmer@1234",
+    roles: ["farmer"],
+    fullName: "Seed Farmer",
+    department: "Greenhouse",
+    designation: "Farmer",
+  },
+  {
+    email: process.env.SEED_AGRO_EMAIL || "agro@greennest.local",
+    password: process.env.SEED_AGRO_PASSWORD || "Agro@1234",
+    roles: ["specialist"],
+    fullName: "Seed Agro Specialist",
+    department: "Greenhouse",
+    designation: "Agro Specialist",
+  },
 ];
 
 // ---- Seed runner ----
