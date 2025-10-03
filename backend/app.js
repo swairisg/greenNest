@@ -5,11 +5,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+// temporary minimal users router to prevent crash
+const { Router } = require('express');
+const router = Router();
+router.get('/', (_req, res) => {
+  res.json({ message: 'Users route healthy' });
+});
+
 const app = express();
 
 // middleware
 app.use(cors());
 app.use(express.json());
+
+const qualityRoutes = require('./Routes/qualityControl/qualityControlRoute');
+app.use('/quality', qualityRoutes);
 
 // routes
 app.get('/', (_req, res) => res.send('Hello from backend'));
