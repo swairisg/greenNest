@@ -1,0 +1,32 @@
+:root{
+  /* Greenhouse */
+  --green:#22c55e;
+  --green-dark:#166534;
+  --green-light:#bbf7d0;
+
+  /* Strawberry */
+  --strawberry:#ef4444;
+  --strawberry-dark:#991b1b;
+  --strawberry-light:#fecaca;
+
+  /* Flowers */
+  --lavender:#a78bfa;
+  --orchid:#ec4899;
+  --sunflower:#facc15;
+
+  /* Neutrals */
+  --bg-light:#f9fafb;
+  --bg-dark:#111827;
+  --border:#d1d5db;
+  --text:#1f2937;
+  --muted:#6b7280;
+}
+
+
+
+/*
+can use these like this:
+
+.btn-primary { background:var(--green); color:#fff; }
+.card { background:var(--bg-light); border:1px solid var(--border); color:var(--text); }
+*/

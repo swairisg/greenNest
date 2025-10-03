@@ -5,15 +5,18 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "dev": "nodemon app.js",
+    "seed:core": "node seed/seedAdminAndCoreRoles.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "mongoose": "^8.18.2",
+    "mongoose": "^8.18.3",
     "nodemon": "^3.1.10"
   }
 }
