@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../../Model/auth/User");
+const isCompanyEmail = require("../../utils/isCompanyEmail");
 
 // simple strength check: 8+ chars, 1 lower, 1 upper, 1 digit
 const isStrong = (pwd) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(pwd);
@@ -18,6 +19,16 @@ exports.customerSignup = async (req, res) => {
     if (!isStrong(password)) {
       return res.status(400).json({
         message: "Use 8+ chars with upper, lower, and a number.",
+      });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Block company emails on public signup
+    if (isCompanyEmail(normalizedEmail)) {
+      return res.status(403).json({
+        message:
+          "This looks like a company email. Staff accounts must use the invite link from HR.",
       });
     }
 
