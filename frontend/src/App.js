@@ -26,6 +26,9 @@ import UpdateSchedule from "./Components/harvestManagement/UpdateHarvestSchedule
 import AddYieldRecord from "./Components/harvestManagement/AddYieldRecord/AddYieldRecord";
 import ViewYield from "./Components/harvestManagement/ViewYieldRecord/ViewYield";
 import EditYieldRecord from "./Components/harvestManagement/EditYieldRecord/EditYieldRecord";
+import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
+
+import HarvestDashboard from "./Components/harvestManagement/harvestdashboard/HarvestDashboard";
 
 
 
@@ -72,18 +75,20 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route path="/addharvestschedules" element={<AddSchedule />} />
-          <Route path="/viewharvestschedules" element={<ViewSchedule/>}/>
+        <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
-
           <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
-          <Route path="/ViewYieldRecords" element={<ViewYield />} />
-          <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
+        <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
 
 
+      <Route element={<HarvestLayout />}>
+        <Route path="/harvestdashboard" element={<HarvestDashboard />} />
+        <Route path="/viewharvestschedules" element={<ViewSchedule />} />
+        <Route path="/ViewYieldRecords" element={<ViewYield />} />
+      </Route>
 
 
-
+      <Route path="*" element={<Navigate to="/" replace />} />
 
 
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
