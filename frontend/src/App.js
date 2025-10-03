@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -36,7 +35,6 @@ export default function App() {
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<Login />} />
 
-          <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<Signup />} />
 
           <Route element={<RequireRole roles={["customer"]} />}>
