@@ -10,7 +10,12 @@ const cors = require("cors");
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your React dev server
+    credentials: true, // allow cookies if you add them later
+  })
+);
 app.use(express.json());
 
 
@@ -18,6 +23,9 @@ app.use("/HarvestSchedules",harvestRouter);
 
 // routes
 app.get("/", (_req, res) => res.send("Hello from backend"));
+
+/* ---------- routes ---------- */
+app.use("/auth", require("./Routes/auth"));
 
 // connect DB then start server
 const PORT = Number(process.env.PORT) || 5001;
