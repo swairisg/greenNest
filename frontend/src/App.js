@@ -9,7 +9,10 @@ import RequireAuth from "./routes/guards/RequireAuth";
 import RequireRole from "./routes/guards/RequireRole";
 
 import Home from "./pages/public/Home";
+
 import CustomerProfile from "./pages/profile/CustomerProfile";
+import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
+
 
 import Admin from "./pages/dashboards/Admin";
 import HR from "./pages/dashboards/HR";
@@ -17,7 +20,10 @@ import Finance from "./pages/dashboards/Finance";
 import Inventory from "./pages/dashboards/Inventory";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
+
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+import BookVisit from "./Components/customers/BookVisit/BookVisit";
+import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess";
 
 export default function App() {
   return (
@@ -32,6 +38,8 @@ export default function App() {
           <Route element={<RequireRole roles={["customer"]} />}>
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<CustomerProfile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+
           </Route>
 
           <Route element={<RequireAuth />}>
@@ -62,6 +70,9 @@ export default function App() {
 
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
+
+          <Route path="/visit/book" element={<BookVisit />} />
+          <Route path="/visit/success" element={<BookVisitSuccess />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
