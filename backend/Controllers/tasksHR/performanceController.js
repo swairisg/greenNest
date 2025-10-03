@@ -1,4 +1,4 @@
-const svc = require("../../services/performance.service");
+const svc = require("../../services/tasksHR/performance.service");
 const { writeAudit } = require("../../utils/audit");
 
 exports.list = async (req, res) =>

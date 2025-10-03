@@ -18,8 +18,10 @@ app.use(
 );
 app.use(express.json());
 
+app.use("/HarvestSchedules", harvestRouter);
 
-app.use("/HarvestSchedules",harvestRouter);
+const hrRoutes = require("./Routes/tasksHR");
+app.use("/api/hr", hrRoutes);
 
 // routes
 app.get("/", (_req, res) => res.send("Hello from backend"));

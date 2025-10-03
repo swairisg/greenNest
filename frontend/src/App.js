@@ -19,6 +19,18 @@ import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
+import HRLayout from "./Components/tasksHR/HRLayout";
+import HROverview from "./Components/tasksHR/Overview";
+import HREmployees from "./Components/tasksHR/Employees";
+import HREmployeesNew from "./Components/tasksHR/EmployeesNew";
+import HRTasks from "./Components/tasksHR/Tasks";
+import HRTasksNew from "./Components/tasksHR/TasksNew";
+import HRAttendance from "./Components/tasksHR/Attendance";
+import HRPayroll from "./Components/tasksHR/Payroll";
+import HRPerformance from "./Components/tasksHR/Performance";
+import HRReports from "./Components/tasksHR/Reports";
+import HRSettings from "./Components/tasksHR/Settings";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -26,7 +38,6 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<Login />} />
-
           <Route path="/auth/signup" element={<Signup />} />
 
           <Route element={<RequireRole roles={["customer"]} />}>
@@ -39,8 +50,19 @@ export default function App() {
               <Route path="/admin" element={<Admin />} />
             </Route>
 
-            <Route element={<RequireRole roles={["hr_manager"]} />}>
-              <Route path="/hr" element={<HR />} />
+            <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
+              <Route path="/hr" element={<HRLayout />}>
+                <Route index element={<HROverview />} />
+                <Route path="employees" element={<HREmployees />} />
+                <Route path="employees/new" element={<HREmployeesNew />} />
+                <Route path="tasks" element={<HRTasks />} />
+                <Route path="tasks/new" element={<HRTasksNew />} />
+                <Route path="attendance" element={<HRAttendance />} />
+                <Route path="payroll" element={<HRPayroll />} />
+                <Route path="performance" element={<HRPerformance />} />
+                <Route path="reports" element={<HRReports />} />
+                <Route path="settings" element={<HRSettings />} />
+              </Route>
             </Route>
 
             <Route element={<RequireRole roles={["finance_manager"]} />}>

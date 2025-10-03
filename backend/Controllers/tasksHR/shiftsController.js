@@ -1,4 +1,4 @@
-const svc = require("../../services/shifts.service");
+const svc = require("../../services/tasksHR/performance.service");
 
 exports.templates = async (req, res) =>
   res.json({ rows: await svc.listTemplates() });
