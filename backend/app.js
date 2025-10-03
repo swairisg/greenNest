@@ -1,9 +1,11 @@
 // app.js
-require('dotenv').config(); // load .env exactly once
+require("dotenv").config(); // load .env exactly once
 
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const harvestRouter = require("./Routes/harvestManagement/harvest");
+
+const cors = require("cors");
 
 // temporary minimal users router to prevent crash
 const { Router } = require('express');
@@ -15,33 +17,52 @@ router.get('/', (_req, res) => {
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your React dev server
+    credentials: true, // allow cookies if you add them later
+  })
+);
 app.use(express.json());
+
 
 const qualityRoutes = require('./Routes/qualityControl/qualityControlRoute');
 app.use('/quality', qualityRoutes);
 
+
+app.use("/HarvestSchedules",harvestRouter);
+
+
 // routes
-app.get('/', (_req, res) => res.send('Hello from backend'));
+app.get("/", (_req, res) => res.send("Hello from backend"));
+
+/* ---------- routes ---------- */
+app.use("/auth", require("./Routes/auth"));
 
 // connect DB then start server
-const PORT = Number(process.env.PORT) || 5001; 
+const PORT = Number(process.env.PORT) || 5001;
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
-  console.error('❌ MONGO_URI is missing in .env');
+  console.error("❌ MONGO_URI is missing in .env");
   process.exit(1);
 }
 
+const User = require("./Model/auth/User");
 mongoose
   .connect(MONGO_URI)
-  .then(() => {
-    console.log('Connected to MongoDB');
+  .then(async () => {
+    console.log("Connected to MongoDB");
+    console.log("DB:", mongoose.connection.name);
+
+    // Ensure indexes are in place (safe to call on every boot)
+    await User.syncIndexes();
+
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error('Mongo connection error:', err);
+    console.error("Mongo connection error:", err);
     process.exit(1);
   });

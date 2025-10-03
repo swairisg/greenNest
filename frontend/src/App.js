@@ -1,6 +1,25 @@
-// src/App.js
+
+
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, NavLink } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import AuthProvider from "./auth/AuthProvider";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+
+import RequireAuth from "./routes/guards/RequireAuth";
+import RequireRole from "./routes/guards/RequireRole";
+
+import Home from "./pages/public/Home";
+import CustomerProfile from "./pages/profile/CustomerProfile";
+
+import Admin from "./pages/dashboards/Admin";
+import HR from "./pages/dashboards/HR";
+import Finance from "./pages/dashboards/Finance";
+import Inventory from "./pages/dashboards/Inventory";
+import Product from "./pages/dashboards/Product";
+import Farmer from "./pages/dashboards/Farmer";
+import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
 // Quality Control (CRUD) pages
 import QualityList from "./Components/qualityControl/QualityList";
@@ -10,8 +29,50 @@ import QualityDetail from "./Components/qualityControl/QualityDetail";
 
 export default function App() {
   return (
-    <Router>
-      {/* Simple header/nav */}
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/auth/login" replace />} />
+          <Route path="/auth/login" element={<Login />} />
+
+          <Route path="/auth/signup" element={<Signup />} />
+
+          <Route element={<RequireRole roles={["customer"]} />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<CustomerProfile />} />
+          </Route>
+
+          <Route element={<RequireAuth />}>
+            <Route element={<RequireRole roles={["admin"]} />}>
+              <Route path="/admin" element={<Admin />} />
+            </Route>
+
+            <Route element={<RequireRole roles={["hr_manager"]} />}>
+              <Route path="/hr" element={<HR />} />
+            </Route>
+
+            <Route element={<RequireRole roles={["finance_manager"]} />}>
+              <Route path="/finance" element={<Finance />} />
+            </Route>
+
+            <Route element={<RequireRole roles={["inventory_manager"]} />}>
+              <Route path="/inventory" element={<Inventory />} />
+            </Route>
+
+            <Route element={<RequireRole roles={["product_manager"]} />}>
+              <Route path="/products" element={<Product />} />
+            </Route>
+
+            <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
+              <Route path="/farmer" element={<Farmer />} />
+            </Route>
+          </Route>
+
+          <Route path="/addharvestschedules" element={<AddSchedule />} />
+          <Route path="*" element={<Navigate to="/auth/login" replace />} />
+        </Routes>
+
+  {/* Simple header/nav */}
       <header className="card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
         <h2 style={{ margin: 0 }}>GreenNest</h2>
         <nav style={{ display: "flex", gap: 12 }}>
@@ -36,6 +97,33 @@ export default function App() {
           <Route path="*" element={<Navigate to="/quality" replace />} />
         </Routes>
       </main>
-    </Router>
+      </AuthProvider>
+    </BrowserRouter>
   );
-};
+}
+// frontend/src/App.js
+/*import "./App.css";
+import { useEffect, useState } from "react";
+import { api, API_BASE } from "./api";
+
+
+
+import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+
+
+
+function App() {
+  return (
+    <Routes>
+  
+      
+      <Route path="/addharvestschedules" element={<AddSchedule />} />
+      
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+export default App;*/
+

@@ -1,0 +1,93 @@
+@import "./theme.css";
+
+/* Base */
+:root {
+  --radius: 10px;
+  --shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+  color: var(--text);
+  background: var(--bg-light);
+}
+
+/* Layout helpers */
+.gn-container { max-width: 920px; margin: 48px auto; padding: 0 16px; }
+
+/* Card */
+.gn-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+/* Inputs */
+.gn-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+}
+.gn-input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--green) 20%, transparent);
+}
+
+/* Buttons */
+.gn-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 10px 14px; border-radius: 8px; border: 1px solid transparent;
+  cursor: pointer; font-weight: 600; text-decoration: none;
+}
+.gn-btn.primary {
+  background: var(--green); color: #fff; border-color: var(--green-dark);
+}
+.gn-btn.primary:hover { filter: brightness(0.95); }
+.gn-btn.ghost {
+  background: #fff; color: var(--text); border-color: var(--border);
+}
+.gn-btn.danger { background: var(--strawberry); color: #fff; border-color: var(--strawberry-dark); }
+
+/* TopBar */
+.gn-topbar {
+  position: sticky; top: 0; z-index: 10;
+  background: #fff; border-bottom: 1px solid var(--border);
+}
+.gn-topbar-inner {
+  max-width: 1200px; margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* Badges */
+.gn-badge {
+  display: inline-block; padding: 6px 10px; border-radius: 999px; font-size: 12px;
+  border: 1px solid var(--border); background: #fff;
+}
+
+/* Grid for dashboard cards */
+.gn-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.gn-card-link { text-decoration: none; color: inherit; }
+.gn-card-link:hover .gn-card { border-color: var(--green); }
+
+/* Accent helpers */
+.text-muted { color: var(--muted); }
+.text-green { color: var(--green-dark); }
+.bg-green-soft { background: var(--green-light); }
+.bg-strawberry-soft { background: var(--strawberry-light); }
+
+/* Dark mode (optional – if you toggle a class on <html>) */
+html.dark body { background: var(--bg-dark); color: #e5e7eb; }
+html.dark .gn-card, html.dark .gn-topbar { background: #0b1220; border-color: #243044; }
+html.dark .gn-input { background: #0b1220; color: #e5e7eb; border-color: #243044; }
+html.dark .gn-btn.ghost { background: #0b1220; color: #e5e7eb; border-color: #243044; }
