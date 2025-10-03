@@ -1,4 +1,4 @@
-//import { useContext } from "react";
+// src/auth/useAuth.js
 import AuthProvider, { useAuthCtx } from "./AuthProvider";
-export { AuthProvider }; // (optional re-export)
-export const useAuth = () => useAuthCtx();
+export { AuthProvider }; // optional re-export for convenience
+export const useAuth = () => useAuthCtx(); // our canonical hook
