@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "./AddSchedule.css";
+import { API_BASE } from "../../../api"; 
+
 
 function AddSchedule() {
   const navigate = useNavigate();
@@ -69,7 +71,7 @@ function AddSchedule() {
     if (!validateForm()) return;
 
     try {
-      await axios.post("http://localhost:5001/harvestSchedules", {
+      await axios.post(`${API_BASE}/harvestSchedules`, {
         cropType: String(inputs.cropType),
         greenhouseSection: String(inputs.greenhouseSection),
         plantedDate: String(inputs.plantedDate),
