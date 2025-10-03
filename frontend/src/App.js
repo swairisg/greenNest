@@ -70,10 +70,6 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route path="/" element={<Navigate to="/PestDetectDashboard" replace />} />
-      {/*<Route path="/" element={<Navigate to="/catalog" replace />} />*/}
-      {/*<Route path="/" element={<Navigate to="/admin/products/dashboard" replace />} />*/}
-
       <Route path="/admin" element={<Admin />} />
    
       <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
