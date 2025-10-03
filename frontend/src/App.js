@@ -23,6 +23,8 @@ import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSc
 import ViewSchedule from "./Components/harvestManagement/ViewHarvestSchedule/ViewSchedule";
 import UpdateSchedule from "./Components/harvestManagement/UpdateHarvestSchedule/UpdateSchedule";
 import AddYieldRecord from "./Components/harvestManagement/AddYieldRecord/AddYieldRecord";
+import ViewYield from "./Components/harvestManagement/ViewYieldRecord/ViewYield";
+
 
 
 
@@ -73,6 +75,9 @@ export default function App() {
           <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
 
           <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
+          <Route path="/ViewYieldRecords" element={<ViewYield />} />
+
+
 
 
 

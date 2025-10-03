@@ -1,0 +1,283 @@
+/* ViewYieldRecord.css — scoped to .viewyield-root only (no globals) */
+.viewyield-root {
+  /* Light greenhouse palette (mid-tone, professional) */
+  --vy-bg-1: #eaf5ee;
+  --vy-bg-2: #dff0e6;
+  --vy-panel: #f6fbf8;
+  --vy-text: #113626;
+  --vy-muted: #3e6f59;
+  --vy-accent: #27b96b;
+  --vy-accent-2: #199655;
+  --vy-border: #c7e2d4;
+  --vy-border-strong: #a9d4c1;
+  --vy-warn: #d88908;
+  --vy-danger: #e55353;
+
+  --vy-radius: 14px;
+
+  width: 100%;
+  padding: clamp(12px, 3vw, 24px);
+  background: linear-gradient(180deg, var(--vy-bg-1), var(--vy-bg-2));
+  color: var(--vy-text);
+  box-sizing: border-box;
+}
+
+/* Header: title + actions */
+.viewyield-root .viewyield-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  background: var(--vy-panel);
+  border: 1px solid var(--vy-border);
+  border-radius: var(--vy-radius);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 22px rgba(16, 70, 44, 0.08);
+}
+.viewyield-root .viewyield-title {
+  margin: 0;
+  font-size: clamp(18px, 2.1vw, 22px);
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--vy-text);
+}
+.viewyield-root .viewyield-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Buttons (shared + variants) */
+.viewyield-root .viewyield-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--vy-border);
+  background: #ffffff;
+  color: var(--vy-text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.viewyield-root .viewyield-btn:hover {
+  border-color: var(--vy-accent);
+  box-shadow: 0 4px 12px rgba(25, 150, 85, 0.18);
+}
+.viewyield-root .viewyield-btn:active { transform: translateY(1px); }
+
+.viewyield-root .viewyield-btn--refresh {
+  background: linear-gradient(180deg, var(--vy-accent), var(--vy-accent-2));
+  color: #08391f;
+  border-color: #9ddfbe;
+}
+.viewyield-root .viewyield-btn--update {
+  background: #ffffff;
+  color: #0c3c27;
+  border-color: var(--vy-border-strong);
+}
+.viewyield-root .viewyield-btn--update:hover { border-color: var(--vy-accent); }
+.viewyield-root .viewyield-btn--delete {
+  background: #fff5f5;
+  color: #7a1d1d;
+  border-color: #f2b3b3;
+}
+.viewyield-root .viewyield-btn--delete:hover {
+  border-color: var(--vy-danger);
+  box-shadow: 0 4px 12px rgba(229, 83, 83, 0.2);
+}
+
+/* Table wrapper (responsive scroll) */
+.viewyield-root .viewyield-tablewrap {
+  background: var(--vy-panel);
+  border: 1px solid var(--vy-border);
+  border-radius: var(--vy-radius);
+  padding: 8px;
+  box-shadow: 0 8px 22px rgba(16, 70, 44, 0.08);
+
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Table */
+.viewyield-root .viewyield-table {
+  width: 100%;
+  min-width: 960px;             /* keep columns readable; scroll on small screens */
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+/* Header cells */
+.viewyield-root .viewyield-table thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: #e5f4ec;
+  color: #0f2d1d;
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 2px solid var(--vy-border-strong);
+  white-space: nowrap;
+}
+
+/* Body cells */
+.viewyield-root .viewyield-table tbody td {
+  padding: 10px;
+  border-bottom: 1px solid var(--vy-border);
+  vertical-align: top;
+  color: var(--vy-text);
+}
+
+/* Zebra + hover */
+.viewyield-root .viewyield-table tbody tr:nth-child(odd) { background: #fbfdfb; }
+.viewyield-root .viewyield-table tbody tr:nth-child(even) { background: #f7fbf9; }
+.viewyield-root .viewyield-table tbody tr:hover { background: #eef8f1; }
+
+/* Compact ID column */
+.viewyield-root .viewyield-cell--id {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Actions cell tidy */
+.viewyield-root .viewyield-actions-cell { white-space: nowrap; }
+.viewyield-root .viewyield-actions-cell .viewyield-btn + .viewyield-btn { margin-left: 8px; }
+
+/* Empty state row */
+.viewyield-root .viewyield-empty td {
+  text-align: center;
+  padding: 18px;
+  color: var(--vy-muted);
+  background: #ffffff;
+  border-bottom: 1px solid var(--vy-border);
+}
+
+/* Small-screen tweaks */
+@media (max-width: 560px) {
+  .viewyield-root .viewyield-table { font-size: 13px; min-width: 760px; }
+  .viewyield-root .viewyield-table thead th,
+  .viewyield-root .viewyield-table tbody td { padding: 10px 8px; }
+}
+
+/* Optional: if you later add status badges, reuse these */
+.viewyield-root .viewyield-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  border: 1px solid var(--vy-border-strong);
+  background: #eef8f1;
+  color: #11412b;
+}
+.viewyield-root .viewyield-status--due-soon {
+  background: #fff7e6;
+  border-color: #f2d39a;
+  color: #7a4c08;
+}
+.viewyield-root .viewyield-status--over-due {
+  background: #ffecec;
+  border-color: #f2b3b3;
+  color: #7a1d1d;
+}
+
+/* Filter Options Styles - Dropdown Version */
+.filter-options {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+}
+
+.filter-row {
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Search and Action Styles */
+.viewyield-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.viewyield-search {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 250px;
+}
+
+.viewyield-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.viewyield-btn--refresh {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.viewyield-btn--refresh:hover {
+  background-color: #138496;
+}
+
+.viewyield-btn--download {
+  background-color: #28a745;
+  color: white;
+}
+
+.viewyield-btn--download:hover {
+  background-color: #218838;
+}
+
+.viewyield-btn--clear {
+  background-color: #6c757d;
+  color: white;
+}
+
+.viewyield-btn--clear:hover {
+  background-color: #545b62;
+}

@@ -1,5 +1,5 @@
-// pages/YieldAdd.js
-import React, { useEffect, useState, useMemo } from "react"; // ⬅ add useMemo
+
+import React, { useEffect, useState, useMemo } from "react"; 
 import axios from "axios";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -19,7 +19,7 @@ export default function AddYieldRecord() {
     storageLocation: ""
   });
 
-  // ✅ today string once for inputs/validation
+  //today string once for inputs/validation
   const todayStr = useMemo(() => new Date().toISOString().split("T")[0], []);
 
   useEffect(() => {
@@ -150,7 +150,7 @@ export default function AddYieldRecord() {
 
       <div>
         <label className="yieldadd_label">Harvest Date</label>
-        {/* ✅ block future dates in the picker itself */}
+        {/*block future dates in the picker itself */}
         <input
           className="yieldadd_input_date"
           type="date"
@@ -164,7 +164,7 @@ export default function AddYieldRecord() {
 
       <div>
         <label className="yieldadd_label">Quantity</label>
-        {/* ✅ must be >0; step allows decimals like kg */}
+        {/* must be >0; step allows decimals like kg */}
         <input
           className="yieldadd_input_number"
           type="number"
@@ -180,7 +180,7 @@ export default function AddYieldRecord() {
 
       <div>
         <label className="yieldadd_label">Trees Picked</label>
-        {/* ✅ must be integer >0 */}
+        {/* must be integer >0 */}
         <input
           className="yieldadd_input_number"
           type="number"
