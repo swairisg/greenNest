@@ -3,6 +3,8 @@ require("dotenv").config(); // load .env exactly once
 
 const express = require("express");
 const mongoose = require("mongoose");
+const harvestRouter = require("./Routes/harvestManagement/harvest");
+
 const cors = require("cors");
 
 const app = express();
@@ -15,6 +17,9 @@ app.use(
   })
 );
 app.use(express.json());
+
+
+app.use("/HarvestSchedules",harvestRouter);
 
 // routes
 app.get("/", (_req, res) => res.send("Hello from backend"));
@@ -31,11 +36,16 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
+const User = require("./Model/auth/User");
 mongoose
   .connect(MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log("Connected to MongoDB");
     console.log("DB:", mongoose.connection.name);
+
+    // Ensure indexes are in place (safe to call on every boot)
+    await User.syncIndexes();
+
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);
     });

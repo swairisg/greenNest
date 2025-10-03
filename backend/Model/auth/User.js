@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema(
     passwordHash: { type: String, required: true },
     roles: { type: [String], default: ["customer"], index: true },
     primaryRole: { type: String, default: "customer" },
+    name: { type: String, trim: true },
+    phone: { type: String, trim: true },
+    address: { type: String, trim: true },
     status: {
       type: String,
       enum: ["pending", "active", "suspended", "invited", "pendingApproval"],
@@ -30,4 +33,5 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+userSchema.index({ email: 1 }, { unique: true }); // ensure unique email
 module.exports = mongoose.models.User || mongoose.model("User", userSchema);

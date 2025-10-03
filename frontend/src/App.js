@@ -1,12 +1,15 @@
-// frontend/src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import AuthProvider from "./auth/AuthProvider";
 import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 
 import RequireAuth from "./routes/guards/RequireAuth";
 import RequireRole from "./routes/guards/RequireRole";
+
+import Home from "./pages/public/Home";
+import CustomerProfile from "./pages/profile/CustomerProfile";
 
 import Admin from "./pages/dashboards/Admin";
 import HR from "./pages/dashboards/HR";
@@ -14,6 +17,7 @@ import Finance from "./pages/dashboards/Finance";
 import Inventory from "./pages/dashboards/Inventory";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
+import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
 export default function App() {
   return (
@@ -22,6 +26,13 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<Login />} />
+
+          <Route path="/auth/signup" element={<Signup />} />
+
+          <Route element={<RequireRole roles={["customer"]} />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<CustomerProfile />} />
+          </Route>
 
           <Route element={<RequireAuth />}>
             <Route element={<RequireRole roles={["admin"]} />}>
@@ -49,6 +60,7 @@ export default function App() {
             </Route>
           </Route>
 
+          <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
         </Routes>
       </AuthProvider>
@@ -60,21 +72,22 @@ export default function App() {
 import { useEffect, useState } from "react";
 import { api, API_BASE } from "./api";
 
+
+
+import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+
+
+
 function App() {
-  const [msg, setMsg] = useState("loading...");
-
-  useEffect(() => {
-    api
-      .get("/") // backend root returns "Hello from backend"
-      .then((r) => setMsg(r.data))
-      .catch(() => setMsg(`Cannot reach API at ${API_BASE}`));
-  }, []);
-
   return (
-    <div className="App">
-      <h1>GreenNest Frontend</h1>
-      <p>API status: {msg}</p>
-    </div>
+    <Routes>
+  
+      
+      <Route path="/addharvestschedules" element={<AddSchedule />} />
+      
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
