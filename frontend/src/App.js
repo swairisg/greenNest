@@ -1,23 +1,21 @@
-// frontend/src/App.js
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
-import { useEffect, useState } from "react";
-import { api, API_BASE } from "./api";
+
+
+import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+
+
 
 function App() {
-  const [msg, setMsg] = useState("loading...");
-
-  useEffect(() => {
-    api
-      .get("/") // backend root returns "Hello from backend"
-      .then((r) => setMsg(r.data))
-      .catch(() => setMsg(`Cannot reach API at ${API_BASE}`));
-  }, []);
-
   return (
-    <div className="App">
-      <h1>GreenNest Frontend</h1>
-      <p>API status: {msg}</p>
-    </div>
+    <Routes>
+  
+      
+      <Route path="/addharvestschedules" element={<AddSchedule />} />
+      
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
