@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api } from "../../../api"; 
+import axios from "axios";
+import { API_BASE } from "../../../../api";
 
 
 function getExpectedHarvestDate(cropType, plantedDate, ctx = {}) {
@@ -85,15 +86,17 @@ function Schedule(props) {
     if (derivedStatusValue === status) return; 
     if(status === "harvested" ) return;
 
-   api
-    .put(`/harvestSchedules/${_id}`, { status: derivedStatusValue })
-    .catch((err) => {
-      console.error(
-        "Status auto-update failed:",
-        err?.response?.data || err?.message || err
-      );
-    });
-    }, [_id, derivedStatusValue, status]);
+   axios
+      .put(`${API_BASE}/harvest-schedules/${_id}`, { status: derivedStatusValue })
+      .catch((err) => {
+        console.error(
+          "Status auto-update failed:",
+          err?.response?.data || err?.message || err
+        );
+      });
+  }, [_id, derivedStatusValue, status]);
+
+
 
   // --- Handle Harvest action ---
   const handleHarvest = async (e) => {
@@ -103,7 +106,7 @@ function Schedule(props) {
     
     try {
       // First update the status to harvested
-      await api.put(`/harvestSchedules/${_id}`, { status: "harvested" });
+      await axios.put(`${API_BASE}/harvest-schedules/${_id}`, { status: "harvested" });
 
       
       // Then navigate to AddYieldRecord page
@@ -126,7 +129,8 @@ function Schedule(props) {
   const deleteHandler = async () => {
     if (!window.confirm("Are you sure you want to delete this schedule?")) return;
     try {
-      await api.delete(`/harvestSchedules/${_id}`);
+      await axios.delete(`${API_BASE}/harvestschedules/${_id}`);
+
       navigate("/viewharvestschedules");
     } catch (err) {
       console.error(err);

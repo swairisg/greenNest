@@ -19,6 +19,7 @@ import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 import ViewSchedule from "./Components/harvestManagement/ViewHarvestSchedule/ViewSchedule";
 
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -55,6 +56,7 @@ export default function App() {
 
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="/viewharvestschedules" element={<ViewSchedule/>}/>
+
 
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
         </Routes>
