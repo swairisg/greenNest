@@ -7,7 +7,7 @@ const isStrong = (pwd) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(pwd);
 
 exports.customerSignup = async (req, res) => {
   try {
-    const { email, password, confirmPassword, phone, address, name } = req.body;
+    const { email, password, confirmPassword, name, phone, address } = req.body;
 
     // minimal required: email + password (name/phone/address if you store them elsewhere, ignore here)
     if (!email || !password || !confirmPassword) {
@@ -47,9 +47,9 @@ exports.customerSignup = async (req, res) => {
       primaryRole: "customer",
       status: "active", // or "pending" if you plan approval
       source: "publicSignup",
-      // isEmailVerified: false,  // uncomment if you want to force verification (your schema default is true)
-      // Optional customer profile data (if you store them in a separate CustomerProfile model, ignore here)
-      // you can stitch phone/address/name into that model in a later step
+      name: name?.trim() || undefined,
+      phone: phone?.trim() || undefined,
+      address: address?.trim() || undefined,
     });
 
     return res.status(201).json({
@@ -60,6 +60,9 @@ exports.customerSignup = async (req, res) => {
         roles: doc.roles,
         primaryRole: doc.primaryRole,
         status: doc.status,
+        name: doc.name,
+        phone: doc.phone,
+        address: doc.address,
       },
     });
   } catch (err) {

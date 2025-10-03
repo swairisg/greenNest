@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema(
     passwordHash: { type: String, required: true },
     roles: { type: [String], default: ["customer"], index: true },
     primaryRole: { type: String, default: "customer" },
+    name: { type: String, trim: true },
+    phone: { type: String, trim: true },
+    address: { type: String, trim: true },
     status: {
       type: String,
       enum: ["pending", "active", "suspended", "invited", "pendingApproval"],
