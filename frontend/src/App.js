@@ -20,8 +20,6 @@ import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
 import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
 import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
 import PestDetectDashboard from './Components/pestControl/PestDetectDashboard/PestDetectDashboard';
@@ -29,7 +27,6 @@ import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
 import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
-import Admin from "./Components/Admin.js";
 
 export default function App() {
   return (
