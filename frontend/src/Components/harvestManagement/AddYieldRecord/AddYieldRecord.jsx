@@ -6,6 +6,14 @@ import Swal from "sweetalert2";
 import { API_BASE } from "../../../api"
 import "./AddYieldRecord.css";
 
+const toYMD = (d) => {
+  if (!d) return "";
+  const dt = new Date(d);
+  if (isNaN(dt)) return "";
+  return dt.toISOString().slice(0, 10).replace(/-/g, "/"); // YYYY/MM/DD
+};
+
+
 export default function AddYieldRecord() {
   const { scheduleId: paramId } = useParams();
   const { state } = useLocation();
@@ -144,8 +152,8 @@ export default function AddYieldRecord() {
       </div>
 
       <div>
-        <label className="yieldadd_label">Planted Date</label>
-        <input className="yieldadd_input_readonly" value={prefill.plantedDate} readOnly />
+      <label className="yieldadd_label">Planted Date</label>
+      <input className="yieldadd_input_readonly" value={toYMD(prefill.plantedDate)} readOnly />
       </div>
 
       <div>

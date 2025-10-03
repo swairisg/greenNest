@@ -1,0 +1,195 @@
+/* ====== YIELDuP: Edit Yield Record (scoped) ====== */
+/* Theme tokens (tweak these to adjust the vibe) */
+.yieldup_form {
+  --yieldup-bg: #f6fbf6;               /* page/card background */
+  --yieldup-surface: #ffffff;          /* field group surface */
+  --yieldup-border: rgba(34, 139, 34, 0.18);
+  --yieldup-text: #0b2f0b;
+  --yieldup-muted: #587a58;
+  --yieldup-accent: #2e8b57;           /* primary accent (sea green) */
+  --yieldup-accent-2: #3fa269;         /* hover/active */
+  --yieldup-focus: rgba(46, 139, 87, 0.18);
+  --yieldup-shadow: 0 8px 24px rgba(18, 64, 18, 0.08);
+  --yieldup-radius-lg: 16px;
+  --yieldup-radius-md: 12px;
+  --yieldup-gap: 14px;
+
+  background: var(--yieldup-bg);
+  padding: 18px;
+  border-radius: var(--yieldup-radius-lg);
+  border: 1px solid var(--yieldup-border);
+  box-shadow: var(--yieldup-shadow);
+  max-width: 960px;
+  margin: 12px auto;
+  color: var(--yieldup-text);
+}
+
+/* Title inside the form (your <h2>) */
+.yieldup_form > h2 {
+  margin: 0 0 12px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+/* Responsive grid wrapper */
+.yieldup_grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--yieldup-gap);
+}
+
+/* Each field group */
+.yieldup_grid_item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--yieldup-surface);
+  border: 1px solid var(--yieldup-border);
+  border-radius: var(--yieldup-radius-md);
+  padding: 12px;
+}
+
+/* Labels */
+.yieldup_label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--yieldup-text);
+  letter-spacing: 0.2px;
+}
+
+/* Base input styles (text, number) */
+.yieldup_input,
+.yieldup_inputdate,
+.yieldup_inputnumber {
+  appearance: none;
+  width: 100%;
+  height: 42px;
+  border: 1px solid var(--yieldup-border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--yieldup-text);
+  padding: 0 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.02s ease;
+  font-size: 0.95rem;
+}
+
+/* Focus + hover feedback */
+.yieldup_input:hover,
+.yieldup_inputdate:hover,
+.yieldup_inputnumber:hover {
+  border-color: rgba(46, 139, 87, 0.35);
+}
+
+.yieldup_input:focus,
+.yieldup_inputdate:focus,
+.yieldup_inputnumber:focus {
+  border-color: var(--yieldup-accent);
+  box-shadow: 0 0 0 4px var(--yieldup-focus);
+}
+
+/* Invalid hint (native :invalid without global impact) */
+.yieldup_input:invalid,
+.yieldup_inputdate:invalid,
+.yieldup_inputnumber:invalid {
+  border-color: rgba(200, 40, 40, 0.5);
+}
+
+/* Actions row */
+.yieldup_actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* Primary CTA button (highlight main function) */
+.yieldup_button {
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--yieldup-accent), #277a4c);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(46, 139, 87, 0.22);
+  transition: transform 0.06s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.yieldup_button:hover {
+  filter: brightness(1.03);
+  box-shadow: 0 12px 22px rgba(46, 139, 87, 0.28);
+}
+
+.yieldup_button:active {
+  transform: translateY(1px);
+}
+
+/* Loading text */
+.yieldup_loading {
+  text-align: center;
+  color: var(--yieldup-muted);
+  font-weight: 600;
+  padding: 12px 0;
+}
+
+/* Fine-tuning date/number inputs for consistent look */
+.yieldup_inputdate::-webkit-calendar-picker-indicator {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.yieldup_inputnumber::-webkit-outer-spin-button,
+.yieldup_inputnumber::-webkit-inner-spin-button {
+  margin: 0;
+}
+
+/* Compact screens */
+@media (max-width: 860px) {
+  .yieldup_form {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  .yieldup_grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 420px) {
+  .yieldup_form {
+    padding: 12px;
+  }
+  .yieldup_button {
+    width: 100%;
+  }
+}
+
+/* Optional dark-mode support without affecting global theme */
+@media (prefers-color-scheme: dark) {
+  .yieldup_form {
+    --yieldup-bg: #0e1a0f;
+    --yieldup-surface: #142016;
+    --yieldup-border: rgba(110, 190, 110, 0.22);
+    --yieldup-text: #eaf6ea;
+    --yieldup-muted: #b8d2b8;
+    --yieldup-accent: #47c47f;
+    --yieldup-accent-2: #5ed595;
+    --yieldup-focus: rgba(71, 196, 127, 0.18);
+    --yieldup-shadow: 0 8px 24px rgba(8, 32, 8, 0.5);
+    background: linear-gradient(180deg, #0e1a0f, #0a140c);
+  }
+
+  .yieldup_input,
+  .yieldup_inputdate,
+  .yieldup_inputnumber {
+    background: #0f1b11;
+    color: var(--yieldup-text);
+  }
+
+  .yieldup_grid_item {
+    background: #122015;
+  }
+}

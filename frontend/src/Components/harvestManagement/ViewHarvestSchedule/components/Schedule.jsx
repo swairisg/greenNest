@@ -150,7 +150,7 @@ function Schedule(props) {
     if (!ask.isConfirmed) return;
 
     try {
-      await axios.delete(`${API_BASE}/harvest-schedules/${_id}`);
+      await axios.delete(`${API_BASE}/harvestschedules/${_id}`);
 
       await Swal.fire({
         icon: "success",

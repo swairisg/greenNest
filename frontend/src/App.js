@@ -22,8 +22,10 @@ import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 import ViewSchedule from "./Components/harvestManagement/ViewHarvestSchedule/ViewSchedule";
 import UpdateSchedule from "./Components/harvestManagement/UpdateHarvestSchedule/UpdateSchedule";
+
 import AddYieldRecord from "./Components/harvestManagement/AddYieldRecord/AddYieldRecord";
 import ViewYield from "./Components/harvestManagement/ViewYieldRecord/ViewYield";
+import EditYieldRecord from "./Components/harvestManagement/EditYieldRecord/EditYieldRecord";
 
 
 
@@ -76,6 +78,8 @@ export default function App() {
 
           <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
           <Route path="/ViewYieldRecords" element={<ViewYield />} />
+          <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
+
 
 
 
