@@ -1,0 +1,10 @@
+.pd-container { max-width: 860px; margin: 24px auto; padding: 16px; }
+.pd-title { margin: 0 0 12px; }
+.pd-form { display: grid; gap: 16px; }
+.pd-fieldset { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; }
+.pd-legend { padding: 0 6px; font-weight: 600; }
+.pd-row { display: grid; gap: 6px; margin-bottom: 8px; }
+.pd-label { font-size: 14px; color: #374151; }
+.pd-input, .pd-textarea, .pd-select { border: 1px solid #d1d5db; border-radius: 6px; padding: 8px; }
+.pd-btn { background:#16a34a; color:#fff; border:0; padding:10px 14px; border-radius:8px; cursor:pointer; }
+.pd-loading, .pd-error { padding: 12px; }

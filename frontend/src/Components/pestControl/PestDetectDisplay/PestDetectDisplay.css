@@ -1,0 +1,9 @@
+.pd-display { max-width: 960px; margin: 24px auto; padding: 12px; }
+.pd-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.pd-display__title { margin:0; }
+.pd-card-wrap { border:1px solid #e5e7eb; border-radius:10px; padding:12px; margin-bottom:14px; }
+.pd-actions { display:flex; gap:8px; margin-top:10px; }
+.pd-btn { background:#16a34a; color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; }
+.pd-btn--primary { background:#15803d; }
+.pd-btn--danger { background:#dc2626; }
+.pd-loading, .pd-empty { padding:10px; }
