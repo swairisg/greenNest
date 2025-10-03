@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { API_BASE } from "../../api"; 
+import { API_BASE } from "../../api";
 import "../../styles/theme.css";
 import "../../styles/app.css";
 
@@ -18,6 +18,10 @@ export default function Signup() {
     confirmPassword: "",
     agree: false,
   });
+
+  // separate toggles for each field
+  const [showPw, setShowPw] = useState(false);
+  const [showConfirmPw, setShowConfirmPw] = useState(false);
 
   const onChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -37,10 +41,8 @@ export default function Signup() {
   const submit = async (e) => {
     e.preventDefault();
     const err = validateClient();
-    if (err) {
-      Swal.fire({ icon: "warning", text: err });
-      return;
-    }
+    if (err) return Swal.fire({ icon: "warning", text: err });
+
     try {
       setLoading(true);
       const res = await axios.post(`${API_BASE}/auth/signup`, {
@@ -52,7 +54,6 @@ export default function Signup() {
         confirmPassword: form.confirmPassword,
       });
       Swal.fire({ icon: "success", title: "Welcome!", text: res.data?.message || "Account created." });
-      // If you want autologin, store res.data.token via AuthProvider then navigate("/").
       navigate("/auth/login");
     } catch (error) {
       const msg = error?.response?.data?.message || "Signup failed";
@@ -70,38 +71,62 @@ export default function Signup() {
           Join our farm-to-table marketplace to order fresh strawberries, flowers, and veggies.
         </p>
 
-        <form onSubmit={submit}autoComplete="off" style={{ marginTop: 16 }}>
+        <form onSubmit={submit} autoComplete="off" style={{ marginTop: 16 }}>
           <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Full Name*</label>
           <input className="gn-input" name="name" value={form.name} onChange={onChange} placeholder="Jane Doe" autoComplete="off" required />
 
           <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Email*</label>
-          <input className="gn-input" name="email" type="email" value={form.email} onChange={onChange} placeholder="jane@example.com"  autoComplete="off" required />
+          <input className="gn-input" name="email" type="email" value={form.email} onChange={onChange} placeholder="jane@example.com" autoComplete="off" required />
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div>
               <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Phone</label>
-              <input className="gn-input" name="phone" value={form.phone} onChange={onChange} placeholder="+94 7X XXX XXXX" autoComplete="off"/>
+              <input className="gn-input" name="phone" value={form.phone} onChange={onChange} placeholder="+94 7X XXX XXXX" autoComplete="off" />
             </div>
             <div>
               <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Address</label>
-              <input className="gn-input" name="address" value={form.address} onChange={onChange} placeholder="City / District" autoComplete="off"/>
+              <input className="gn-input" name="address" value={form.address} onChange={onChange} placeholder="City / District" autoComplete="off" />
             </div>
           </div>
 
-          <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Password*</label>
+          {/* Password */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 8 }}>
+            <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Password*</label>
+            <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <input type="checkbox" checked={showPw} onChange={() => setShowPw((s) => !s)} />
+              <span className="text-muted" style={{ fontSize: 13 }}>Show</span>
+            </label>
+          </div>
           <input
             className="gn-input"
             name="password"
-            type="password"
+            type={showPw ? "text" : "password"}
             value={form.password}
             onChange={onChange}
             placeholder="Min 8 chars, upper/lower/number"
             autoComplete="new-password"
             required
+            aria-label="Password"
           />
 
-          <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Confirm Password*</label>
-          <input className="gn-input" name="confirmPassword" type="password" value={form.confirmPassword} onChange={onChange} autoComplete="new-password" required />
+          {/* Confirm Password */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 8 }}>
+            <label style={{ fontWeight: 600, margin: "12px 0 6px" }}>Confirm Password*</label>
+            <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <input type="checkbox" checked={showConfirmPw} onChange={() => setShowConfirmPw((s) => !s)} />
+              <span className="text-muted" style={{ fontSize: 13 }}>Show</span>
+            </label>
+          </div>
+          <input
+            className="gn-input"
+            name="confirmPassword"
+            type={showConfirmPw ? "text" : "password"}
+            value={form.confirmPassword}
+            onChange={onChange}
+            autoComplete="new-password"
+            required
+            aria-label="Confirm password"
+          />
 
           <label style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 12 }}>
             <input type="checkbox" name="agree" checked={form.agree} onChange={onChange} />

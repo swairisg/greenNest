@@ -6,16 +6,14 @@ import { useAuth } from "../../auth/useAuth";
 const nextPathByUser = (user) => {
   const primary = user?.primaryRole;
   const roles = Array.isArray(user?.roles) ? user.roles : [];
-
   const has = (r) => r && (primary === r || roles.includes(r));
-
   if (has("admin")) return "/admin";
   if (has("hr_manager")) return "/hr";
   if (has("finance_manager")) return "/finance";
   if (has("inventory_manager")) return "/inventory";
   if (has("product_manager")) return "/products";
   if (has("farmer") || has("specialist")) return "/farmer";
-  return "/home"; // default for customers and anyone else
+  return "/home";
 };
 
 export default function Login() {
@@ -24,6 +22,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false); // <-- added
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -72,17 +71,35 @@ export default function Login() {
 
           <input
             className="gn-input"
-            type="password"
+            type={showPw ? "text" : "password"}   // <-- toggle here
             name="gn-pass"
             autoComplete="new-password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            aria-label="Password"
           />
 
+          {/* Show password checkbox */}
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="checkbox"
+              checked={showPw}
+              onChange={() => setShowPw((s) => !s)}
+              aria-checked={showPw}
+            />
+            <span className="text-muted" style={{ fontSize: 13 }}>Show password</span>
+          </label>
+
           {err && (
-            <div className="gn-badge" style={{ borderColor: "var(--strawberry-dark)", color: "var(--strawberry-dark)" }}>
+            <div
+              className="gn-badge"
+              style={{
+                borderColor: "var(--strawberry-dark)",
+                color: "var(--strawberry-dark)",
+              }}
+            >
               {err}
             </div>
           )}
