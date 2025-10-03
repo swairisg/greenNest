@@ -1,0 +1,338 @@
+/* ViewSchedule.css — scoped to .harvestView only */
+
+/* ===== Page container & palette (local vars) ===== */
+.harvestView {
+  --hv-bg-1: #bbf7d0;
+  --hv-bg-2: #dff0e6;
+  --hv-panel: #f6fbf8;
+  --hv-text: #113626;
+  --hv-muted: #3e6f59;
+  --hv-accent: #27b96b;
+  --hv-accent-2: #199655;
+  --hv-border: #c7e2d4;
+  --hv-border-strong: #a9d4c1;
+
+  --hv-radius: 14px;
+
+  width: 100%;
+  padding: clamp(12px, 3vw, 24px);
+  background: linear-gradient(180deg, var(--hv-bg-1), var(--hv-bg-2));
+  color: var(--hv-text);
+  box-sizing: border-box;
+}
+
+/* ===== Toolbar (title + search + button) ===== */
+.harvestView .hv-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  background: var(--hv-panel);
+  border: 1px solid var(--hv-border);
+  border-radius: var(--hv-radius);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 22px rgba(16, 70, 44, 0.08);
+}
+
+.harvestView .hvharvest-title {
+  margin: 0;
+  font-size: clamp(18px, 2.1vw, 22px);
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--hv-text);
+}
+
+.harvestView .hv-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.harvestView .hv-search {
+  flex: 1 1 320px;     /* grows, but can shrink */
+  min-width: 180px;
+  max-width: 520px;
+  height: 38px;
+
+  padding: 8px 12px;
+  border: 1px solid var(--hv-border-strong);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--hv-text);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.harvestView .hv-search:focus {
+  border-color: var(--hv-accent);
+  box-shadow: 0 0 0 3px rgba(39,185,107,0.18);
+}
+
+.harvestView .hv-btn {
+  flex: 0 0 auto;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--hv-accent), var(--hv-accent-2));
+  color: #bbf7d0;
+  font-weight: 700;
+  letter-spacing: .2px;
+  border: 1px solid #bbf7d0;
+  cursor: pointer;
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
+  box-shadow: 0 6px 16px rgba(25, 150, 85, 0.18);
+}
+.harvestView .hv-btn:hover { filter: brightness(1.04); }
+.harvestView .hv-btn:active { transform: translateY(1px); }
+
+/* Stack toolbar on small screens */
+@media (max-width: 720px) {
+  .harvestView .hv-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .harvestView .hv-toolbar-right { width: 100%; }
+  .harvestView .hv-search { width: 100%; max-width: none; }
+  .harvestView .hv-btn { width: 100%; }
+}
+
+/* ===== Table wrapper (responsive scroll) ===== */
+.harvestView .hv-table-wrap {
+  background: var(--hv-panel);
+  border: 1px solid var(--hv-border);
+  border-radius: var(--hv-radius);
+  padding: 8px;
+  box-shadow: 0 8px 22px rgba(16, 70, 44, 0.08);
+
+  overflow-x: auto;                 /* enable horizontal scroll on phones */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Table ===== */
+.harvestView .harvestschedule-table {
+  width: 100%;
+  min-width: 940px;                /* keeps columns readable; scrolls on small screens */
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+/* Header cells */
+.harvestView .harvestschedule-table thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: #e5f4ec;
+  color: #0f2d1d;
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 2px solid var(--hv-border-strong);
+  white-space: nowrap;
+}
+
+/* Body cells */
+.harvestView .harvestschedule-table tbody td {
+  padding: 10px;
+  border-bottom: 1px solid var(--hv-border);
+  vertical-align: top;
+  color: var(--hv-text);
+}
+
+/* Zebra & hover rows */
+.harvestView .harvestschedule-table tbody tr:nth-child(odd) { background: #fbfdfb; }
+.harvestView .harvestschedule-table tbody tr:nth-child(even) { background: #f7fbf9; }
+.harvestView .harvestschedule-table tbody tr:hover { background: #eef8f1; }
+
+/* Notes column: wrap long text nicely */
+.harvestView .harvestschedule-table td:nth-child(6) {
+  max-width: 360px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Actions column keeps buttons tidy (buttons styled wherever they’re rendered) */
+.harvestView .harvestschedule-table td:last-child {
+  white-space: nowrap;
+  gap: 8px;
+}
+
+/* Small-screen table tightening */
+@media (max-width: 560px) {
+  .harvestView .harvestschedule-table { font-size: 13px; min-width: 760px; }
+  .harvestView .harvestschedule-table thead th,
+  .harvestView .harvestschedule-table tbody td { padding: 10px 8px; }
+}
+
+/* ====== Row actions (Update / Delete / Harvest) ====== */
+.harvestView .hvrow-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;             /* lets buttons wrap on narrow screens */
+}
+
+/* Base button look for both <a> and <button> inside row actions */
+.harvestView .hvrow-actions a,
+.harvestView .hvrow-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid var(--hv-border);
+  background: #ffffff;
+  color: var(--hv-text);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;       /* remove underline on <a> */
+  cursor: pointer;
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.harvestView .hvrow-actions a:hover,
+.harvestView .hvrow-actions button:hover {
+  border-color: var(--hv-accent);
+  box-shadow: 0 4px 10px rgba(25, 150, 85, 0.15);
+}
+
+.harvestView .hvrow-actions a:active,
+.harvestView .hvrow-actions button:active {
+  transform: translateY(1px);
+}
+
+.harvestView .hvrow-actions a:focus-visible,
+.harvestView .hvrow-actions button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(39,185,107,0.18);
+  border-color: var(--hv-accent);
+}
+
+/* Variants by position (matching your current markup order) */
+/* 1) Update = first <a> */
+.harvestView .hvrow-actions a:first-child {
+  background: #ffffff;
+  color: #0c3c27;
+  border-color: var(--hv-border);
+}
+
+/* 2) Delete = the <button> */
+.harvestView .hvrow-actions button {
+  background: #fff5f5;
+  color: #7a1d1d;
+  border-color: #f2b3b3;
+}
+.harvestView .hvrow-actions button:hover {
+  border-color: #e55353;
+  box-shadow: 0 4px 12px rgba(229, 83, 83, 0.18);
+}
+
+/* 3) Harvest = last <a> */
+.harvestView .hvrow-actions a:last-child {
+  background: linear-gradient(180deg, var(--hv-accent), var(--hv-accent-2));
+  color: #08391f;
+  border-color: #9ddfbe;
+}
+
+/* Ensure the three controls don’t squish too small inside the cell */
+.harvestView .harvestschedule-table td:last-child {
+  white-space: nowrap;
+}
+
+/* ====== Status badge ====== */
+.harvestView .hvstatus-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  border: 1px solid var(--hv-border);
+  background: #eef8f1;
+  color: #22c55e;
+  white-space: nowrap;
+}
+
+/* Modifiers based on your derived status string */
+.harvestView .hvstatus--due-soon {
+  background: #fff7e6;
+  border-color: #f2d39a;
+  color: #7a4c08;
+}
+.harvestView .hvstatus--over-due {
+  background: #ffecec;
+  border-color: #f2b3b3;
+  color: #7a1d1d;
+}
+.harvestView .hvstatus--planted {
+  background: #edf4ff;
+  border-color: #c7d9f6;
+  color: #143a7b;
+}
+.harvestView .hvstatus--harvested {
+  background: #e9fbf2;
+  border-color: #bde8d2;
+  color: #0e5d39;
+}
+
+/* Muted helper text used for (days) next to expected date */
+.harvestView .hvmuted {
+  color: var(--hv-muted);
+  font-size: 12px;
+}
+
+/* ====== Compact tweaks on very small screens ====== */
+@media (max-width: 520px) {
+  .harvestView .hvrow-actions {
+    gap: 6px;
+  }
+  .harvestView .hvrow-actions a,
+  .harvestView .hvrow-actions button {
+    height: 30px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+}
+/* Filter Options Styles */
+.filter-options {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.filter-btn:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.filter-btn.active {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-options {
+    gap: 5px;
+  }
+  
+  .filter-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}

@@ -14,7 +14,10 @@ import Finance from "./pages/dashboards/Finance";
 import Inventory from "./pages/dashboards/Inventory";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
+
+
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+import ViewSchedule from "./Components/harvestManagement/ViewHarvestSchedule/ViewSchedule";
 
 export default function App() {
   return (
@@ -51,6 +54,8 @@ export default function App() {
           </Route>
 
           <Route path="/addharvestschedules" element={<AddSchedule />} />
+          <Route path="/viewharvestschedules" element={<ViewSchedule/>}/>
+
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
         </Routes>
       </AuthProvider>
