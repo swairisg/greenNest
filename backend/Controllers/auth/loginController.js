@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { User } = require("../../Model/auth");
 
 // POST /auth/login
@@ -6,17 +6,29 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body || {};
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: "email and password required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "email and password required" });
     }
 
-    const user = await User.findOne({ email: String(email).toLowerCase().trim() });
-    if (!user) return res.status(401).json({ success: false, message: "Invalid credentials" });
+    const user = await User.findOne({
+      email: String(email).toLowerCase().trim(),
+    });
+    if (!user)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
 
     const ok = await bcrypt.compare(password, user.passwordHash);
-    if (!ok) return res.status(401).json({ success: false, message: "Invalid credentials" });
+    if (!ok)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
 
     if (user.status !== "active") {
-      return res.status(403).json({ success: false, message: `Account status: ${user.status}` });
+      return res
+        .status(403)
+        .json({ success: false, message: `Account status: ${user.status}` });
     }
 
     return res.json({
@@ -28,6 +40,9 @@ exports.login = async (req, res) => {
           roles: user.roles,
           primaryRole: user.primaryRole,
           status: user.status,
+          name: user.name,
+          phone: user.phone,
+          address: user.address,
         },
       },
     });
