@@ -41,11 +41,16 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
+const User = require("./Model/auth/User");
 mongoose
   .connect(MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log("Connected to MongoDB");
     console.log("DB:", mongoose.connection.name);
+
+    // Ensure indexes are in place (safe to call on every boot)
+    await User.syncIndexes();
+
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);
     });
