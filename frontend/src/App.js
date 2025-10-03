@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import AuthProvider from "./auth/AuthProvider";
 import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 
 import RequireAuth from "./routes/guards/RequireAuth";
 import RequireRole from "./routes/guards/RequireRole";
@@ -22,6 +23,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<Login />} />
+
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/signup" element={<Signup />} />
 
           <Route element={<RequireAuth />}>
             <Route element={<RequireRole roles={["admin"]} />}>

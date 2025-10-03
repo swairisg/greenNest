@@ -46,9 +46,9 @@ export default function Login() {
           {err && <div className="gn-alert">{err}</div>}
           <button type="submit" className="gn-btn primary">Login</button>
         </form>
-        <p className="text-muted" style={{ marginTop: 10 }}>
-          New customer? <Link to="/auth/signup">Create account</Link>
-        </p>
+        <p className="text-muted" style={{ marginTop: 12, textAlign: "center" }}>
+  Don’t have an account? <Link to="/auth/signup">Create one</Link>
+</p>
       </div>
     </div>
   );
