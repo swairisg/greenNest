@@ -18,6 +18,7 @@ import Farmer from "./pages/dashboards/Farmer";
 
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 import ViewSchedule from "./Components/harvestManagement/ViewHarvestSchedule/ViewSchedule";
+import UpdateSchedule from "./Components/harvestManagement/UpdateHarvestSchedule/UpdateSchedule";
 
 
 export default function App() {
@@ -56,6 +57,8 @@ export default function App() {
 
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="/viewharvestschedules" element={<ViewSchedule/>}/>
+          <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
+
 
 
           <Route path="*" element={<Navigate to="/auth/login" replace />} />

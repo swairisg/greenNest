@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_BASE } from "../../../../api";
+import Swal from "sweetalert2";
 
 
+//calculating expected harvest date
 function getExpectedHarvestDate(cropType, plantedDate, ctx = {}) {
   const rules = {
     strawberry: ({ dayNeutral = false, tempFactor = 1 } = {}) =>
@@ -29,6 +31,7 @@ function getExpectedHarvestDate(cropType, plantedDate, ctx = {}) {
   return { date: d, days };
 }
 
+//Formatting date
 function formatDateLike(d) {
   if (!d) return "—";
   const date = d instanceof Date ? d : new Date(d);
@@ -37,7 +40,7 @@ function formatDateLike(d) {
     : date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
 }
 
-//---planted date to due date ---
+//Changing due date status
 const DUE_SOON_DAYS = 7; 
 
 function startOfDay(d) {
@@ -63,12 +66,12 @@ function derivedStatus(expectedDate, currentStatus) {
   return currentStatus;   
 }
 
-// ---- Display schedules  ----
+//Dispay schedules
 function Schedule(props) {
   const { _id, cropType, greenhouseSection, plantedDate, status, notes } =
     props.harvestschedule;
 
-  //--- compute expected date ---
+  //expected date get
   const { date: expected, days } = getExpectedHarvestDate(
     cropType,
     plantedDate,
@@ -77,10 +80,10 @@ function Schedule(props) {
 
   const navigate = useNavigate();
 
-  // FIXED: Use the correct function name 'derivedStatus' instead of 'calculateDerivedStatus'
+  
   const derivedStatusValue = derivedStatus(expected, status);
 
-  // --- Adding changed status to db ---
+  //adding changed status to db
   useEffect(() => {
     if (!_id) return;
     if (derivedStatusValue === status) return; 
@@ -97,48 +100,73 @@ function Schedule(props) {
   }, [_id, derivedStatusValue, status]);
 
 
-
-  // --- Handle Harvest action ---
+//marking harvested status
   const handleHarvest = async (e) => {
-    e.preventDefault(); // Prevent default link behavior
-    
-    if (!window.confirm("Mark this schedule as harvested and proceed to add yield record?")) return;
-    
-    try {
-      // First update the status to harvested
-      await axios.put(`${API_BASE}/harvest-schedules/${_id}`, { status: "harvested" });
+    e.preventDefault();
 
-      
-      // Then navigate to AddYieldRecord page
-      navigate(`/AddYieldRecord/${_id}`, {
-        state: {
-          scheduleId: _id,
-          cropType,
-          greenhouseSection,
-          plantedDate
-        }
+    const ask = await Swal.fire({
+      icon: "question",
+      title: "Mark as harvested?",
+      text: "This will mark the schedule as harvested and take you to Add Yield Record.",
+      showCancelButton: true,
+      confirmButtonText: "Yes, continue",
+      cancelButtonText: "Cancel"
+    });
+    if (!ask.isConfirmed) return;
+
+    try {
+      await axios.put(`${API_BASE}/harvestschedules/${_id}`, { status: "harvested" });
+
+      await Swal.fire({
+        icon: "success",
+        title: "Marked as harvested",
+        timer: 1400,
+        showConfirmButton: false
       });
-      
+
+      navigate(`/AddYieldRecord/${_id}`, {
+        state: { scheduleId: _id, cropType, greenhouseSection, plantedDate }
+      });
     } catch (err) {
       console.error("Harvest update failed:", err);
-      alert(`Harvest update failed: ${err?.response?.data?.message || err?.message || "Unknown error"}`);
+      Swal.fire({
+        icon: "error",
+        title: "Harvest update failed",
+        text: err?.response?.data?.message || err?.message || "Unknown error"
+      });
     }
   };
 
-  //--- delete schedules ---
+  //Delete handling part
   const deleteHandler = async () => {
-    if (!window.confirm("Are you sure you want to delete this schedule?")) return;
+    const ask = await Swal.fire({
+      icon: "warning",
+      title: "Delete this schedule?",
+      text: "This action cannot be undone.",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel"
+    });
+    if (!ask.isConfirmed) return;
+
     try {
-      await axios.delete(`${API_BASE}/harvestschedules/${_id}`);
+      await axios.delete(`${API_BASE}/harvest-schedules/${_id}`);
+
+      await Swal.fire({
+        icon: "success",
+        title: "Schedule deleted",
+        timer: 1400,
+        showConfirmButton: false
+      });
 
       navigate("/viewharvestschedules");
     } catch (err) {
       console.error(err);
-      alert(
-        `Delete failed: ${
-          err?.response?.data?.message || err?.message || "Unknown error"
-        }`
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Delete failed",
+        text: err?.response?.data?.message || err?.message || "Unknown error"
+      });
     }
   };
 
