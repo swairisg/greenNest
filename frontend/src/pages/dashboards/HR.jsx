@@ -2,6 +2,7 @@
 import React from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
+import EmployeesNew from "../../Components/tasksHR/EmployeesNew";
 
 // simple utility for active link styling
 const navCls = ({ isActive }) =>

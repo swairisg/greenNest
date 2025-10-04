@@ -1,17 +1,28 @@
 const jwt = require("jsonwebtoken");
+// If you use a barrel export, keep this, otherwise do: const User = require("../Model/auth/User");
 const { User } = require("../Model/auth");
-// attach req.user if token is valid
+
 async function ensureAuth(req, res, next) {
   try {
-    const hdr = req.headers.authorization || "";
-    const token = hdr.startsWith("Bearer ") ? hdr.slice(7) : null;
-    if (!token) return res.status(401).json({ message: "Not authenticated" });
+    const raw = req.headers.authorization || "";
+    const parts = raw.split(" ");
+    const token = parts[0] === "Bearer" ? parts[1] : null;
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    if (
+      !token ||
+      token === "undefined" ||
+      token === "null" ||
+      token.length < 16
+    ) {
+      return res.status(401).json({ message: "Missing token" });
+    }
+
+    const payload = jwt.verify(token, process.env.JWT_SECRET || "dev-secret");
     const user = await User.findById(payload.sub).lean();
     if (!user || user.status !== "active") {
       return res.status(401).json({ message: "Invalid user" });
     }
+
     req.user = {
       id: String(user._id),
       email: user.email,
@@ -24,7 +35,6 @@ async function ensureAuth(req, res, next) {
   }
 }
 
-// require any of the roles
 function requireRoles(allowed = []) {
   return (req, res, next) => {
     const roles = req.user?.roles || [];
