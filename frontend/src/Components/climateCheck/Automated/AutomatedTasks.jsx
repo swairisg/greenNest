@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Trash2, Edit2  } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/automation";
+const API_URL = "http://localhost:5001/api/automation";
 
 function AutomatedTasks() {
   const [tasks, setTasks] = useState([]);

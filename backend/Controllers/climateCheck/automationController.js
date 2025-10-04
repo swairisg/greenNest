@@ -1,6 +1,8 @@
-const Automation = require("../../models/ClimateMonitoring/AutomationSettings");
+require('dotenv').config(); 
+const Automation = require("../../Model/climateCheck/AutomationSettings")
+//("../../models/ClimateMonitoring/AutomationSettings");
 
-// Create a new automation threshold
+//create a new automation threshold
 const addThreshold = async (req, res) => {
   try {
     const { parameter, minValue, maxValue } = req.body;

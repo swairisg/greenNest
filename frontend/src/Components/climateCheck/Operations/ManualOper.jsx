@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Trash2, Edit, Plus, Calendar, User, MapPin, FileText } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/operations";
+const API_URL = "http://localhost:5001/api/operations";
 
 function ManualOper() {
   const [events, setEvents] = useState([]);

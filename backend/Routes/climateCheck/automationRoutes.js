@@ -1,6 +1,7 @@
+require('dotenv').config(); 
 const express = require("express");
 const router = express.Router();
-const automationController = require("../../controllers/ClimateMonitoring/automationController");
+const automationController = require("../../Controllers/climateCheck/automationController");
 
 // Test route
 router.get("/test", (req, res) =>

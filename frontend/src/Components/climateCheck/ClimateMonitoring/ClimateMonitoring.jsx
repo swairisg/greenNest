@@ -3,8 +3,8 @@ import axios from "axios";
 import moment from "moment-timezone";
 import ClimateDataDisplay from "../displayData/ClimateDataDisplay";
 
-const URL = "http://localhost:5000/api/climate";
-const ALERTS_URL = "http://localhost:5000/api/alerts";
+const URL = "http://localhost:5001/api/climate";
+const ALERTS_URL = "http://localhost:5001/api/alerts";
 
 function ClimateMonitoring() {
   const [latestRecord, setLatestRecord] = useState(null);

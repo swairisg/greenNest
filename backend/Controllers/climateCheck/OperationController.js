@@ -1,4 +1,6 @@
-const Operation = require("../../models/ClimateMonitoring/OperationEvent"); // Mongoose model for events/logs
+require('dotenv').config(); 
+const Operation = require("../../Model/climateCheck/OperationEvent");
+  //../../models/ClimateMonitoring/OperationEvent"); // Mongoose model for events/logs
 
 // Create a new operation/event
 const addEvent = async (req, res) => {

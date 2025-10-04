@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const mongoose = require("mongoose");
 
 const AlertConfigSchema = new mongoose.Schema(

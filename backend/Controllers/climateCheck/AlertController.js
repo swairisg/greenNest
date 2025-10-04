@@ -1,5 +1,6 @@
-const AlertConfig = require('../../models/ClimateMonitoring/AlertConfigModel');
-const AlertHistory = require('../../models/ClimateMonitoring/AlertHistoryModel');
+require('dotenv').config(); 
+const AlertConfig = require('../../Model/climateCheck/AlertConfigModel');
+const AlertHistory = require('../../Model/climateCheck/AlertHistoryModel');
 const climateAlertService = require('../../utils/climateAlertService');
 
 // Create or update alert configuration

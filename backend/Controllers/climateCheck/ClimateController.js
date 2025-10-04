@@ -1,4 +1,5 @@
-const ClimateRecord = require("../../models/ClimateMonitoring/ClimateRecord"); // Corrected path
+require('dotenv').config(); 
+const ClimateRecord = require("../../Model/climateCheck/ClimateRecord"); // Corrected path
 const axios = require("axios"); //for http requests
 const moment = require("moment-timezone"); //for timezone handling, moment library
 const climateAlertService = require('../../utils/climateAlertService');
@@ -225,23 +226,33 @@ const getDashboardData = async (req, res, next) => {
 // Fetch external weather data and save to DB
 const fetchAndStoreExternalData = async (req, res) => {
   try {
-    const lat = 6.9497;
-    const lng = 80.7891;
+    const lat = process.env.DEFAULT_LAT || 6.9497;
+    const lng = process.env.DEFAULT_LNG || 80.7891;
     const weatherParams = "airTemperature,humidity";
     const bioParams = "soilMoisture";
 
-    const URL = `https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lng}&params=${weatherParams}`;
-    const URL2 = `https://api.stormglass.io/v2/bio/point?lat=${lat}&lng=${lng}&params=${bioParams}`;
+    const weatherURL = `${process.env.STORMGLASS_WEATHER_URL}?lat=${lat}&lng=${lng}&params=${weatherParams}`;
+    const bioURL = `${process.env.STORMGLASS_BIO_URL}?lat=${lat}&lng=${lng}&params=${bioParams}`;
+    const apiKey = process.env.STORMGLASS_API_KEY;
+
+
+    if (!apiKey) {
+      return res.status(500).json({
+        success: false,
+        message: "API key not configured"
+      });
+    }
+
 
     const [weatherResponse, bioResponse] = await Promise.all([
-      axios.get(URL, {
+      axios.get(weatherURL, {
         headers: {
-          Authorization: "abcf79bc-863f-11f0-a59f-0242ac130006-abcf7a2a-863f-11f0-a59f-0242ac130006",
+          Authorization: apiKey,
         },
       }),
-      axios.get(URL2, {
+      axios.get(bioURL, {
         headers: {
-          Authorization: "abcf79bc-863f-11f0-a59f-0242ac130006-abcf7a2a-863f-11f0-a59f-0242ac130006",
+          Authorization: apiKey,
         },
       }),
     ]);
