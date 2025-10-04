@@ -6,11 +6,11 @@ import { useAuth } from "../../../auth/useAuth";
 import { API_BASE } from "../../../api";
 import "./EditProfile.css";
 
-const isPhone = (v = "") => /^[+()\-.\s\d]{7,20}$/.test(String(v).trim());
+const isPhone = (v = "") => /^[+()\-\.\s\d]{7,20}$/.test(String(v).trim());
 
 export default function EditProfile() {
   const nav = useNavigate();
-  const { user, setUserFromServer } = useAuth();
+  const { user } = useAuth();
 
   const [form, setForm] = useState({
     name: user?.name || "",
@@ -39,9 +39,8 @@ export default function EditProfile() {
     try {
       setSaving(true);
 
-      // ✅ use the correct endpoint and a safe id fallback
       const uid = user?.id || user?._id;
-      const url = `${API_BASE}/auth/profile/${uid}`;
+      const url = `${API_BASE}/api/auth/profile/${uid}`;
 
       const payload = {
         name: form.name?.trim(),
@@ -53,9 +52,22 @@ export default function EditProfile() {
         headers: { "Content-Type": "application/json" },
       });
 
-      const fresh = res.data?.user;
-      if (fresh) setUserFromServer(fresh); // update context + localStorage
+      const fresh = res?.data?.user;
+      if (fresh) {
+        // Merge to retain any extra client fields your app stores
+        const merged = { ...(user || {}), ...fresh };
 
+        // Update ONLY your user cache key(s). Do NOT touch the token.
+        try { localStorage.setItem("gn:user", JSON.stringify(merged)); } catch {}
+        try { localStorage.setItem("auth:user", JSON.stringify(merged)); } catch {}
+        try { localStorage.setItem("user", JSON.stringify(merged)); } catch {}
+
+        // Navigate to profile and hand off the updated user via route state
+        nav("/profile", { replace: true, state: { updatedUser: merged } });
+        return;
+      }
+
+      // If backend didn’t return user (unlikely), just go back
       nav("/profile", { replace: true });
     } catch (e) {
       console.error("Update profile failed:", e);
@@ -76,32 +88,13 @@ export default function EditProfile() {
         <input className="ep_input" value={user.email} disabled />
 
         <label className="ep_label">Name</label>
-        <input
-          className="ep_input"
-          name="name"
-          value={form.name}
-          onChange={onChange}
-          placeholder="Your name"
-        />
+        <input className="ep_input" name="name" value={form.name} onChange={onChange} placeholder="Your name" />
 
         <label className="ep_label">Phone</label>
-        <input
-          className="ep_input"
-          name="phone"
-          value={form.phone}
-          onChange={onChange}
-          placeholder="+94 7X XXX XXXX"
-        />
+        <input className="ep_input" name="phone" value={form.phone} onChange={onChange} placeholder="+94 7X XXX XXXX" />
 
         <label className="ep_label">Address</label>
-        <textarea
-          className="ep_input"
-          name="address"
-          rows={3}
-          value={form.address}
-          onChange={onChange}
-          placeholder="Street, city"
-        />
+        <textarea className="ep_input" name="address" rows={3} value={form.address} onChange={onChange} placeholder="Street, city" />
 
         {err && <div className="ep_error">{err}</div>}
 
