@@ -13,7 +13,7 @@ export default function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const { data } = await api.post("/auth/login", { email, password });
-    const u = data?.data?.user;          // expects { name, phone, address, ... }
+    const u = data?.data?.user;
     setUser(u);
     localStorage.setItem("gn_user", JSON.stringify(u));
     return u;
@@ -26,13 +26,17 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  // Optional: keep localStorage in sync if setUser is used elsewhere
+  // keep localStorage in sync both ways
   useEffect(() => {
     if (user) localStorage.setItem("gn_user", JSON.stringify(user));
+    else localStorage.removeItem("gn_user");
   }, [user]);
 
+  // ✅ alias used by your pages
+  const setUserFromServer = (freshUser) => setUser(freshUser);
+
   return (
-    <AuthCtx.Provider value={{ user, setUser, login, logout }}>
+    <AuthCtx.Provider value={{ user, setUser, setUserFromServer, login, logout }}>
       {children}
     </AuthCtx.Provider>
   );

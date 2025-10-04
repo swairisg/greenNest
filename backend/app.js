@@ -5,7 +5,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const harvestRouter = require("./Routes/harvestManagement/harvest");
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
-
+const authRouter = require("./Routes/auth");
 
 const cors = require("cors");
 
@@ -20,9 +20,11 @@ app.use(
 );
 app.use(express.json());
 
-
+//amami
 app.use("/HarvestSchedules",harvestRouter);
 app.use("/public", publicVisitRoutes);
+app.use(express.json());                     // IMPORTANT for req.body
+app.use("/api/auth", authRouter);
 
 
 

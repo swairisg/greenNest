@@ -10,10 +10,6 @@ import RequireRole from "./routes/guards/RequireRole";
 
 import Home from "./pages/public/Home";
 
-import CustomerProfile from "./pages/profile/CustomerProfile";
-import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
-
-
 import Admin from "./pages/dashboards/Admin";
 import HR from "./pages/dashboards/HR";
 import Finance from "./pages/dashboards/Finance";
@@ -23,6 +19,9 @@ import Farmer from "./pages/dashboards/Farmer";
 
 
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+
+import CustomerProfile from "./pages/profile/CustomerProfile";
+import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
 import BookVisit from "./Components/customers/BookVisit/BookVisit";
 import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess";
 import ViewVisit from "./Components/customers/ViewVisitBooking/ViewVisit"
@@ -96,12 +95,18 @@ export default function App() {
       
       <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
 
+          {/*harvest schedule*/}
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
 
+          {/*customer and buyer management*/} 
           <Route path="/visit/book" element={<BookVisit />} />
           <Route path="/visit/success" element={<BookVisitSuccess />} />
           <Route path="/visits/bookings" element={<ViewVisit />} />
+
+          {/*customer profile*/}
+          <Route path="/profile" element={<CustomerProfile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
 
         </Routes>
       </AuthProvider>
