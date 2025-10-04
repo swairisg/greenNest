@@ -24,7 +24,7 @@ import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 import BookVisit from "./Components/customers/BookVisit/BookVisit";
 import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess";
-
+import ViewVisit from "./Components/customers/ViewVisitBooking/ViewVisit"
 export default function App() {
   return (
     <BrowserRouter>
@@ -73,6 +73,8 @@ export default function App() {
 
           <Route path="/visit/book" element={<BookVisit />} />
           <Route path="/visit/success" element={<BookVisitSuccess />} />
+          <Route path="/visits/bookings" element={<ViewVisit />} />
+
         </Routes>
       </AuthProvider>
     </BrowserRouter>

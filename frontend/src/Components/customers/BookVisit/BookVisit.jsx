@@ -13,8 +13,11 @@ const SLOT_OPTIONS = [
 ];
 
 const isEmail = (v="") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-const isPhone = (v="") => /^[+()\-\.\s\d]{7,20}$/.test(v);
-
+const isPhone = (v = "") => {
+  const digits = (v.match(/\d/g) || []).length;
+   return digits === 10 && /^[+()\-.\s\d]+$/.test(v);
+ };
+ 
 export default function BookVisit() {
   const nav = useNavigate();
   const [inputs, setInputs] = useState({
@@ -235,7 +238,6 @@ export default function BookVisit() {
 
       {/* RIGHT: fixed-width side image (not full page) */}
       <div className="bv-sideimg" style={{ backgroundImage: `url(${bookvisit})` }}>
-        <div className="bv-mark">🌿 GreenNest</div>
       </div>
     </div>
   </div>

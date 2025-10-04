@@ -61,14 +61,18 @@
 }
 
 .bv-row{ margin-bottom:14px; }
-.bv-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.bv-grid{
+   display:grid;
+   grid-template-columns:1fr 1fr; 
+   gap:12px; margin-bottom:14px;
+  }
 .bv-col{ display:flex; flex-direction:column; }
 .bv-check{ display:flex; align-items:center; gap:10px; margin:10px 0 12px; color:#41524f; }
 .bv-actions{ margin-top:4px; }
 
 .bv-btn{
   width:100%;
-  background:#2dbb5c;
+  background:#32CD32;
   color:#fff;
   border:0;
   padding:12px 16px;
@@ -131,4 +135,28 @@
     max-width:1400px;
     grid-template-columns:520px minmax(600px,1fr);
   }
+}
+.bookvisit-wrap{
+  min-height: 100vh;          
+  display: flex;
+  align-items: center;        
+  justify-content: center;    
+  background: #e9f2f1;       
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.bookvisit-card{
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.12);
+  border: 1px solid rgba(0,0,0,.04);
+  text-align: center;
+}
+
+@media (max-width: 560px){
+  .bookvisit-card{ padding: 20px; }
 }

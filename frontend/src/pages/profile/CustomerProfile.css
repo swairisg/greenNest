@@ -1,139 +1,168 @@
-/* CustomerProfile.css — scoped (cp_) */
-
+/* ===== Customer Profile — Minimal Green/White ===== */
 .cp_profile {
-  /* palette (scoped) */
-  --cp-card: #f7fdf9;            /* very light green card */
-  --cp-border: #dff4e7;          /* soft green border */
-  --cp-text: #0f172a;
-  --cp-muted: #64748b;
-  --cp-green: #16a34a;           /* primary green */
-  --cp-green-hover: #0f8a3d;
-  --cp-green-weak: rgba(22,163,74,.10);
-  --cp-ring: rgba(34,197,94,.25);
-  --cp-shadow: 0 10px 26px rgba(2, 8, 23, 0.06);
+  --cp-primary: #32CD32;      /* green */
+  --cp-primary-700: #32CD32;
+  --cp-bg: #ffffff;           /* page + card stay white/minimal */
+  --cp-muted: #6b7a75;
+  --cp-border: #4F7942(0,0,0,.06);
+  --cp-ring: #ffffff;
+
+  min-height: 100dvh;
+  background: var(--cp-bg);
+  display: grid;
+  place-items: center;
+  padding: 20px;
 }
 
 .cp_profile .gn-container { width: 100%; }
-
 .cp_profile .gn-card {
-  background: var(--cp-card);
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  background: #fff;
   border: 1px solid var(--cp-border);
   border-radius: 16px;
-  box-shadow: var(--cp-shadow);
-  padding: 20px;
-  background-image: linear-gradient(180deg, rgba(22,163,74,.05), transparent 85%);
+  padding: 18px;
 }
 
-/* Header (title + logout) */
+/* Header */
 .cp_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 .cp_title {
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 800;
-  color: var(--cp-text);
+  color: #0f1c19;
 }
 
-/* Identity row */
+/* Identity block — simple, minimal */
 .cp_identity {
   display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 16px;
+  grid-template-columns: 90px 1fr;
+  gap: 14px;
   align-items: center;
-  padding: 12px 0 10px;
-  border-bottom: 1px solid var(--cp-border);
-  margin-bottom: 12px;
-}
-.cp_avatar {
-  width: 72px;
-  height: 72px;
+  padding: 14px;
   border-radius: 12px;
-  background: #ffffff;
+  border: 1px solid var(--cp-border);
+  background: #fff;
+  margin: 8px 0 10px;
+}
+
+.cp_avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 999px;
+  background: var(--cp-primary);
+  color: #fff;
   display: grid;
   place-items: center;
   font-weight: 800;
-  color: var(--cp-muted);
+  font-size: 34px;
+  border: 6px solid var(--cp-ring);
   overflow: hidden;
-  box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--cp-green-weak);
 }
-.cp_userName { font-size: 18px; font-weight: 800; color: var(--cp-text); }
-.cp_userMeta { font-size: 12px; color: var(--cp-muted); }
+.cp_avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Fields grid */
+.cp_userName {
+  margin: 2px 0 2px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f1c19;
+}
+.cp_userMeta { color: var(--cp-muted); font-size: 13px; }
+
+/* Fields */
 .cp_fields {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: 1fr;
-  margin-top: 8px;
-}
-.cp_field { display: grid; grid-template-columns: 1fr; gap: 6px; }
-.cp_label { font-size: 12px; color: var(--cp-muted); }
-
-.cp_value {
-  min-height: 44px;
-  padding: 10px 12px;
-  border: 1px solid #e9f7ef;
-  border-radius: 10px;
+  margin-top: 6px;
   background: #fff;
-  color: var(--cp-text);
-  display: flex;
-  align-items: center;
-  box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
-  transition: border-color .15s ease, box-shadow .15s ease, transform .05s ease;
+  border: 1px solid var(--cp-border);
+  border-radius: 12px;
+  overflow: hidden;
 }
-.cp_value:hover {
-  border-color: var(--cp-green);
-  box-shadow: 0 0 0 3px var(--cp-ring);
-  transform: translateY(-1px);
+.cp_field {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  padding: 10px 14px;
+  align-items: center;
+  border-top: 1px solid var(--cp-border);
+}
+.cp_field:first-child { border-top: 0; }
+
+.cp_label {
+  color: var(--cp-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .2px;
+}
+.cp_value {
+  color: #0f1c19;
+  font-weight: 600;
+  font-size: 14.5px;
+  word-break: break-word;
 }
 
 /* Actions */
 .cp_actions {
-  display: flex;
-  justify-content: center;   /* change to flex-end if you want right-aligned */
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 10px;
-  margin-top: 18px;
-  flex-wrap: wrap;
+  margin-top: 14px;
 }
+
+/* Minimal buttons */
 .cp_btn {
-  min-height: 44px;
-  padding: 0 18px;
+  appearance: none;
   border-radius: 10px;
-  border: 1px solid var(--cp-border);
-  background: #fff;
-  color: var(--cp-text);
-  font-weight: 800;
+  padding: 11px 14px;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
-  transition: transform .05s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  border: 1px solid transparent;
+  background: #fff;
+  color: var(--cp-primary);
+  border-color:#4F7942(30,142,112,.25);
 }
-.cp_btn:hover { transform: translateY(-1px); }
+.cp_btn:hover { border-color: var(--cp-primary); }
 
+/* Primary = filled green */
 .cp_btn--primary {
-  background: var(--cp-green);
-  border-color: var(--cp-green);
+  background: var(--cp-primary);
   color: #fff;
-  box-shadow: 0 6px 16px rgba(22,163,74,.22);
+  border-color: var(--cp-primary);
 }
-.cp_btn--primary:hover { background: var(--cp-green-hover); }
+.cp_btn--primary:hover { background: var(--cp-primary-700); }
 
+/* Ghost = white with green border (already set above) */
 .cp_btn--ghost {
-  background: transparent;
-  border-color: var(--cp-green);
-  color: var(--cp-green);
+  background: #fff;
+  color: var(--cp-primary);
 }
-.cp_btn--ghost:hover { background: var(--cp-green-weak); }
 
-/* Responsiveness */
-@media (min-width: 768px) {
-  .cp_fields { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+/* Match your existing Book Visit button to minimal style */
+.cp_actions .gn-btn.success {
+  background: #fff;
+  color: var(--cp-primary);
+  border: 1px solid#4F7942(30,142,112,.25);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-weight: 700;
 }
-@media (max-width: 480px) {
-  .cp_profile .gn-card { padding: 16px; }
-  .cp_identity { grid-template-columns: 56px 1fr; }
-  .cp_avatar { width: 56px; height: 56px; border-radius: 10px; }
+.cp_actions .gn-btn.success:hover {
+  border-color: var(--cp-primary);
+}
+
+/* Responsive tweaks */
+@media (min-width: 480px) {
+  .cp_profile .gn-card { padding: 20px; }
+  .cp_identity { grid-template-columns: 100px 1fr; }
+  .cp_avatar { width: 100px; height: 100px; font-size: 38px; }
+}
+@media (min-width: 768px) {
+  .cp_actions { grid-template-columns: 1fr 1fr 1fr; }
 }

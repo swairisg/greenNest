@@ -10,8 +10,10 @@ export default function CustomerProfile() {
   const navigate = useNavigate();
 
   const doLogout = async () => { await logout(); navigate("/auth/login", { replace: true }); };
-  const goUpdateProfile = () => navigate("/profile/edit");           // adjust route as you have it
-  const goUpdatePassword = () => navigate("/auth/reset-password");   // or your preferred route
+  const goUpdateProfile = () => navigate("/profile/edit");           
+  const goUpdatePassword = () => navigate("/auth/reset-password");   
+  const goBookVisit = () => navigate("/visit/book");  
+
 
   return (
     <div className="cp_profile">
@@ -82,6 +84,11 @@ export default function CustomerProfile() {
                 <button className="cp_btn cp_btn--ghost" onClick={goUpdatePassword}>
                   Update Password
                 </button>
+
+               <button className="gn-btn success" onClick={goBookVisit}>
+                Book Visit
+                </button>
+
               </div>
             </>
           )}

@@ -45,7 +45,6 @@ exports.createBooking = async (req, res) => {
   try {
     const payload = req.body;
 
-    // honeypot: if bot filled the hidden field, quietly "succeed"
     if (payload.website && String(payload.website).trim()) {
       return res.status(200).json({ ok: true });
     }
@@ -73,7 +72,22 @@ exports.createBooking = async (req, res) => {
   }
 };
 
-exports.listBookings = async (_req, res) => {
-  const list = await VisitBooking.find().sort({ createdAt: -1 }).limit(200);
+exports.listBookings = async (req, res) => {
+  const filter = {};
+  if (req.query.email) filter.email = String(req.query.email).trim();
+
+  const list = await VisitBooking.find(filter).sort({ createdAt: -1 }).limit(200);
   return res.json({ data: list });
 };
+
+// 👇 NEW: fetch one booking by id (for a simple details view if needed)
+exports.getBookingById = async (req, res) => {
+  try {
+    const doc = await VisitBooking.findById(req.params.id);
+    if (!doc) return res.status(404).json({ message: "Booking not found" });
+    return res.json({ data: doc });
+  } catch (err) {
+    console.error("getBookingById error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
