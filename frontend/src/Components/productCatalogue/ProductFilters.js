@@ -1,4 +1,3 @@
-// src/Components/productCatalogue/ProductFilters.js
 import React, { useEffect, useState } from "react";
 import { ProductsAPI } from "../../api";
 

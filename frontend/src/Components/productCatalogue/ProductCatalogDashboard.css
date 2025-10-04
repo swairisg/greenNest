@@ -1,12 +1,11 @@
-
 :root {
   --gn-bg: #ffffff;
   --gn-surface: #ffffff;
   --gn-border: #e5e7eb;
   --gn-text: #0f172a;
   --gn-muted: #64748b;
-  --gn-accent: #13b39c;   /* green */
-  --gn-accent-2: #0ea5e9; /* teal/blue accent if needed */
+  --gn-accent: #32CD32;   
+  --gn-accent-2: #0ea5e9; 
   --gn-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
   --gn-radius: 16px;
 }

@@ -1,0 +1,60 @@
+.ep_wrap { 
+  display:flex;
+  justify-content:center;
+  padding:24px; 
+  background:#f6fff8;
+ }
+.ep_card {
+  width:100%;
+  max-width:520px;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:14px;
+  padding:20px; 
+  box-shadow:0 10px 28px rgba(0,0,0,.08);
+}
+.ep_title 
+{ margin:0 0 14px; 
+  font-size:22px;
+   font-weight:800;
+    color:#32CD32;
+}
+.ep_label
+ { display:block; 
+  margin:10px 0 6px; 
+  font-size:13px;
+  color:#2f3a33;
+ }
+.ep_input 
+{
+  width:100%; 
+  padding:10px 12px; 
+  border:1px solid #d9e7dd; 
+  border-radius:10px; 
+  outline:none;
+  background:#fbfffc;
+}
+.ep_input:focus 
+{ border-color:#32CD32;
+   box-shadow:0 0 0 3px rgba(58,167,109,.15);
+}
+
+.ep_actions
+ {
+   display:flex;
+   gap:10px; 
+   justify-content:flex-end; 
+   margin-top:16px;
+}
+.ep_btn {
+  padding:10px 14px; 
+  border-radius:10px;
+  border:1px solid #32CD32;
+  background:#32CD32;
+  color:#fff; 
+  font-weight:700; 
+  cursor:pointer;
+}
+.ep_btn:disabled { opacity:.7; cursor:not-allowed; }
+.ep_btn.ghost { background:#fff; color:#32CD32; border-color:#b8e0c9; }
+.ep_error { margin-top:10px; color:#b00020; font-size:13px; }

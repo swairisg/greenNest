@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ProductsAPI } from "../../api";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../cart/cartUtils";
 import "./ProductCatalogCustomer.css";
 import Logo from "../../assests/logo-leaf.png";
+import { ProductsAPI } from "../../api";
 
 // tiny debounce to avoid spamming the API when typing
 function useDebounced(value, delay = 400) {
@@ -60,6 +62,8 @@ function ProductCard({ p, onAdd }) {
 }
 
 export default function CatalogPage() {
+
+  const navigate = useNavigate();
   // query params aligned to your backend controller
   const [params, setParams] = useState({
     page: 1,
@@ -150,7 +154,11 @@ export default function CatalogPage() {
     }));
 
   const onAdd = (p) => {
-    alert(`Added: ${p.productName} (demo)`);
+    const onAdd = (p) => {
+      if (p.stockQuantity <= 0 || p.isVisible === false) return;
+      addToCart(p, 1);
+      navigate("/cart"); 
+   };
   };
 
   // derive min/max from server range
