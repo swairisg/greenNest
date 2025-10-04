@@ -43,6 +43,7 @@ export default function HREmployees() {
   const [designation, setDesignation] = useState("all");
 
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [err, setErr] = useState("");
 
   // Edit drawer state
@@ -72,6 +73,19 @@ export default function HREmployees() {
     return clearRight;
   }, [setRight, clearRight]);
 
+const buildParams = (overrides = {}) => {
+    const params = {
+      page,
+      pageSize,
+      ...overrides,
+    };
+    if (search.trim()) params.search = search.trim();
+    if (status !== "all") params.status = status;
+    if (department !== "all") params.department = department;
+    if (designation !== "all") params.designation = designation;
+    return params;
+  };
+
   const fetchList = async () => {
     setLoading(true);
     setErr("");
@@ -96,7 +110,6 @@ export default function HREmployees() {
   // initial + when page or filters change
   useEffect(() => {
     fetchList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, status, department, designation]);
 
   // search with small debounce (300ms)
@@ -108,10 +121,9 @@ export default function HREmployees() {
       fetchList();
     }, 300);
     return () => clearTimeout(debounceRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
-
+//deleting
 const handleDelete = async (row) => {
   const result = await MySwal.fire({
     icon: "warning",
@@ -203,6 +215,102 @@ const handleDelete = async (row) => {
 };
 
 
+//exporting reports
+const csvEscape = (v) => {
+    if (v == null) return "";
+    const s = String(v);
+    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  };
+
+  const handleExport = async () => {
+    try {
+      setExporting(true);
+
+      // Pull ALL rows that match current filters/search in batches
+      const pageSizeExport = 500;
+      let curPage = 1;
+      let all = [];
+      let totalFound = 0;
+
+      // first call
+      // reuse the same endpoint with filters
+      while (true) {
+        const res = await api.get("/hr/employees", {
+          params: buildParams({ page: curPage, pageSize: pageSizeExport }),
+        });
+        const chunk = res.data?.data || [];
+        totalFound = res.data?.total || 0;
+        all = all.concat(chunk);
+
+        const totalPagesExport = Math.max(
+          1,
+          Math.ceil(totalFound / pageSizeExport)
+        );
+        if (curPage >= totalPagesExport) break;
+        curPage++;
+      }
+
+      // Build CSV rows
+      const headers = [
+        "Full Name",
+        "Email",
+        "Phone",
+        "Department",
+        "Designation",
+        "Status",
+        "Join Date",
+        "Salary (LKR)",
+      ];
+
+      const rowsCsv = all.map((r) => {
+        const join = r.joinDate || r.createdAt;
+        const joinStr = join ? new Date(join).toISOString().slice(0, 10) : "";
+        return [
+          csvEscape(r.fullName || ""),
+          csvEscape(r.email || ""),
+          csvEscape(r.phone || ""),
+          csvEscape(r.department || ""),
+          csvEscape(r.designation || ""),
+          csvEscape(r.currentStatus || ""),
+          csvEscape(joinStr),
+          csvEscape(r.salary != null ? r.salary : ""),
+        ].join(",");
+      });
+
+      const csv = [headers.join(","), ...rowsCsv].join("\n");
+
+      // Download
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const stamp = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `employees_${stamp}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      // Tiny toast
+      MySwal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: `Report generated (${all.length} rows)`,
+        showConfirmButton: false,
+        timer: 2200,
+        timerProgressBar: true,
+      });
+    } catch (e) {
+      console.error(e);
+      const msg = e?.response?.data?.message || e.message || "Export failed";
+      MySwal.fire({ icon: "error", title: "Export failed", text: msg });
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <div className="hrlist-wrap">
       <div className="hrlist-card">
@@ -282,6 +390,17 @@ const handleDelete = async (row) => {
             }}
           >
             {loading ? "Searching…" : "Search"}
+          </button>
+
+          {/* Export button */}
+          <button
+            className="hrlist-btn ghost"
+            disabled={exporting || loading}
+            onClick={handleExport}
+            title="Download CSV of the filtered results"
+            style={{ marginLeft: 6 }}
+          >
+            {exporting ? "Exporting…" : "Export CSV"}
           </button>
         </div>
 

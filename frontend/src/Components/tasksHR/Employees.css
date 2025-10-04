@@ -35,7 +35,7 @@
 .badge { display:inline-block; padding: 4px 8px; border-radius: 999px; font-size: 12px; border:1px solid #dbe7dc; }
 .badge.active { background: var(--green-100); color: var(--green-700); border-color:#cfe9d3; }
 .badge.inactive { background:#fff6e6; color: var(--amber-600); border-color:#f2e4c3; }
-.badge.terminated { background:#ffe6e6; color:#8a1f1f; border-color:#f4cccc; }
+.badge.terminated { background:#ffe6e6; color:#ad0b0b; border-color:#f4cccc; }
 
 .hrlist-btn { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--green-600); background: var(--green-600); color: #fff; cursor: pointer; }
 .hrlist-btn:hover { filter: brightness(0.98); }
