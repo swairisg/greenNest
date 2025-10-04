@@ -1,5 +1,5 @@
-require('dotenv').config(); 
-const ClimateRecord = require("../../Model/climateCheck/ClimateRecord"); // Corrected path
+
+const ClimateRecord = require("../../models/ClimateMonitoring/ClimateRecord"); // Corrected path
 const axios = require("axios"); //for http requests
 const moment = require("moment-timezone"); //for timezone handling, moment library
 const climateAlertService = require('../../utils/climateAlertService');
@@ -235,14 +235,12 @@ const fetchAndStoreExternalData = async (req, res) => {
     const bioURL = `${process.env.STORMGLASS_BIO_URL}?lat=${lat}&lng=${lng}&params=${bioParams}`;
     const apiKey = process.env.STORMGLASS_API_KEY;
 
-
     if (!apiKey) {
       return res.status(500).json({
         success: false,
         message: "API key not configured"
       });
     }
-
 
     const [weatherResponse, bioResponse] = await Promise.all([
       axios.get(weatherURL, {
