@@ -44,6 +44,12 @@ import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
 import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
 
+import QualityList from "./Components/qualityControl/QualityList";
+import QualityCreate from "./Components/qualityControl/QualityCreate";
+import QualityDetail from "./Components/qualityControl/QualityDetail";
+import QualityEdit from "./Components/qualityControl/QualityEdit";
+import Cart from "./Components/cart/Cart";
+
 
 export default function App() {
   return (
