@@ -23,6 +23,9 @@ app.use("/HarvestSchedules", harvestRouter);
 const hrRoutes = require("./Routes/tasksHR");
 app.use("/hr", hrRoutes);
 
+const plantCultRoutes = require("./Routes/plantCultivation");
+app.use("/plant-cultivation", plantCultRoutes);
+
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
 app.use("/users", pestRoutes);
