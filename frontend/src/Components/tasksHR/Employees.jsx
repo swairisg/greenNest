@@ -174,7 +174,7 @@ export default function HREmployees() {
           </select>
 
           <button
-            className="hrlist-btn"
+            className="btn-teal"
             disabled={loading}
             onClick={() => {
               setPage(1);
@@ -225,14 +225,15 @@ export default function HREmployees() {
                       </span>
                     </td>
                     <td>
-                      {r.joinDate
-                        ? new Date(r.joinDate).toLocaleDateString()
-                        : "-"}
-                    </td>
+   {(() => {
+     const d = r.joinDate || r.createdAt;
+     return d ? new Date(d).toLocaleDateString() : "-";
+   })()}
+ </td>
                     <td>
                       <div className="hrlist-actions">
                         <button
-                          className="hrlist-btn ghost small"
+  className="hrlist-btn edit small"
                           title="View / Edit"
                           onClick={() => nav(`/hr/employees/${r._id}`)}
                         >

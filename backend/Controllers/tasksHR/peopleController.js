@@ -9,6 +9,7 @@ const isStrong = (pwd) =>
 const bad = (res, msg, code = 400) => res.status(code).json({ message: msg });
 
 /* ---------- LIST: GET /hr/employees ---------- */
+/* ---------- LIST: GET /hr/employees ---------- */
 async function list(req, res) {
   try {
     const {
@@ -23,13 +24,24 @@ async function list(req, res) {
 
     const q = {};
     if (status) q.currentStatus = status;
+
+    // treat missing isDeleted as "not deleted"
     if (includeDeleted !== "true") q.isDeleted = { $ne: true };
+
     if (department) q.department = department;
     if (designation) q.designation = designation;
 
-    if (search) {
-      if (search.length >= 3) q.$text = { $search: search };
-      else q.fullName = { $regex: search, $options: "i" };
+    // robust case-insensitive search across common fields (no text index needed)
+    if (search && search.trim()) {
+      const safe = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const rx = new RegExp(safe, "i");
+      q.$or = [
+        { fullName: rx },
+        { email: rx },
+        { department: rx },
+        { designation: rx },
+        { phone: rx },
+      ];
     }
 
     const ps = Math.max(1, Number(pageSize));
@@ -43,7 +55,7 @@ async function list(req, res) {
     res.json({ data: rows, total, page: Number(page), pageSize: ps });
   } catch (err) {
     console.error("Employees list error:", err);
-    bad(res, "Failed to fetch employees", 500);
+    res.status(500).json({ message: "Failed to fetch employees" });
   }
 }
 

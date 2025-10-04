@@ -1,0 +1,73 @@
+/* ========= HR Sidebar ========= */
+.hr-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 0;
+  min-height: 100vh;
+  background: #f5faf6;
+}
+
+.hr-side {
+  background: #ffffff;
+  border-right: 1px solid #e8efe8;
+  padding: 18px 16px 20px;
+}
+
+.hr-brand {
+  font-weight: 800;
+  color: #065f46;
+  font-size: 18px;
+  letter-spacing: .2px;
+  margin-bottom: 10px;
+}
+
+.hr-nav {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 14px;
+}
+
+.hr-navlink {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #1f3a2e;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.hr-navlink:hover {
+  background: #f2fbf7;
+  border-color: #e3f3ea;
+}
+.hr-navlink.active {
+  background: #e9fbf7;             /* light teal */
+  border-color: #baf3ec;
+  color: #0f766e;                   /* teal-700 */
+  font-weight: 700;
+}
+
+.hr-quick {
+  margin-top: 14px;
+  background: #f0fffa;
+  border: 1px dashed #a7e7dc;
+  border-radius: 14px;
+  padding: 12px;
+  color: #0f3b2c;
+}
+.hr-quick h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #0f3b2c;
+}
+.hr-quick a {
+  display: block;
+  color: #0b766e;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 10px;
+}
+.hr-quick a:hover { background: #e9fbf7; }
+
+.hr-main {
+  padding: 18px 18px 24px;
+}

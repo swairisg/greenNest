@@ -51,3 +51,34 @@
 
 .hrlist-pager { margin-top: 12px; display:flex; align-items:center; justify-content:space-between; }
 .hrlist-pager-info { color:#2d4638; font-size: 13px; }
+
+.hrlist-btn.edit { background: #14b8a6; border-color: #14b8a6; color: #fff; }
+.hrlist-btn.edit:hover { filter: brightness(0.98); }
+
+/* ========= Teal button utilities ========= */
+.btn-teal {
+  background: #14b8a6;            /* teal-500 */
+  border: 1px solid #14b8a6;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(20, 184, 166, .2);
+}
+.btn-teal.small { padding: 7px 12px; border-radius: 999px; font-weight: 600; }
+.btn-teal:hover { filter: brightness(0.98); }
+.btn-teal:active { transform: translateY(1px); }
+.btn-teal:disabled { opacity: .6; cursor: not-allowed; }
+
+/* make the existing "primary" class teal too */
+.hrlist-btn-primary {
+  background: #14b8a6;
+  border: 1px solid #14b8a6;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 16px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(20, 184, 166, .22);
+  text-decoration: none;
+}
+.hrlist-btn-primary:hover { filter: brightness(0.98); }
