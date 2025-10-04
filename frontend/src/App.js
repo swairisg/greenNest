@@ -75,10 +75,10 @@ export default function App() {
       <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
       <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
 
-      {/* 🛒 Product Catalog (Customer) */}
+      {/* Product Catalog (Customer) */}
       <Route path="/catalog" element={<CatalogPage />} />
 
-      {/* 🔐 Product Catalog (Admin) */}
+      {/*Product Catalog (Admin) */}
       <Route path="/admin/products" element={<AdminProducts />} />
       <Route path="/admin/products/new" element={<ProductCatalogForm />} />
       <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
