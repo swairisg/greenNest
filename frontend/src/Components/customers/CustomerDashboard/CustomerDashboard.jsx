@@ -3,27 +3,35 @@ import axios from "axios";
 import { API_BASE } from "../../../api";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useNavigate } from "react-router-dom";
 import VisitBookingsChart from "./components/VisitBookingsChart";
+import ContactMessagesCharts from "./components/ContactMessagesCharts";
 import "../CustomerDashboard/CustomerDashboard.css";
 
 const fmtDate = (d) => (d ? new Date(d).toLocaleDateString() : "—");
 const fmtDateTime = (d) => (d ? new Date(d).toLocaleString() : "—");
 const norm = (v) => String(v ?? "").toLowerCase();
 
-
 const LIST_URL = (email) =>
   `${API_BASE}/public/visit-bookings${email ? `?email=${encodeURIComponent(email)}` : ""}`;
-const ADMIN_URL = `${API_BASE}/api/visit-bookings`; 
+const ADMIN_URL = `${API_BASE}/api/visit-bookings`;
+
+// NEW: contact-us admin endpoints
+const CONTACT_LIST_URL = `${API_BASE}/contact-us`;
 
 export default function VisitBookingsPage() {
-  
-  const [email, setEmail] = useState("");  
-  const [query, setQuery] = useState("");  
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [query, setQuery] = useState("");
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
-  const [localStatus, setLocalStatus] = useState({}); 
+  // NEW: contact-us state
+  const [contacts, setContacts] = useState([]);
+  const [loadingContacts, setLoadingContacts] = useState(true);
+
+  const [localStatus, setLocalStatus] = useState({});
 
   const load = useCallback(async () => {
     try {
@@ -46,9 +54,29 @@ export default function VisitBookingsPage() {
     }
   }, [email]);
 
+  // NEW: load contact messages once (no filters)
+  const loadContacts = useCallback(async () => {
+    try {
+      setLoadingContacts(true);
+      const res = await axios.get(CONTACT_LIST_URL);
+      const rows = res?.data?.data ?? res?.data ?? [];
+      setContacts(Array.isArray(rows) ? rows : []);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to load contact messages");
+    } finally {
+      setLoadingContacts(false);
+    }
+  }, []);
+
   useEffect(() => {
     load();
   }, [load]);
+
+  // NEW: fetch contacts on mount
+  useEffect(() => {
+    loadContacts();
+  }, [loadContacts]);
 
   const filtered = useMemo(() => {
     const q = norm(query);
@@ -95,14 +123,13 @@ export default function VisitBookingsPage() {
     }
     setLocalStatus((p) => ({
       ...p,
-      [id]: nextStatus === "approved" ? "approved" : undefined, 
+      [id]: nextStatus === "approved" ? "approved" : undefined,
     }));
     try {
       await patchBooking(id, { status: nextStatus });
     } catch (err) {
       console.error(err);
       alert(err?.response?.data?.message || "Failed to update booking");
-
       setLocalStatus((p) => {
         const copy = { ...p };
         const prev = toUiStatus(r.status || "new");
@@ -217,13 +244,7 @@ export default function VisitBookingsPage() {
             Search
           </button>
 
-          <input
-            type="text"
-            className="vb-input"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Quick filter (client-side)"
-          />
+          
 
           <button
             className="vb-btn ghost"
@@ -248,9 +269,13 @@ export default function VisitBookingsPage() {
         </div>
       </div>
 
+      {/* ---- Booking Visits Analytics (TITLE + charts) ---- */}
+      <div className="vb-section-title">Booking Visits Analytics</div>
+
+      {/* Existing Visit Bookings charts */}
       {!loading && (
         <VisitBookingsChart
-          rows={filtered} 
+          rows={filtered}
           titleSuffix={filtered.length !== rows.length ? "(filtered)" : ""}
         />
       )}
@@ -285,7 +310,6 @@ export default function VisitBookingsPage() {
                   <div>{r.visitorsCount ?? "—"}</div>
                   <div>{fmtDateTime(r.createdAt)}</div>
 
-                  {/* Status select + Delete only */}
                   <div className="vb-actions">
                     <select
                       className="vb-status-select"
@@ -313,6 +337,37 @@ export default function VisitBookingsPage() {
           )}
         </div>
       )}
+
+      {/* ---- Contact Messages Analytics (COMPACT, BELOW THE TABLE) ---- */}
+      <section className="vb-analytics">
+        <div className="vb-section-title">Contact Messages Analytics</div>
+
+        {loadingContacts ? (
+          <div className="vb-loading sm">Loading contact analytics…</div>
+        ) : contacts.length === 0 ? (
+          <div className="vb-empty">No contact messages yet.</div>
+        ) : (
+          <div className="vb-analytics-grid one">
+            <div className="vb-card vb-chart-box vb-chart-box--sm">
+              <ContactMessagesCharts
+                rows={contacts}
+                titleSuffix=""
+                // options={{ maintainAspectRatio: false }}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="vb-actions-bar">
+          <button
+            className="vb-btn outline"
+            onClick={() => navigate("/viewcontactus")}
+            title="Go to Contact Messages table"
+          >
+            View Contact Messages Table
+          </button>
+        </div>
+      </section>
     </div>
   );
 }

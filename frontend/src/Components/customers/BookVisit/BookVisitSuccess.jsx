@@ -13,7 +13,7 @@ export default function BookVisitSuccess() {
         <p className="bookvisit-sub">
           Your visit request was submitted. We’ll email you after reviewing availability.
         </p>
-        <Link className="bv-btn" to="/">Back to Home</Link>
+        <Link className="bv-btn" to="/Home">Back to Home</Link>
       </div>
     </div>
   );

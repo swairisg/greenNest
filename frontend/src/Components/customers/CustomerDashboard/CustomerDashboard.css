@@ -206,6 +206,7 @@
 }
 
 
+
 @media (max-width: 980px){
   .vb-table{ width:100%; overflow:auto; }
   .vb-thead, .vb-row{ width:980px; } 
@@ -214,4 +215,76 @@
   .vb-head{ flex-direction:column; align-items:stretch; gap:12px; }
   .vb-filters{ justify-content:stretch; }
   .vb-input{ min-width:0; flex:1; }
+}
+.vb-section-title{
+  margin: 28px 6px 10px;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--vb-ink);
+}
+
+.vb-actions-bar{
+  margin: 12px 6px 22px;
+}
+
+
+
+.vb-analytics { margin-top: 28px; }
+
+.vb-section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--vb-ink);
+  margin: 8px 0 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.vb-analytics-grid.one {            /* single, centered card area */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Same card look as the top charts */
+.vb-card {
+  background: var(--vb-card, #fff);
+  border-radius: var(--vb-radius, 16px);
+  box-shadow: var(--vb-shadow, 0 10px 26px rgba(0,0,0,.06));
+  border: 1px solid var(--vb-line, rgba(0,0,0,.08));
+  padding: 16px;
+}
+
+.vb-chart-box { position: relative; overflow: hidden; }
+.vb-chart-box--sm { height: 340px; }   
+
+.vb-chart-box--sm canvas {
+  width: 100% !important;
+  height: 100% !important;   /* pairs with maintainAspectRatio:false if provided */
+  display: block;
+}
+
+/* Optional: shrink internal titles inside the chart card */
+.vb-chart-box--sm h3,
+.vb-chart-box--sm .chart-title,
+.vb-chart-box--sm .cmc-title {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--vb-ink, #1b1f23);
+}
+
+/* Button row under the compact chart */
+.vb-actions-bar {
+  margin-top: 12px;
+  display: flex; gap: 10px; justify-content: flex-start;
+}
+/* was 340px */
+.vb-chart-box--sm { height: 420px; }  /* try 380–440px if you want finer control */
+
+/* Small loading text */
+.vb-loading.sm { font-size: .95rem; color: var(--vb-ink-soft, #6b7280); padding: 10px 0; }
+
+/* Responsive nicety: if later you add more contact charts, they’ll grid nicely */
+@media (min-width: 768px) {
+  .vb-analytics-grid.one { grid-template-columns: 1fr; }
 }
