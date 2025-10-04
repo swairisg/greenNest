@@ -68,7 +68,7 @@ export default function PestDetectDisplay() {
     <div className="pd-display">
       <div className="pd-head">
         <h1 className="pd-display__title">Pest Detect Records</h1>
-        <Link to="/pests/new" className="pd-btn pd-btn--primary">+ Report Pest</Link>
+        <Link to="/pests/farmer" className="pd-btn pd-btn--primary">+ Report Pest</Link>
       </div>
 
       <PestDetectFilter

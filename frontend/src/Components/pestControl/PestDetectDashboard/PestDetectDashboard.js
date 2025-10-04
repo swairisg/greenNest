@@ -100,7 +100,7 @@ function PestDetectDashboard() {
 
   // PIE: only Low/Medium/High/Critical
   const pieCounts = useMemo(() => {
-    const acc = { low: 0, medium: 0, high: 0, critical: 0 };
+    const acc = { low: 0, moderate: 0, high: 0, critical: 0 };
     filtered.forEach((r) => {
       const k = getSeverity(r);
       if (k in acc) acc[k] += 1;
@@ -109,10 +109,10 @@ function PestDetectDashboard() {
   }, [filtered]);
 
   const pieData = useMemo(() => ({
-    labels: ["Low", "Medium", "High", "Critical"],
+    labels: ["Low", "Moderate", "High", "Critical"],
     datasets: [{
       label: "Reports",
-      data: [pieCounts.low, pieCounts.medium, pieCounts.high, pieCounts.critical],
+      data: [pieCounts.low, pieCounts.moderate, pieCounts.high, pieCounts.critical],
     }],
   }), [pieCounts]);
 
@@ -240,7 +240,7 @@ function PestDetectDashboard() {
         </div>
         <div className="pd-actions">
           <Link to="/pests/farmer" className="pd-btn pd-btn-primary">+ Report Pest</Link>
-          <Link to="/PestDetectDisplay" className="pd-btn pd-btn-ghost">View All</Link>
+          <Link to="/PestDetectDisplay" className="pd-btn pd-btn--ghost">View All</Link>
         </div>
       </header>
 
