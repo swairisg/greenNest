@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DriverDataDisplay from "../itemDataDisplay/DriverDataDisplay";
+import DriverDataDisplay from "../../../Components/inventory/itemDataDisplay/DriverDataDisplay";
 
 const API_URL = "http://localhost:5000/api/drivers";
 

@@ -1,5 +1,6 @@
-const Inventory = require("../../models/InventoryAndSupplychain/InventoryModel");
-const Supplier = require("../../models/InventoryAndSupplychain/SupplierModel"); 
+const Inventory = require("../../Model/inventory/InventoryModel")
+//require("../../models/InventoryAndSupplychain/InventoryModel");
+const Supplier = require("../../Model/inventory/SupplierModel"); 
 
 //read all items
 const getAllItems = async (req, res, next) => {
@@ -70,7 +71,7 @@ const createItem = async (req, res, next) => {
       currentStock
     } = req.body;
 
-    // Enhanced validation with detailed error messages
+    // detailed error messages
     const missingFields = [];
     if (!name) missingFields.push('name');
     if (!category) missingFields.push('category');
@@ -84,7 +85,7 @@ const createItem = async (req, res, next) => {
       });
     }
 
-    // Check if supplier exists
+    //sheck if supplier exists
     const supplier = await Supplier.findById(supplierId);
     if (!supplier) {
       return res.status(400).json({
@@ -93,12 +94,12 @@ const createItem = async (req, res, next) => {
       });
     }
 
-    // Generate SKU
+    //generate SKU
     const timestamp = Date.now();
     const randomSuffix = Math.floor(Math.random() * 1000);
     const sku = `SKU-${timestamp}-${randomSuffix}`;
 
-    // Create item with all fields
+    //create item with all fields
     const itemData = {
       name: name.trim(),
       category: category.trim(),
@@ -117,7 +118,7 @@ const createItem = async (req, res, next) => {
     const item = new Inventory(itemData);
     await item.save();
     
-    // Populate supplier info in response
+    //populate supplier info in response
     const populatedItem = await Inventory.findById(item._id)
       .populate('supplierId', 'name companyName contactPerson email phone');
     
@@ -131,7 +132,7 @@ const createItem = async (req, res, next) => {
   } catch (error) {
     console.error("❌ Error creating item:", error);
     
-    // Handle validation errors
+    // validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({
@@ -141,7 +142,7 @@ const createItem = async (req, res, next) => {
       });
     }
     
-    // Duplicate SKU error (shouldn't happen with timestamp-based SKU)
+    //duplicatr  SKU error 
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,

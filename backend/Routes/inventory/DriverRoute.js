@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../../controllers/InventoryAndSupplychain/DriverController");
+const controller = require("../../Controllers/inventory/DriverController");
 
 router.post("/", controller.createDriver);
 router.get("/", controller.getAllDrivers);

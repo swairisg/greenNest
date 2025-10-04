@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import InventoryDisplay from "../itemDataDisplay/InventoryDisplay";
+import InventoryDisplay from "../../../Components/inventory/itemDataDisplay/InventoryDisplay";
 import ReportGenerator from "../Report/ReportGenerator";
 import {
   Plus,

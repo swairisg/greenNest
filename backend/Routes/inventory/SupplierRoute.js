@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../../controllers/InventoryAndSupplychain/SupplierController");
+const controller = require("../../Controllers/inventory/SupplierController");
 
 router.post("/", controller.createSupplier);
 router.get("/", controller.getAllSuppliers);

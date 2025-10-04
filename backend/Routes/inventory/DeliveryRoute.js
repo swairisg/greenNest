@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../../controllers/InventoryAndSupplychain/DeliveryController");
+const controller = require("../../Controllers/inventory/DeliveryController");
 
 router.post("/", controller.createDelivery);
 router.get("/", controller.getAllDeliveries);

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"); //for transactions
-const { inventoryConnection } = require('../../config/database')
+//const { inventoryConnection } = require('../../config/database')
 
 const TransactionSchema = new mongoose.Schema(
   {
@@ -19,4 +19,4 @@ const TransactionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = inventoryConnection.model("Transaction", TransactionSchema);
+module.exports = mongoose.model("Transaction", TransactionSchema);

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../../controllers/InventoryAndSupplychain/TransactionController");
+const controller = require("../../Controllers/inventory/TransactionController");
 
 router.post("/in", controller.recordStockInward);
 router.post("/out", controller.recordStockOutward);

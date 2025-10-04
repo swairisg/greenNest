@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const reportController = require('../../controllers/InventoryAndSupplychain/reportController');
+const reportController = require('../../Controllers/inventory/reportController');
 
 // Stock reports
 router.get('/stock', reportController.generateStockReport);

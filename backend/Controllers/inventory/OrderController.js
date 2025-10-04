@@ -1,6 +1,6 @@
-const Order = require("../../models/InventoryAndSupplychain/OrderModel");
-const Transaction = require("../../models/InventoryAndSupplychain/TransactionModel");
-const Inventory = require("../../models/InventoryAndSupplychain/InventoryModel");
+const Order = require("../../Model/inventory/OrderModel");
+const Transaction = require("../../Model/inventory/TransactionModel");
+const Inventory = require("../../Model/inventory/InventoryModel");
 
 //po = purchase order
 

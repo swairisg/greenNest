@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import OrderDataDisplay from "../itemDataDisplay/OrderDataDisplay";
+import OrderDataDisplay from "../../../Components/inventory/itemDataDisplay/OrderDataDisplay";
 
 const API_URL = "http://localhost:5000/api/orders";
 

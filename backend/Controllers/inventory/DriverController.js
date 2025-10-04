@@ -1,11 +1,12 @@
-const Driver = require("../../models/InventoryAndSupplychain/DriverModel");
 
-// Create driver
+const Driver = require("../../Model/inventory/DriverModel")
+
+//create driver
 const createDriver = async (req, res, next) => {
   try {
     console.log("🚚 Creating driver with data:", JSON.stringify(req.body, null, 2));
     
-    // Validate required fields
+    //validate required fields
     const requiredFields = ['name', 'phone', 'email', 'vehicleInfo', 'licenseNumber'];
     const missingFields = requiredFields.filter(field => !req.body[field] || req.body[field].toString().trim() === '');
     
@@ -18,7 +19,7 @@ const createDriver = async (req, res, next) => {
       });
     }
 
-    // Clean and format data
+    //clean and format data
     const driverData = {
       ...req.body,
       licenseNumber: req.body.licenseNumber.trim().toUpperCase(),
@@ -47,7 +48,7 @@ const createDriver = async (req, res, next) => {
   } catch (error) {
     console.error("💥 Error creating driver:", error);
 
-    // MongoDB duplicate key error
+    //mngoDB duplicate key error
     if (error.code === 11000) {
       const field = Object.keys(error.keyPattern)[0];
       return res.status(400).json({ 
@@ -58,7 +59,7 @@ const createDriver = async (req, res, next) => {
       });
     }
 
-    // MongoDB validation error
+    //mongoDB validation error
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({ 
@@ -77,7 +78,7 @@ const createDriver = async (req, res, next) => {
   }
 };
 
-// Get all drivers
+//get all drivers
 const getAllDrivers = async (req, res, next) => {
   try {
     console.log("📋 Fetching all active drivers");
@@ -104,7 +105,7 @@ const getAllDrivers = async (req, res, next) => {
   }
 };
 
-// Get driver by ID
+//get driver by ID
 const getDriverById = async (req, res, next) => {
   try {
     const driver = await Driver.findOne({ 
@@ -133,7 +134,7 @@ const getDriverById = async (req, res, next) => {
   }
 };
 
-// Update driver
+//update driver
 const updateDriver = async (req, res, next) => {
   try {
     const driver = await Driver.findByIdAndUpdate(
@@ -173,7 +174,7 @@ const updateDriver = async (req, res, next) => {
   }
 };
 
-// Soft delete driver
+//soft delete driver
 const softDeleteDriver = async (req, res, next) => {
   try {
     const driver = await Driver.findByIdAndUpdate(

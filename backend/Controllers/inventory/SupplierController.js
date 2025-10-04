@@ -1,4 +1,4 @@
-const Supplier = require("../../models/InventoryAndSupplychain/SupplierModel");
+const Supplier = require("../../Model/inventory/SupplierModel");
 
 const createSupplier = async (req, res, next) => {
   try {

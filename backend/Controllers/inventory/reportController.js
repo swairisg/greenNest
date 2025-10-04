@@ -1,7 +1,7 @@
-const Inventory = require('../../models/InventoryAndSupplychain/InventoryModel');
+const Inventory = require('../../Model/inventory/InventoryModel');
 
 class ReportController {
-  // Generate stock report
+  //generate stock report
   async generateStockReport(req, res) {
     try {
       console.log('📊 Generating stock report with query:', req.query);
@@ -22,7 +22,7 @@ class ReportController {
       console.log(`📦 Found ${items.length} items for report`);
 
       if (format === 'pdf') {
-        // For now, return JSON until PDF service is set up
+        //
         return res.json({
           success: true,
           data: items,
@@ -32,7 +32,7 @@ class ReportController {
         });
       }
 
-      // JSON response
+      // json response
       res.json({
         success: true,
         data: items,
@@ -50,7 +50,7 @@ class ReportController {
     }
   }
 
-  // Export to CSV
+  //export to CSV
   async exportToCSV(req, res) {
     try {
       const { category } = req.query;
@@ -78,7 +78,7 @@ class ReportController {
     }
   }
 
-  // Generate dashboard statistics
+  // dashboard statistics
   async getDashboardStats(req, res) {
     try {
       const totalItems = await Inventory.countDocuments({ isActive: true });
@@ -138,7 +138,7 @@ class ReportController {
     }
   }
 
-  // Helper method to generate summary
+  // method to generate summary
   generateSummary(items) {
     const totalItems = items.length;
     const lowStockItems = items.filter(item => item.currentStock <= item.minStockLevel).length;
@@ -157,7 +157,7 @@ class ReportController {
     };
   }
 
-  // Helper method to generate CSV
+  // method to generate CSV
   generateCSV(items) {
     const headers = ['Name', 'SKU', 'Category', 'Current Stock', 'Min Stock', 'Max Stock', 'Unit', 'Supplier', 'Status', 'Last Updated'];
     

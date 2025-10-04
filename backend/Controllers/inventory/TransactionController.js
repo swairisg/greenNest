@@ -1,10 +1,9 @@
-const Inventory = require("../../models/InventoryAndSupplychain/InventoryModel");
-const Transaction = require("../../models/InventoryAndSupplychain/TransactionModel");
+const Inventory = require("../../Model/inventory/InventoryModel");
+const Transaction = require("../../Model/inventory/TransactionModel");
 const whatsappService = require('../../utils/WhatsAppService');
-const { inventoryConnection } = require("../../config/database");
+//const { inventoryConnection } = require("../../config/database");
 console.log('inventoryConnection.readyState =', inventoryConnection && inventoryConnection.readyState);
 // 1 = connected
-
 
 //inward
 const recordStockInward = async (req, res, next) => {

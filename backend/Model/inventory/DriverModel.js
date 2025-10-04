@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { inventoryConnection } = require("../../config/database.js"); 
+//const { inventoryConnection } = require("../../config/database.js"); 
 
 const DriverSchema = new mongoose.Schema(
   {
@@ -57,4 +57,4 @@ DriverSchema.index({ licenseNumber: 1 }, { unique: true });
 DriverSchema.index({ isActive: 1 });
 DriverSchema.index({ email: 1 });
 
-module.exports = inventoryConnection.model("Driver", DriverSchema);
+module.exports = mongoose.model("Driver", DriverSchema);

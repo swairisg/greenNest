@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const { inventoryConnection } = require("../../config/database"); 
-const drivers = require('../../models/InventoryAndSupplychain/DriverModel')
+//const { inventoryConnection } = require("../../config/database"); 
+const drivers = require('../../Model/inventory/DriverModel')
 
 const DeliverySchema = new mongoose.Schema(
   {
@@ -44,4 +44,4 @@ const DeliverySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = inventoryConnection.model("Delivery", DeliverySchema);
+module.exports = mongoose.model("Delivery", DeliverySchema);

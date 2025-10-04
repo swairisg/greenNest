@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import TransactionDataDisplay from "../itemDataDisplay/TransactionDataDisplay";
+import TransactionDataDisplay from "../../../Components/inventory/itemDataDisplay/TransactionDataDisplay";
 
 const API_URL = "http://localhost:5000/api/transactions";
 

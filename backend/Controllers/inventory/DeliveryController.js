@@ -1,6 +1,6 @@
-const Delivery = require("../../models/InventoryAndSupplychain/DeliveryModel");
-const Driver = require("../../models/InventoryAndSupplychain/DriverModel");
-const Order = require("../../models/InventoryAndSupplychain/OrderModel");
+const Delivery = require("../../Model/inventory/DeliveryModel");
+const Driver = require("../../Model/inventory/DriverModel");
+const Order = require("../../Model/inventory/OrderModel");
 
 //create delivery
 const createDelivery = async (req, res, next) => {
