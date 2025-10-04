@@ -1,0 +1,362 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Urbanist:wght@500;700&display=swap");
+
+:root {
+  --gn-bg-start: #b8edbc;   /* very light green */
+  --gn-bg-end:   #8ae9a6;   /* light green gradient end */
+  --gn-accent:   #009688;   /* teal */
+  --gn-accent-2: #13b39c;   /* lighter teal for glow */
+  --gn-text:     #0f172a;   /* deep slate */
+  --gn-muted:    #5b6b75;
+  --gn-danger:   #e53935;
+  --gn-card:     rgba(255, 255, 255, 0.30);
+  --gn-card-bdr: rgba(255, 255, 255, 0.45);
+  --gn-blur:     16px;
+  --gn-radius:   16px;
+  --gn-shadow:   0 10px 30px rgba(0, 0, 0, 0.10);
+  --gn-glow:     0 0 0 rgba(19,179,156,0); /* anim target */
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, var(--gn-bg-start), var(--gn-bg-end));
+  font-family: Inter, Urbanist, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: var(--gn-text);
+}
+
+/* Container */
+.gn-container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 20px 40px;
+}
+
+/* Toolbar */
+.gn-toolbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.gn-title {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  font-family: Urbanist, Inter, system-ui, sans-serif;
+  font-size: 24px;
+}
+
+.gn-sub {
+  margin-top: 4px;
+  color: var(--gn-muted);
+  font-size: 14px;
+}
+
+/* Card base (glass) */
+.gn-card {
+  backdrop-filter: blur(var(--gn-blur));
+  -webkit-backdrop-filter: blur(var(--gn-blur));
+  background: var(--gn-card);
+  border: 1px solid var(--gn-card-bdr);
+  border-radius: var(--gn-radius);
+  box-shadow: var(--gn-shadow);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+.gn-card--loading {
+  padding: 24px;
+  animation: gn-pulse 1.4s ease-in-out infinite;
+}
+
+.gn-card--scroll {
+  overflow-x: auto;
+}
+
+/* Subtle lift on hover */
+.gn-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.12), 0 0 30px rgba(19,179,156,0.15);
+}
+
+/* Buttons */
+.gn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(255,255,255,0.55);
+  color: var(--gn-text);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 120ms ease, box-shadow 200ms ease, background 200ms ease;
+  backdrop-filter: blur(8px);
+}
+
+.gn-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12), 0 0 12px rgba(19,179,156,0.25);
+}
+
+.gn-btn.primary {
+  background: linear-gradient(135deg, var(--gn-accent), var(--gn-accent-2));
+  color: white;
+}
+
+.gn-btn.danger {
+  background: linear-gradient(135deg, #e53935, #ef5350);
+  color: white;
+}
+
+/* Table */
+.gn-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 880px;
+}
+
+.gn-table thead th {
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gn-muted);
+  padding: 14px 16px;
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(10px);
+}
+
+.gn-table tbody td {
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255,255,255,0.5);
+  vertical-align: middle;
+}
+
+.gn-table tbody tr {
+  transition: background 160ms ease, box-shadow 160ms ease;
+}
+
+.gn-table tbody tr:hover {
+  background: rgba(255,255,255,0.35);
+  box-shadow: inset 0 0 0 1px rgba(19,179,156,0.18);
+}
+
+/* Thumbnail */
+.gn-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+}
+
+.gn-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Emphasis cell */
+.gn-cell-strong {
+  font-weight: 600;
+}
+
+/* Row actions (right aligned) */
+.gn-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* Empty state row */
+.gn-empty {
+  text-align: center;
+  padding: 28px 12px;
+  color: var(--gn-muted);
+}
+
+/* Little ambient glow on interactive elements */
+.gn-btn.primary:hover,
+.gn-btn.danger:hover {
+  box-shadow: 0 10px 24px rgba(0,0,0,0.16), 0 0 18px rgba(19,179,156,0.45);
+}
+
+/* Utilities */
+.mb-16 { margin-bottom: 16px; }
+
+/* Loading pulse */
+@keyframes gn-pulse {
+  0%   { background-color: rgba(255,255,255,0.28); }
+  50%  { background-color: rgba(255,255,255,0.38); }
+  100% { background-color: rgba(255,255,255,0.28); }
+}
+
+/* ================== Admin Product Form (Glassmorphism Eco) ================== */
+
+/* Grid layout for form rows */
+.gn-row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px 16px;
+}
+
+/* Labels */
+.gn-label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .2px;
+  color: var(--gn-muted);
+  margin: 6px 0 6px;
+}
+
+/* Inputs / Selects / Textareas */
+.gn-input,
+.gn-select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.14);
+  background: rgba(255,255,255,0.95);
+  color: var(--gn-text);
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 220ms ease, transform 120ms ease;
+  font-size: 0.98rem;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.gn-input:hover,
+.gn-select:hover {
+  border-color: rgba(0,150,136,0.35);
+}
+
+.gn-input:focus,
+.gn-select:focus,
+textarea.gn-input:focus {
+  border-color: var(--gn-accent);
+  box-shadow: 0 0 0 3px rgba(0,150,136,0.18), 0 6px 18px rgba(0,150,136,0.10);
+  transform: translateY(-1px);
+}
+
+textarea.gn-input {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Error states */
+.gn-input.has-error,
+.gn-select.has-error,
+textarea.gn-input.has-error {
+  border-color: #e53935;
+  box-shadow: 0 0 0 3px rgba(229,57,53,0.12);
+}
+
+.gn-field-error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #e53935;
+}
+
+/* Small helper pills (tags) */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(0,0,0,0.12);
+  color: var(--gn-text);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.pill-x {
+  border: 0;
+  background: transparent;
+  color: var(--gn-muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+.pill-x:hover { color: var(--gn-accent); }
+
+/* Simple utilities used in the JSX */
+.flex { display: flex; align-items: center; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-24 { margin-top: 24px; }
+
+/* Image gallery (uploaded previews) */
+.gn-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+}
+@media (max-width: 1024px) { .gn-grid { grid-template-columns: repeat(8, 1fr); } }
+@media (max-width: 720px)  { .gn-grid { grid-template-columns: repeat(6, 1fr); } }
+@media (max-width: 480px)  { .gn-grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* Preview card */
+.pcard {
+  grid-column: span 3; /* 4 per row on 12-col */
+  overflow: hidden;
+  padding: 0;
+}
+.pcard img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid rgba(255,255,255,0.55);
+}
+.pcard .pcard-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+@media (max-width: 1024px) { .pcard { grid-column: span 4; } }
+@media (max-width: 720px)  { .pcard { grid-column: span 6; } }
+@media (max-width: 480px)  { .pcard { grid-column: span 12; } }
+
+/* File input area alignment */
+input[type="file"] {
+  font-size: 0.92rem;
+}
+
+/* Back/Primary buttons already styled via .gn-btn; nudge spacing */
+.gn-card form .gn-btn { min-width: 140px; }
+
+/* Make the form card glassier */
+.gn-card form,
+form.gn-card {
+  background: rgba(255,255,255,0.36);
+  border: 1px solid var(--gn-card-bdr);
+  backdrop-filter: blur(calc(var(--gn-blur) * 0.9));
+  -webkit-backdrop-filter: blur(calc(var(--gn-blur) * 0.9));
+}
+
+/* Optional: highlight required label with a subtle dot */
+.gn-label::after {
+  content: attr(data-required);
+  margin-left: 6px;
+  color: rgba(229,57,53,.85);
+  font-weight: 700;
+  font-size: 12px;
+}
+
