@@ -1,0 +1,26 @@
+/* Scoped to chart wrapper only */
+.vbch-wrap {
+  margin: 12px auto 20px;
+  max-width: 1200px;
+}
+
+.vbch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.vbch-card {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(20, 33, 32, 0.04);
+}
+
+/* one-per-row on narrow screens */
+@media (max-width: 900px) {
+  .vbch-grid {
+    grid-template-columns: 1fr;
+  }
+}

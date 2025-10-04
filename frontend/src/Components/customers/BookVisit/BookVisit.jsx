@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { API_BASE } from "../../../api";
 import bookvisit from "../../../assests/customers/bookvisit.jpg";
-
 import "./BookVisit.css";
 
 const SLOT_OPTIONS = [
@@ -15,11 +14,17 @@ const SLOT_OPTIONS = [
 const isEmail = (v="") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 const isPhone = (v = "") => {
   const digits = (v.match(/\d/g) || []).length;
-   return digits === 10 && /^[+()\-.\s\d]+$/.test(v);
- };
- 
+  return digits === 10 && /^[+()\-.\s\d]+$/.test(v);
+};
+
 export default function BookVisit() {
   const nav = useNavigate();
+
+  useEffect(() => {
+    document.body.classList.add("bv-body");
+    return () => document.body.classList.remove("bv-body");
+  }, []);
+
   const [inputs, setInputs] = useState({
     fullName: "",
     email: "",
@@ -84,8 +89,8 @@ export default function BookVisit() {
     try {
       const payload = {
         ...inputs,
-        email: (inputs.email || "").toLowerCase(), 
-        agreeToTerms: true                          
+        email: (inputs.email || "").toLowerCase(),
+        agreeToTerms: true
       };
 
       const res = await axios.post(`${API_BASE}/public/visit-bookings`, payload);
@@ -106,141 +111,138 @@ export default function BookVisit() {
   };
 
   return (
-  <div className="bv-section">
-    <div className="bv-frame">
-      {/* LEFT: your existing form (unchanged fields) */}
-      <div className="bv-left">
-        <h2 className="bookvisit-title">Book a Greenhouse Visit</h2>
-        <p className="bookvisit-sub">Open to everyone. We’ll confirm by email.</p>
+    <div className="bv-section">
+      <div className="bv-frame">        
+        <div className="bv-left">
+          <h2 className="bookvisit-title">Book a Greenhouse Visit</h2>
+          <p className="bookvisit-sub">Open to everyone. We’ll confirm by email.</p>
 
-        <form onSubmit={submit} className="bookvisit-form" noValidate>
-          <div className="bv-row">
-            <label>Full Name <span>*</span></label>
-            <input
-              name="fullName"
-              value={inputs.fullName}
-              onChange={onChange}
-              placeholder="Your full name"
-              required
-              minLength={2}
-              maxLength={80}
-            />
-          </div>
-
-          <div className="bv-grid">
-            <div className="bv-col">
-              <label>Email <span>*</span></label>
+          <form onSubmit={submit} className="bookvisit-form" noValidate>
+            <div className="bv-row">
+              <label>Full Name <span>*</span></label>
               <input
-                type="email"
-                name="email"
-                value={inputs.email}
+                name="fullName"
+                value={inputs.fullName}
                 onChange={onChange}
-                placeholder="you@example.com"
+                placeholder="Your full name"
                 required
-                inputMode="email"
+                minLength={2}
+                maxLength={80}
               />
             </div>
-            <div className="bv-col">
-              <label>Phone <span>*</span></label>
-              <input
-                name="phone"
-                value={inputs.phone}
-                onChange={onChange}
-                placeholder="+94 7X XXX XXXX"
-                required
-                maxLength={20}
-                pattern="[+()\\-\\.\\s\\d]{7,20}"
-                title="7–20 digits/spaces, may include + ( ) - ."
+
+            <div className="bv-grid">
+              <div className="bv-col">
+                <label>Email <span>*</span></label>
+                <input
+                  type="email"
+                  name="email"
+                  value={inputs.email}
+                  onChange={onChange}
+                  placeholder="you@example.com"
+                  required
+                  inputMode="email"
+                />
+              </div>
+              <div className="bv-col">
+                <label>Phone <span>*</span></label>
+                <input
+                  name="phone"
+                  value={inputs.phone}
+                  onChange={onChange}
+                  placeholder="+94 7X XXX XXXX"
+                  required
+                  maxLength={20}
+                  pattern="[+()\\-\\.\\s\\d]{7,20}"
+                  title="7–20 digits/spaces, may include + ( ) - ."
+                />
+              </div>
+              <div className="bv-col">
+                <label>Visitors <span>*</span></label>
+                <input
+                  type="number"
+                  name="visitorsCount"
+                  min={1}
+                  max={20}
+                  required
+                  value={inputs.visitorsCount}
+                  onChange={onChange}
+                />
+              </div>
+            </div>
+
+            <div className="bv-grid">
+              <div className="bv-col">
+                <label>Preferred Date <span>*</span></label>
+                <input
+                  type="date"
+                  name="preferredDate"
+                  min={todayStr}
+                  value={inputs.preferredDate}
+                  onChange={onChange}
+                  required
+                />
+              </div>
+              <div className="bv-col">
+                <label>Time Slot <span>*</span></label>
+                <select
+                  name="timeSlot"
+                  value={inputs.timeSlot}
+                  onChange={onChange}
+                  required
+                >
+                  <option value="">-- Select --</option>
+                  {SLOT_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div className="bv-row">
+              <label>Purpose (optional)</label>
+              <textarea
+                name="purpose"
+                rows={3}
+                placeholder="Tell us a bit about your visit (optional)"
+                value={inputs.purpose}
+                onChange={(e) => {
+                  const v = e.target.value.slice(0, 300);
+                  setInputs(p => ({ ...p, purpose: v }));
+                }}
               />
+              <div style={{textAlign:"right", fontSize:12, color:"#6a8a76"}}>
+                {(inputs.purpose || "").length}/300
+              </div>
             </div>
-            <div className="bv-col">
-              <label>Visitors <span>*</span></label>
-              <input
-                type="number"
-                name="visitorsCount"
-                min={1}
-                max={20}
-                required
-                value={inputs.visitorsCount}
-                onChange={onChange}
-              />
-            </div>
-          </div>
 
-          <div className="bv-grid">
-            <div className="bv-col">
-              <label>Preferred Date <span>*</span></label>
+            
+            <div className="bv-hp">
+              <label>Website</label>
+              <input name="website" value={inputs.website} onChange={onChange} autoComplete="off" />
+            </div>
+
+            <div className="bv-check">
               <input
-                type="date"
-                name="preferredDate"
-                min={todayStr}
-                value={inputs.preferredDate}
+                id="agree"
+                type="checkbox"
+                name="agreeToTerms"
+                checked={inputs.agreeToTerms}
                 onChange={onChange}
                 required
               />
+              <label htmlFor="agree">I agree to the terms and privacy policy.</label>
             </div>
-            <div className="bv-col">
-              <label>Time Slot <span>*</span></label>
-              <select
-                name="timeSlot"
-                value={inputs.timeSlot}
-                onChange={onChange}
-                required
-              >
-                <option value="">-- Select --</option>
-                {SLOT_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
+
+            <div className="bv-actions">
+              <button className="bv-btn" type="submit">Submit Request</button>
             </div>
-          </div>
 
-          <div className="bv-row">
-            <label>Purpose (optional)</label>
-            <textarea
-              name="purpose"
-              rows={3}
-              placeholder="Tell us a bit about your visit (optional)"
-              value={inputs.purpose}
-              onChange={(e) => {
-                const v = e.target.value.slice(0, 300);
-                setInputs(p => ({ ...p, purpose: v }));
-              }}
-            />
-            <div style={{textAlign:"right", fontSize:12, color:"#6a8a76"}}>
-              {(inputs.purpose || "").length}/300
-            </div>
-          </div>
+            <p className="bv-note">We aim to respond within 24–48 hours.</p>
+          </form>
+        </div>
 
-          {/* Honeypot (hidden) */}
-          <div className="bv-hp">
-            <label>Website</label>
-            <input name="website" value={inputs.website} onChange={onChange} autoComplete="off" />
-          </div>
-
-          <div className="bv-check">
-            <input
-              id="agree"
-              type="checkbox"
-              name="agreeToTerms"
-              checked={inputs.agreeToTerms}
-              onChange={onChange}
-              required
-            />
-            <label htmlFor="agree">I agree to the terms and privacy policy.</label>
-          </div>
-
-          <div className="bv-actions">
-            <button className="bv-btn" type="submit">Submit Request</button>
-          </div>
-
-          <p className="bv-note">We aim to respond within 24–48 hours.</p>
-        </form>
-      </div>
-
-      {/* RIGHT: fixed-width side image (not full page) */}
-      <div className="bv-sideimg" style={{ backgroundImage: `url(${bookvisit})` }}>
+        
+        <div className="bv-sideimg" style={{ backgroundImage: `url(${bookvisit})` }} />
       </div>
     </div>
-  </div>
-);
-
+  );
 }

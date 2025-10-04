@@ -3,9 +3,9 @@ require("dotenv").config(); // load .env exactly once
 
 const express = require("express");
 const mongoose = require("mongoose");
-const harvestRouter = require("./Routes/harvestManagement/harvest");
-const publicVisitRoutes = require("./Routes/customers/visitBooking");
-const authRouter = require("./Routes/auth");
+
+
+
 
 const cors = require("cors");
 
@@ -20,11 +20,20 @@ app.use(
 );
 app.use(express.json());
 
-//amami
+//harvest
+const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules",harvestRouter);
+//customer
+const publicVisitRoutes = require("./Routes/customers/visitBooking");
+const authRouter = require("./Routes/auth");
 app.use("/public", publicVisitRoutes);
-app.use(express.json());                     // IMPORTANT for req.body
+
+app.use("/public", publicVisitRoutes);
+app.use(express.json());                     
 app.use("/api/auth", authRouter);
+
+const visitBookingRoutes = require("./Routes/customers/visitBooking");
+app.use("/api", visitBookingRoutes);
 
 
 

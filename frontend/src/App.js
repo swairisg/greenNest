@@ -24,7 +24,7 @@ import CustomerProfile from "./pages/profile/CustomerProfile";
 import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
 import BookVisit from "./Components/customers/BookVisit/BookVisit";
 import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess";
-import ViewVisit from "./Components/customers/ViewVisitBooking/ViewVisit"
+import CustomerDashboard from "./Components/customers/CustomerDashboard/CustomerDashboard"
 
 import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
 import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
@@ -102,7 +102,7 @@ export default function App() {
           {/*customer and buyer management*/} 
           <Route path="/visit/book" element={<BookVisit />} />
           <Route path="/visit/success" element={<BookVisitSuccess />} />
-          <Route path="/visits/bookings" element={<ViewVisit />} />
+          <Route path="/visits/bookings" element={<CustomerDashboard />} />
 
           {/*customer profile*/}
           <Route path="/profile" element={<CustomerProfile />} />
