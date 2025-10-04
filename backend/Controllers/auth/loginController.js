@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
-const { User } = require("../../Model/auth");
+const jwt = require("jsonwebtoken");
+const User = require("../../Model/auth/User");
 
 // POST /auth/login
 exports.login = async (req, res) => {
@@ -31,8 +32,19 @@ exports.login = async (req, res) => {
         .json({ success: false, message: `Account status: ${user.status}` });
     }
 
+    const token = jwt.sign(
+      {
+        sub: user._id.toString(),
+        roles: user.roles,
+        primaryRole: user.primaryRole,
+      },
+      process.env.JWT_SECRET || "dev-secret", // set a real secret in .env
+      { expiresIn: "7d" }
+    );
+
     return res.json({
       success: true,
+      token,
       data: {
         user: {
           id: String(user._id),

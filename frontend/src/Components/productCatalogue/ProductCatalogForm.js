@@ -1,4 +1,3 @@
-// src/Components/productCatalogue/ProductCatalogForm.js
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { ProductsAPI, uploadToCloudinary } from "../../api";
@@ -16,7 +15,6 @@ const EMPTY = {
   description: "",
 };
 
-// === Schema-enforced enums (from your Mongoose model) ====================
 const ENUMS = {
   types: [
     "Flagship Section – Premium Strawberries",
@@ -30,11 +28,9 @@ const ENUMS = {
   tags: ["Organic", "Seasonal", "Limited Edition", "Premium", "Eco-Friendly", "New Arrival"],
 };
 
-// fallbacks if /products/filters is empty; but we will still validate against ENUMS
 const FALLBACK_CATEGORIES = ENUMS.categories;
 const FALLBACK_TYPES = ENUMS.types;
 
-// ============== helpers / validators (mirror your schema) ================
 function toStringArray(arr = []) {
   return (arr || [])
     .map((x) => {
@@ -332,7 +328,7 @@ export default function ProductCatalogForm() {
     }
   };
 
-  // ----- Cloudinary file uploads (multi) ---------------------------------
+  //Cloudinary file uploads 
   const onPickFiles = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
@@ -352,12 +348,10 @@ export default function ProductCatalogForm() {
       setUploadErr(err?.response?.data?.error?.message || err.message || "Upload failed");
     } finally {
       setUploading(false);
-      e.target.value = ""; // reset so same file can be selected again
+      e.target.value = ""; 
     }
   };
 
-  // ----- Tags helpers ----------------------------------------------------
- // const [tagText, setTagText] = useState("");
   const addTag = () => {
     const raw = tagText.trim();
     if (!raw) return;

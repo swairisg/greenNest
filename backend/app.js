@@ -20,9 +20,16 @@ app.use(
 );
 app.use(express.json());
 
+
 //harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules",harvestRouter);
+
+app.use("/HarvestSchedules", harvestRouter);
+
+const hrRoutes = require("./Routes/tasksHR");
+app.use("/hr", hrRoutes);
+
 
 //customer
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
@@ -63,6 +70,7 @@ if (!MONGO_URI) {
 }
 
 const User = require("./Model/auth/User");
+const EmployeeProfile = require("./Model/tasksHR/EmployeeProfile");
 mongoose
   .connect(MONGO_URI)
   .then(async () => {
@@ -71,6 +79,7 @@ mongoose
 
     // Ensure indexes are in place (safe to call on every boot)
     await User.syncIndexes();
+    await EmployeeProfile.syncIndexes();
 
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);
