@@ -179,6 +179,16 @@ async function get(req, res) {
 async function update(req, res) {
   try {
     const patch = { ...req.body, updatedBy: req.user?._id };
+
+    // 🔒 Prevent HR managers from changing bank fields
+    const roles = req.user?.roles || [];
+    const isHR = roles.includes("hr_manager");
+    const isAdmin = roles.includes("admin");
+    const isFinance = roles.includes("finance_manager");
+    if (isHR && !isAdmin && !isFinance) {
+      if (patch.bank) delete patch.bank;
+    }
+
     const row = await Employee.findByIdAndUpdate(req.params.id, patch, {
       new: true,
       runValidators: true,

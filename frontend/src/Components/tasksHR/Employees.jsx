@@ -1,13 +1,14 @@
 // frontend/src/Components/tasksHR/Employees.jsx
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../../api";
 import { useHRChrome } from "./HRLayout";
 import "./Employees.css";
+import EditEmployeeDrawer from "./EditEmployeeDrawer";
 
 const STATUSES = ["all", "active", "inactive", "terminated"];
 
-// NEW: dept/designation filter lists
+// Dept/designation filter lists
 const DEPARTMENTS = [
   "Administration",
   "People Ops",
@@ -26,7 +27,6 @@ const DESIGNATIONS_BY_DEPT = {
 };
 
 export default function HREmployees() {
-  const nav = useNavigate();
   const { setRight, clearRight } = useHRChrome();
 
   const [rows, setRows] = useState([]);
@@ -36,13 +36,15 @@ export default function HREmployees() {
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
-
-  // NEW: department & designation filters
   const [department, setDepartment] = useState("all");
   const [designation, setDesignation] = useState("all");
 
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
+
+  // Edit drawer state
+  const [editOpen, setEditOpen] = useState(false);
+  const [editingRow, setEditingRow] = useState(null);
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / pageSize)),
@@ -135,13 +137,13 @@ export default function HREmployees() {
             ))}
           </select>
 
-          {/* NEW: Department filter */}
+          {/* Department filter */}
           <select
             className="hrlist-select"
             value={department}
             onChange={(e) => {
               setDepartment(e.target.value);
-              setDesignation("all"); // reset designation when dept changes
+              setDesignation("all");
               setPage(1);
             }}
             title="Department"
@@ -154,7 +156,7 @@ export default function HREmployees() {
             ))}
           </select>
 
-          {/* NEW: Designation filter (cascades from Department) */}
+          {/* Designation filter (depends on Department) */}
           <select
             className="hrlist-select"
             value={designation}
@@ -225,17 +227,20 @@ export default function HREmployees() {
                       </span>
                     </td>
                     <td>
-   {(() => {
-     const d = r.joinDate || r.createdAt;
-     return d ? new Date(d).toLocaleDateString() : "-";
-   })()}
- </td>
+                      {(() => {
+                        const d = r.joinDate || r.createdAt;
+                        return d ? new Date(d).toLocaleDateString() : "-";
+                      })()}
+                    </td>
                     <td>
                       <div className="hrlist-actions">
                         <button
-  className="hrlist-btn edit small"
+                          className="hrlist-btn edit small"
                           title="View / Edit"
-                          onClick={() => nav(`/hr/employees/${r._id}`)}
+                          onClick={() => {
+                            setEditingRow(r);
+                            setEditOpen(true);
+                          }}
                         >
                           Edit
                         </button>
@@ -279,6 +284,18 @@ export default function HREmployees() {
           </div>
         </div>
       </div>
+
+      {/* Edit drawer */}
+      <EditEmployeeDrawer
+        open={editOpen}
+        row={editingRow}
+        onClose={() => setEditOpen(false)}
+        onSaved={(updated) => {
+          setRows((prev) =>
+            prev.map((x) => (x._id === updated._id ? { ...x, ...updated } : x))
+          );
+        }}
+      />
     </div>
   );
 }
