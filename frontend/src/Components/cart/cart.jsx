@@ -1,95 +1,211 @@
-// frontend/src/Components/cart/Cart.jsx
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import CartItem from "./CartItem";
-import { loadCart, updateQty, removeFromCart, clearCart } from "./cartUtils";
+// src/Components/cart/cart.jsx
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/useAuth";
+import {
+  getCart,            // alias to loadCart
+  removeFromCart,
+  updateQuantity,     // alias to updateQty (delta-based)
+  clearCart,
+} from "../cart/cartUtils";
+import { createOrder } from "../finance/Orders/orderApi"; // adjust path if needed
+import "./Cart.css"; // optional styling
 
-const API_BASE = "http://localhost:5001"; // adjust if your backend runs elsewhere
+function money(n) {
+  const x = Number(n || 0);
+  return `LKR ${x.toFixed(2)}`;
+}
 
-export default function Cart({ userId }) {
-  // NOTE: pass userId from your auth context to this component
+export default function Cart() {
+  const navigate = useNavigate();
+  const { user } = useAuth(); // user may be null on first render
+
   const [items, setItems] = useState([]);
-  const [placing, setPlacing] = useState(false);
-  const [message, setMessage] = useState("");
 
+  // initial load
   useEffect(() => {
-    setItems(loadCart());
+    setItems(getCart()); // [{ productId, name, price, qty, image }]
   }, []);
 
-  const onQtyChange = (productId, q) => setItems(updateQty(productId, q));
-  const onRemove = (productId) => setItems(removeFromCart(productId));
+  // derive totals
+  const totals = useMemo(() => {
+    const sub = items.reduce((s, it) => s + it.price * it.qty, 0);
+    const delivery = 0; // set your delivery logic if any
+    const grand = sub + delivery;
+    return { sub, delivery, grand };
+  }, [items]);
 
-  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
-
-  const placeOrder = async () => {
-    if (!userId) {
-      setMessage("Please log in first.");
-      return;
-    }
-    if (items.length === 0) {
-      setMessage("Your cart is empty.");
-      return;
-    }
-    try {
-      setPlacing(true);
-      setMessage("");
-
-      // backend will re-fetch true price/name from the catalogue by productId
-      const payload = {
-        userId,
-        items: items.map(i => ({ productId: i.productId, qty: i.qty })),
-        shipping: { method: "Standard" }
-      };
-
-      const res = await axios.post(`${API_BASE}/orders`, payload);
-      const orderNo = res.data.orderNo || res.data.order?.orderNo;
-
-      clearCart();
-      setItems([]);
-      setMessage(`✅ Order placed successfully. Order No: ${orderNo}`);
-    } catch (e) {
-      console.error(e);
-      setMessage("❌ Failed to place order. Please try again.");
-    } finally {
-      setPlacing(false);
+  // qty handlers
+  const inc = (productId) => {
+    updateQuantity(productId, +1);   // delta +1
+    setItems(getCart());
+  };
+  const dec = (productId) => {
+    updateQuantity(productId, -1);   // delta -1 (cartUtils should remove if <=0; if not, minimum guard here)
+    setItems(getCart());
+  };
+  const setQty = (productId, newQty) => {
+    // Convert absolute input to delta expected by updateQuantity
+    const cur = items.find(i => i.productId === productId)?.qty ?? 0;
+    const delta = Math.max(1, Number(newQty) || 1) - cur;
+    if (delta !== 0) {
+      updateQuantity(productId, delta);
+      setItems(getCart());
     }
   };
 
+  const remove = (productId) => {
+    removeFromCart(productId);
+    setItems(getCart());
+  };
+
+  const placeOrder = async () => {
+    if (!items.length) return;
+
+    // Try to pick a sensible userId; adjust based on your auth shape
+    const userId =
+      user?.id || user?._id || user?.userId || user?.uid || "guest";
+
+    // Build payload the backend expects
+    const payload = {
+      userId,
+      items: items.map(i => ({
+           productId: i.productId,
+            name: i.name,           // REQUIRED by your orderItemSchema
+            qty: i.qty,
+            unitPrice: i.price,
+          })),
+      // You can extend with shipping, notes, etc.
+      // shipping: { method: "Standard" }
+    };
+
+    try {
+      const res = await createOrder(payload);
+      // Clear cart and go to order details or list
+      clearCart();
+      setItems([]);
+
+      const created = res?.data?.order;
+      if (created?._id) {
+        navigate(`/orders/${created._id}`, { replace: true });
+      } else {
+        navigate(`/orders`, { replace: true });
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to place order. Please try again.");
+    }
+  };
+
+  if (!items.length) {
+    return (
+      <section className="cart">
+        <h2>Shopping Cart</h2>
+        <p>Your cart is empty.</p>
+        <button className="sc-btn sc-btn-primary" onClick={() => navigate("/catalog")}>
+          Browse products
+        </button>
+      </section>
+    );
+  }
+
   return (
-    <div>
-      <h2>Your Cart</h2>
+    <section className="cart">
+      <h2>Shopping Cart</h2>
 
-      {items.length === 0 ? (
-        <p>🛒 Your cart is empty.</p>
-      ) : (
-        <>
-          <table border="1" cellPadding="8" style={{ width: "100%", marginBottom: 16 }}>
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Unit Price</th>
-                <th>Qty</th>
-                <th>Total</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((it) => (
-                <CartItem key={it.productId} item={it} onQtyChange={onQtyChange} onRemove={onRemove} />
-              ))}
-            </tbody>
-          </table>
+      <table className="cart-table">
+        <thead>
+          <tr>
+            <th style={{ textAlign: "left" }}>Item</th>
+            <th>Price</th>
+            <th style={{ minWidth: 140 }}>Qty</th>
+            <th>Total</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((it) => (
+            <tr key={it.productId}>
+              <td>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  {it.image ? (
+                    <img
+                      src={it.image}
+                      alt={it.name}
+                      loading="lazy"
+                      width={56}
+                      height={56}
+                      style={{ objectFit: "cover", borderRadius: 8 }}
+                    />
+                  ) : null}
+                  <div>{it.name}</div>
+                </div>
+              </td>
+              <td style={{ textAlign: "center" }}>{money(it.price)}</td>
+              <td style={{ textAlign: "center" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <button className="qty-btn" onClick={() => dec(it.productId)} aria-label="Decrease">
+                    −
+                  </button>
+                  <input
+                    className="qty-input"
+                    type="number"
+                    min="1"
+                    value={it.qty}
+                    onChange={(e) => setQty(it.productId, e.target.value)}
+                  />
+                  <button className="qty-btn" onClick={() => inc(it.productId)} aria-label="Increase">
+                    +
+                  </button>
+                </div>
+              </td>
+              <td style={{ textAlign: "center" }}>{money(it.price * it.qty)}</td>
+              <td style={{ textAlign: "right" }}>
+                <button className="remove-btn" onClick={() => remove(it.productId)}>
+                  Remove
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr><td colSpan={5}><hr/></td></tr>
+          <tr>
+            <td />
+            <td />
+            <td style={{ textAlign: "right" }}><strong>Subtotal</strong></td>
+            <td style={{ textAlign: "center" }}>{money(totals.sub)}</td>
+            <td />
+          </tr>
+          <tr>
+            <td />
+            <td />
+            <td style={{ textAlign: "right" }}>Delivery</td>
+            <td style={{ textAlign: "center" }}>{money(totals.delivery)}</td>
+            <td />
+          </tr>
+          <tr>
+            <td />
+            <td />
+            <td style={{ textAlign: "right" }}><strong>Grand Total</strong></td>
+            <td style={{ textAlign: "center" }}><strong>{money(totals.grand)}</strong></td>
+            <td />
+          </tr>
+        </tfoot>
+      </table>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h3>Grand Total: LKR {total.toFixed(2)}</h3>
-            <button onClick={placeOrder} disabled={placing}>
-              {placing ? "Placing..." : "Place Order"}
-            </button>
-          </div>
-        </>
-      )}
-
-      {message && <p style={{ marginTop: 12 }}>{message}</p>}
-    </div>
+      <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+        <button className="sc-btn sc-btn-ghost" onClick={() => navigate("/catalog")}>
+          Continue shopping
+        </button>
+        <button
+          className="sc-btn sc-btn-primary"
+          onClick={placeOrder}
+          disabled={!items.length}
+        >
+          Place Order
+        </button>
+      </div>
+    </section>
   );
 }

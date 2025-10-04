@@ -50,3 +50,7 @@ export const saveCart = (cart) => {
   
   // clear all
   export const clearCart = () => localStorage.removeItem("cart");
+
+// compatibility aliases (so older code importing getCart/updateQuantity still works)
+export const getCart = loadCart;
+export const updateQuantity = updateQty;
