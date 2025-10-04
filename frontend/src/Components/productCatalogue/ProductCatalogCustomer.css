@@ -15,11 +15,11 @@
   --sc-card-shadow-hover: 0 12px 40px rgba(0,0,0,0.12), 0 4px 14px rgba(0,0,0,0.06);
   --sc-blur: blur(16px) saturate(120%);
 
-  --sc-accent: #009688;
-  --sc-accent-2: #12b8aa;
+  --sc-accent: #32CD32;
+  --sc-accent-2: #32CD32;
 
   --sc-text: #0f172a;     /* slate-900 */
-  --sc-muted: #64748b;    /* slate-500 */
+  --sc-muted: #6a956e;    /* slate-500 */
 
   --sc-radius-lg: 18px;
   --sc-radius-md: 14px;
@@ -43,7 +43,6 @@ body {
   color: var(--sc-text);
   line-height: 1.45;
 }
-
 .App, main, .page, .layout, .container, .sc-container {
   background: transparent;
 }
@@ -137,13 +136,13 @@ body {
   background-size: 20px 20px, auto;
 }
 .sc-search .sc-input:hover {
-  border-color: #00968880;
+  border-color: #32CD32;
   box-shadow: 0 0 0 3px rgba(0,150,136,0.12), 0 10px 24px rgba(0,0,0,0.10);
   transform: translateY(-1px);
 }
 .sc-search .sc-input:focus,
 .sc-search .sc-input:focus-visible {
-  border-color: #009688;
+  border-color: #32CD32;
   box-shadow: 0 0 0 3px rgba(0,150,136,0.22), 0 12px 28px rgba(0,0,0,0.12);
   outline: none;
 }
@@ -195,8 +194,8 @@ body {
 
 .sc-btn-primary {
   color: #ffffff;
-  background: linear-gradient(180deg, var(--sc-accent), #028f82);
-  border: 1px solid rgba(0,150,136,0.55);
+  background: linear-gradient(180deg, var(--sc-accent), #32CD32);
+  border: 1px solid rgba(25, 150, 0, 0.55);
   box-shadow: 0 10px 24px rgba(0,150,136,0.25), 0 2px 10px rgba(0,0,0,0.06);
 }
 .sc-btn-primary:hover {
