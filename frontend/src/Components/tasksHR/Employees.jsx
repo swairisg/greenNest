@@ -1,26 +1,283 @@
 // frontend/src/Components/tasksHR/Employees.jsx
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useMemo, useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api";
 import { useHRChrome } from "./HRLayout";
+import "./Employees.css";
+
+const STATUSES = ["all", "active", "inactive", "terminated"];
+
+// NEW: dept/designation filter lists
+const DEPARTMENTS = [
+  "Administration",
+  "People Ops",
+  "Operations",
+  "Finance",
+  "Product",
+  "Greenhouse",
+];
+const DESIGNATIONS_BY_DEPT = {
+  Administration: ["Admin", "Office Assistant", "Coordinator"],
+  "People Ops": ["HR Manager", "HR Executive", "Recruiter"],
+  Operations: ["Inventory Manager", "Logistics Coordinator", "Shift Supervisor"],
+  Finance: ["Finance Manager", "Accountant", "Analyst"],
+  Product: ["Product Manager", "QA Engineer", "UX Designer"],
+  Greenhouse: ["Farmer", "Agronomist", "Specialist", "Technician"],
+};
 
 export default function HREmployees() {
+  const nav = useNavigate();
   const { setRight, clearRight } = useHRChrome();
 
+  const [rows, setRows] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("all");
+
+  // NEW: department & designation filters
+  const [department, setDepartment] = useState("all");
+  const [designation, setDesignation] = useState("all");
+
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(total / pageSize)),
+    [total, pageSize]
+  );
+
+  const designationOptions = useMemo(() => {
+    if (department === "all") return [];
+    return DESIGNATIONS_BY_DEPT[department] || [];
+  }, [department]);
+
+  // header right actions
   useEffect(() => {
     setRight(
-      <Link to="/hr/employees/new"
-            style={{ padding: "8px 12px", borderRadius: 12, background: "#065f46",
-                     color: "#fff", textDecoration: "none" }}>
+      <Link to="/hr/employees/new" className="hrlist-btn-primary">
         + Add Employee
       </Link>
     );
     return clearRight;
   }, [setRight, clearRight]);
 
+  const fetchList = async () => {
+    setLoading(true);
+    setErr("");
+    try {
+      const params = { page, pageSize };
+      if (search.trim()) params.search = search.trim();
+      if (status !== "all") params.status = status;
+      if (department !== "all") params.department = department;
+      if (designation !== "all") params.designation = designation;
+
+      const res = await api.get("/hr/employees", { params });
+      setRows(res.data?.data || []);
+      setTotal(res.data?.total || 0);
+    } catch (e) {
+      console.error(e);
+      setErr(e?.response?.data?.message || e.message || "Failed to load");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // initial + when page or filters change
+  useEffect(() => {
+    fetchList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, status, department, designation]);
+
+  // search with small debounce (300ms)
+  const debounceRef = useRef();
+  useEffect(() => {
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setPage(1);
+      fetchList();
+    }, 300);
+    return () => clearTimeout(debounceRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
+
   return (
-    <div style={{ display: "grid", gap: 12 }}>
-      <h1 style={{ margin: 0, color: "#065f46" }}>Employees</h1>
-      <p style={{ color: "#6b7280" }}>Table + filters will go here.</p>
+    <div className="hrlist-wrap">
+      <div className="hrlist-card">
+        <div className="hrlist-head">
+          <h2>Employees</h2>
+        </div>
+
+        {/* Filters */}
+        <div className="hrlist-filters">
+          <input
+            className="hrlist-input"
+            placeholder="Search by name, department, designation…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          <select
+            className="hrlist-select"
+            value={status}
+            onChange={(e) => {
+              setStatus(e.target.value);
+              setPage(1);
+            }}
+            title="Status"
+          >
+            {STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {s[0].toUpperCase() + s.slice(1)}
+              </option>
+            ))}
+          </select>
+
+          {/* NEW: Department filter */}
+          <select
+            className="hrlist-select"
+            value={department}
+            onChange={(e) => {
+              setDepartment(e.target.value);
+              setDesignation("all"); // reset designation when dept changes
+              setPage(1);
+            }}
+            title="Department"
+          >
+            <option value="all">All departments</option>
+            {DEPARTMENTS.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+
+          {/* NEW: Designation filter (cascades from Department) */}
+          <select
+            className="hrlist-select"
+            value={designation}
+            onChange={(e) => {
+              setDesignation(e.target.value);
+              setPage(1);
+            }}
+            disabled={department === "all"}
+            title="Designation"
+          >
+            <option value="all">All designations</option>
+            {designationOptions.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+
+          <button
+            className="hrlist-btn"
+            disabled={loading}
+            onClick={() => {
+              setPage(1);
+              fetchList();
+            }}
+          >
+            {loading ? "Searching…" : "Search"}
+          </button>
+        </div>
+
+        {err && <div className="hrlist-error">{err}</div>}
+
+        {/* Table */}
+        <div className="hrlist-tablewrap">
+          <table className="hrlist-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Status</th>
+                <th>Join Date</th>
+                <th style={{ width: 160 }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="hrlist-empty">
+                    Loading…
+                  </td>
+                </tr>
+              ) : rows.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="hrlist-empty">
+                    No employees found
+                  </td>
+                </tr>
+              ) : (
+                rows.map((r) => (
+                  <tr key={r._id}>
+                    <td className="hrlist-name">{r.fullName}</td>
+                    <td>{r.department || "-"}</td>
+                    <td>{r.designation || "-"}</td>
+                    <td>
+                      <span className={`badge ${r.currentStatus || "active"}`}>
+                        {r.currentStatus || "active"}
+                      </span>
+                    </td>
+                    <td>
+                      {r.joinDate
+                        ? new Date(r.joinDate).toLocaleDateString()
+                        : "-"}
+                    </td>
+                    <td>
+                      <div className="hrlist-actions">
+                        <button
+                          className="hrlist-btn ghost small"
+                          title="View / Edit"
+                          onClick={() => nav(`/hr/employees/${r._id}`)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="hrlist-btn danger small"
+                          title="Delete"
+                          disabled
+                          onClick={() => {}}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="hrlist-pager">
+          <div className="hrlist-pager-info">
+            Page {page} of {totalPages} • {total} total
+          </div>
+          <div className="hrlist-pager-btns">
+            <button
+              className="hrlist-btn ghost small"
+              disabled={page <= 1 || loading}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              ← Prev
+            </button>
+            <button
+              className="hrlist-btn ghost small"
+              disabled={page >= totalPages || loading}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

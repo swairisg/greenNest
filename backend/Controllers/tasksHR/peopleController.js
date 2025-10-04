@@ -14,6 +14,8 @@ async function list(req, res) {
     const {
       search = "",
       status,
+      department,
+      designation,
       page = 1,
       pageSize = 10,
       includeDeleted = "false",
@@ -21,7 +23,9 @@ async function list(req, res) {
 
     const q = {};
     if (status) q.currentStatus = status;
-    if (includeDeleted !== "true") q.isDeleted = false;
+    if (includeDeleted !== "true") q.isDeleted = { $ne: true };
+    if (department) q.department = department;
+    if (designation) q.designation = designation;
 
     if (search) {
       if (search.length >= 3) q.$text = { $search: search };
@@ -91,7 +95,6 @@ async function create(req, res) {
         roles,
         primaryRole: roles[0],
         status: "active",
-
         name: body.fullName,
         phone: body.phone || undefined,
         address: body.address || undefined,
