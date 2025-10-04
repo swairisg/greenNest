@@ -1,7 +1,5 @@
-// backend/Controllers/customers/visitBookingcontroller.js
 const VisitBooking = require("../../Model/customers/VisitBookingModel");
 
-/* ───────────── Helpers ───────────── */
 function isPastDate(d) {
   const dt = new Date(d);
   if (Number.isNaN(dt.getTime())) return true;
@@ -42,10 +40,7 @@ function validateBooking(payload) {
   return errs;
 }
 
-/* ───────────── Status enum bridging ─────────────
-   UI uses: "new" | "approved"
-   DB may use: ["new","approved"]  OR legacy ["pending","confirmed","rejected"]
-*/
+
 const legacyMap = { new: "pending", approved: "confirmed" };
 
 function normalizeStatusForDB(nextStatus) {
@@ -53,23 +48,18 @@ function normalizeStatusForDB(nextStatus) {
   const ui = String(nextStatus).toLowerCase();
 
   const enums = (VisitBooking.schema.path("status")?.enumValues) || [];
-  // If UI value is directly supported by current enum, use it.
   if (enums.includes(ui)) return ui;
 
-  // Otherwise map to legacy value if the enum expects it.
   const mapped = legacyMap[ui];
   if (mapped && enums.includes(mapped)) return mapped;
 
-  // Still invalid → return error descriptor for caller.
   return { error: `Invalid status '${nextStatus}'. Allowed: ${enums.join(", ")}` };
 }
 
-/* ───────────── Create / List / Get ───────────── */
 exports.createBooking = async (req, res) => {
   try {
     const payload = req.body;
 
-    // Honeypot: if "website" is filled, silently accept to deter bots.
     if (payload.website && String(payload.website).trim()) {
       return res.status(200).json({ ok: true });
     }
@@ -87,7 +77,7 @@ exports.createBooking = async (req, res) => {
       timeSlot: payload.timeSlot,
       visitorsCount: Number(payload.visitorsCount),
       purpose: payload.purpose || "",
-      agreeToTerms: true, // status defaults from schema
+      agreeToTerms: true, 
     });
 
     return res.status(201).json({ data: doc, message: "Booking submitted" });
@@ -124,7 +114,6 @@ exports.getBookingById = async (req, res) => {
   }
 };
 
-/* ───────────── Update / Approve / Delete ───────────── */
 exports.updateBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -145,13 +134,12 @@ exports.updateBooking = async (req, res) => {
       if (k in req.body) payload[k] = req.body[k];
     }
 
-    // Normalize status to the DB enum that is actually loaded at runtime.
     if ("status" in payload) {
       const norm = normalizeStatusForDB(payload.status);
       if (norm && norm.error) {
         return res.status(400).json({ message: norm.error });
       }
-      payload.status = norm; // "new"|"approved" OR "pending"|"confirmed"
+      payload.status = norm; 
     }
 
     const doc = await VisitBooking.findByIdAndUpdate(id, payload, {
@@ -171,7 +159,6 @@ exports.approveBooking = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Always set to UI "approved"; normalize to runtime enum.
     const norm = normalizeStatusForDB("approved");
     if (norm && norm.error) {
       return res.status(400).json({ message: norm.error });

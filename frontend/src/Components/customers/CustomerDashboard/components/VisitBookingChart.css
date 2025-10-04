@@ -1,4 +1,4 @@
-/* Scoped to chart wrapper only */
+
 .vbch-wrap {
   margin: 12px auto 20px;
   max-width: 1200px;
@@ -12,15 +12,12 @@
 
 .vbch-card {
   background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 6px 16px rgba(20, 33, 32, 0.04);
+  box-shadow: 0 8px 24px rgba(0,0,0,.05);
 }
 
-/* one-per-row on narrow screens */
 @media (max-width: 900px) {
-  .vbch-grid {
-    grid-template-columns: 1fr;
-  }
+  .vbch-grid { grid-template-columns: 1fr; }
 }

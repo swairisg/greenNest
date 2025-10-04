@@ -1,4 +1,3 @@
-// frontend/src/Components/customers/VisitBookingsPage.jsx
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { API_BASE } from "../../../api";
@@ -7,33 +6,24 @@ import autoTable from "jspdf-autotable";
 import VisitBookingsChart from "./components/VisitBookingsChart";
 import "../CustomerDashboard/CustomerDashboard.css";
 
-/* ========= helpers ========= */
 const fmtDate = (d) => (d ? new Date(d).toLocaleDateString() : "—");
 const fmtDateTime = (d) => (d ? new Date(d).toLocaleString() : "—");
 const norm = (v) => String(v ?? "").toLowerCase();
 
-/* ========= API endpoints =========
-   Keep reads under /public and admin mutations under /api.
-*/
+
 const LIST_URL = (email) =>
   `${API_BASE}/public/visit-bookings${email ? `?email=${encodeURIComponent(email)}` : ""}`;
-const ADMIN_URL = `${API_BASE}/api/visit-bookings`; // <-- fixed: add /api prefix
+const ADMIN_URL = `${API_BASE}/api/visit-bookings`; 
 
-/* ========= component ========= */
 export default function VisitBookingsPage() {
-  // server-side email filter (optional)
-  const [email, setEmail] = useState("");
-
-  // client-side full-text search
-  const [query, setQuery] = useState("");
-
-  // data + loading
+  
+  const [email, setEmail] = useState("");  
+  const [query, setQuery] = useState("");  
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // local per-row status (UI fallback if backend uses legacy enum)
-  // values: "new" | "approved"
-  const [localStatus, setLocalStatus] = useState({}); // { [id]: "approved" }
+  
+  const [localStatus, setLocalStatus] = useState({}); 
 
   const load = useCallback(async () => {
     try {
@@ -42,11 +32,9 @@ export default function VisitBookingsPage() {
       const list = data?.data || [];
       setRows(list);
 
-      // seed localStatus from backend if present; fallback to "new"
       const seed = {};
       for (const r of list) {
         const s = r.status && String(r.status).toLowerCase();
-        // accept both 'approved' and legacy 'confirmed'
         if (s === "approved" || s === "confirmed") seed[r._id] = "approved";
       }
       setLocalStatus(seed);
@@ -83,7 +71,6 @@ export default function VisitBookingsPage() {
     });
   }, [rows, query, localStatus]);
 
-  /* ========= admin actions ========= */
   const patchBooking = async (id, payload) =>
     axios.patch(`${ADMIN_URL}/${id}`, payload);
 
@@ -106,17 +93,16 @@ export default function VisitBookingsPage() {
     if (!["new", "approved"].includes(nextStatus)) {
       return alert("Invalid status");
     }
-    // optimistic UI
     setLocalStatus((p) => ({
       ...p,
-      [id]: nextStatus === "approved" ? "approved" : undefined, // 'new' removes local override
+      [id]: nextStatus === "approved" ? "approved" : undefined, 
     }));
     try {
       await patchBooking(id, { status: nextStatus });
     } catch (err) {
       console.error(err);
       alert(err?.response?.data?.message || "Failed to update booking");
-      // rollback
+
       setLocalStatus((p) => {
         const copy = { ...p };
         const prev = toUiStatus(r.status || "new");
@@ -145,7 +131,6 @@ export default function VisitBookingsPage() {
     }
   };
 
-  /* ========= PDF export ========= */
   const downloadPDF = () => {
     try {
       const doc = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
@@ -214,14 +199,12 @@ export default function VisitBookingsPage() {
     }
   };
 
-  /* ========= render ========= */
   return (
     <div className="vb-wrap">
       <div className="vb-head">
-        <h2 className="vb-title">Visit Bookings</h2>
+        <h2 className="vb-title">Customer Management Dashboard</h2>
 
         <div className="vb-filters">
-          {/* server-side email filter */}
           <input
             type="email"
             className="vb-input"
@@ -234,7 +217,6 @@ export default function VisitBookingsPage() {
             Search
           </button>
 
-          {/* optional quick client-side search */}
           <input
             type="text"
             className="vb-input"
@@ -266,10 +248,9 @@ export default function VisitBookingsPage() {
         </div>
       </div>
 
-      {/* ⬇️ CHART INSIDE RETURN (fixes no-lone-blocks) */}
       {!loading && (
         <VisitBookingsChart
-          rows={filtered} // or rows
+          rows={filtered} 
           titleSuffix={filtered.length !== rows.length ? "(filtered)" : ""}
         />
       )}

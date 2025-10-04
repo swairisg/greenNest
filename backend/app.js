@@ -23,6 +23,7 @@ app.use(express.json());
 //harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules",harvestRouter);
+
 //customer
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
 const authRouter = require("./Routes/auth");
@@ -35,6 +36,8 @@ app.use("/api/auth", authRouter);
 const visitBookingRoutes = require("./Routes/customers/visitBooking");
 app.use("/api", visitBookingRoutes);
 
+const contactRoutes = require("./Routes/customers/contactUs/contactus");
+app.use(contactRoutes);
 
 
 // routes

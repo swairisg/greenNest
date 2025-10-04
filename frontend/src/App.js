@@ -25,6 +25,8 @@ import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
 import BookVisit from "./Components/customers/BookVisit/BookVisit";
 import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess";
 import CustomerDashboard from "./Components/customers/CustomerDashboard/CustomerDashboard"
+import ContactUs from "./Components/customers/ContactUs/ContactUs";
+import Viewcontactus from "./Components/customers/ContactUs/ViewContactUs/Viewcontactus";
 
 import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
 import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
@@ -107,6 +109,8 @@ export default function App() {
           {/*customer profile*/}
           <Route path="/profile" element={<CustomerProfile />} />
           <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/viewcontactus" element={<Viewcontactus />} />
 
         </Routes>
       </AuthProvider>

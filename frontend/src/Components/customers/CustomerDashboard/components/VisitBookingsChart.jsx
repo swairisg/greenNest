@@ -3,15 +3,9 @@ import "chart.js/auto";
 import { Bar, Doughnut } from "react-chartjs-2";
 import "./VisitBookingChart.css";
 
-/**
- * Props:
- *  - rows: array of visit bookings
- *  - titleSuffix: optional string to append to section titles (e.g., "(filtered)")
- */
+
 export default function VisitBookingsChart({ rows = [], titleSuffix = "" }) {
-  // --- aggregates ---
   const { statusData, dateData } = useMemo(() => {
-    // status counts (normalize legacy values)
     const statusCounts = { new: 0, approved: 0 };
     for (const r of rows) {
       const raw = String(r?.status || "").toLowerCase();
@@ -20,7 +14,6 @@ export default function VisitBookingsChart({ rows = [], titleSuffix = "" }) {
       else statusCounts.new += 1;
     }
 
-    // bookings per preferredDate (YYYY-MM-DD)
     const byDate = new Map();
     for (const r of rows) {
       if (!r?.preferredDate) continue;
