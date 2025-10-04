@@ -20,7 +20,7 @@
 .pc-actions{display:flex;gap:8px}
 .pc-form-actions{display:flex;gap:10px;grid-column:1 / -1}
 
-.pc-btn{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer}
+.pc-btn{border:1px solid #a5c9f6;background:#ffffff;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer}
 .pc-btn:hover{background:#f8fafc}
 .pc-btn.primary{background:#0ea5e9;border-color:#0ea5e9;color:#fff}
 .pc-btn.primary:hover{filter:brightness(.95)}
@@ -54,3 +54,12 @@
   .pc-search{flex-wrap:wrap}
   .pc-actions{display:none}
 }
+
+
+.pc-hint.error{color:#b91c1c;font-size:12px;margin-top:4px}
+.pc-input.error{border-color:#fca5a5;box-shadow:0 0 0 3px rgba(239,68,68,.12)}
+.pc-input-group{display:flex;gap:8px;align-items:center}
+.pc-row{display:flex;gap:10px;align-items:center}
+.pc-row.gap > *{min-width:160px}
+.pc-search-rows{display:flex;flex-direction:column;gap:10px}
+.pc-search .pc-btn + .pc-btn { margin-left: 4px; }
