@@ -5,6 +5,9 @@ import api from "../../api";
 import { useHRChrome } from "./HRLayout";
 import "./Employees.css";
 import EditEmployeeDrawer from "./EditEmployeeDrawer";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 const STATUSES = ["all", "active", "inactive", "terminated"];
 
@@ -45,6 +48,8 @@ export default function HREmployees() {
   // Edit drawer state
   const [editOpen, setEditOpen] = useState(false);
   const [editingRow, setEditingRow] = useState(null);
+
+  const [deletingId, setDeletingId] = useState(null);
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / pageSize)),
@@ -104,6 +109,54 @@ export default function HREmployees() {
     return () => clearTimeout(debounceRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
+
+
+  const handleDelete = async (row) => {
+    const result = await MySwal.fire({
+      icon: "warning",
+      title: "Delete employee?",
+      text:
+        "This will deactivate and hide the employee from the list. " +
+        "You can still find them later if you build a 'show deleted' view.",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#e11d48", // rose-600
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      setDeletingId(row._id);
+      await api.delete(`/hr/employees/${row._id}`);
+
+      // Optimistic update: remove row locally and adjust total
+      setRows((prev) => prev.filter((r) => r._id !== row._id));
+      setTotal((t) => Math.max(0, t - 1));
+
+      // If page becomes empty and there's a previous page, go back one
+      setTimeout(() => {
+        if (rows.length === 1 && page > 1) {
+          setPage((p) => p - 1);
+        }
+      }, 0);
+
+      await MySwal.fire({
+        icon: "success",
+        title: "Employee deleted",
+        text: "They’ve been marked inactive and hidden from the list.",
+        confirmButtonText: "OK",
+      });
+    } catch (e) {
+      console.error(e);
+      const msg = e?.response?.data?.message || e.message || "Delete failed";
+      MySwal.fire({ icon: "error", title: "Delete failed", text: msg });
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
 
   return (
     <div className="hrlist-wrap">
@@ -247,10 +300,10 @@ export default function HREmployees() {
                         <button
                           className="hrlist-btn danger small"
                           title="Delete"
-                          disabled
-                          onClick={() => {}}
+                         onClick={() => handleDelete(r)}
+                          disabled={deletingId === r._id}
                         >
-                          Delete
+                          {deletingId === r._id ? "Deleting…" : "Delete"}
                         </button>
                       </div>
                     </td>
