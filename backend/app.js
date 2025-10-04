@@ -27,6 +27,12 @@ app.use("/yieldRecords", YieldRouter);
 
 
 // routes
+const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
+app.use("/users", pestRoutes);
+
+const productRoutes = require("./Routes/productCatalogue/ProductRoute");
+app.use("/products", productRoutes);
+
 app.get("/", (_req, res) => res.send("Hello from backend"));
 
 /* ---------- routes ---------- */

@@ -34,6 +34,14 @@ import HarvestDashboard from "./Components/harvestManagement/harvestdashboard/Ha
 
 
 
+import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
+import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
+import PestDetectDashboard from './Components/pestControl/PestDetectDashboard/PestDetectDashboard';
+import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
+import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
+import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
+import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -75,10 +83,11 @@ export default function App() {
             </Route>
           </Route>
 
-        <Route path="/addharvestschedules" element={<AddSchedule />} />
-          <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
-          <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
-        <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
+
+       <Route path="/addharvestschedules" element={<AddSchedule />} />
+       <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
+       <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
+       <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
 
 
       <Route element={<HarvestLayout />}>
@@ -87,8 +96,23 @@ export default function App() {
         <Route path="/ViewYieldRecords" element={<ViewYield />} />
       </Route>
 
+      <Route path="/admin" element={<Admin />} />
+   
+      <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
+      <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+      <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
+      <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* 🛒 Product Catalog (Customer) */}
+      <Route path="/catalog" element={<CatalogPage />} />
+
+      {/* 🔐 Product Catalog (Admin) */}
+      <Route path="/admin/products" element={<AdminProducts />} />
+      <Route path="/admin/products/new" element={<ProductCatalogForm />} />
+      <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
+       <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
+      
+      <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
 
 
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
