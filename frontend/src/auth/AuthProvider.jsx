@@ -31,6 +31,9 @@ export default function AuthProvider({ children }) {
     setUser(null);
   };
 
+  // ✅ alias used by your pages
+  const setUserFromServer = (freshUser) => setUser(freshUser);
+
   return (
     <AuthCtx.Provider value={{ user, token, login, logout }}>
       {children}

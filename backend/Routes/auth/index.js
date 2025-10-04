@@ -9,6 +9,11 @@ const {
   customerSignup,
 } = require("../../Controllers/auth/publicSignup.controller");
 
+const {
+  getCustomerProfile,
+  updateCustomerProfile,
+} = require("../../Controllers/auth/customerProfileController");
+
 // routes
 router.post("/login", login);
 router.post("/logout", logout);
@@ -18,5 +23,11 @@ router.post("/signup", customerSignup);
 
 // optional health
 router.get("/health", (_req, res) => res.json({ ok: true }));
+
+//update part
+router.get("/profile/:id", getCustomerProfile);
+router.put("/profile/:id", updateCustomerProfile);
+
+
 
 module.exports = router;

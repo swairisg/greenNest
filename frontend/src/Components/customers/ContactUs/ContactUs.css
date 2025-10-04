@@ -1,0 +1,278 @@
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+}
+
+.contact-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.contact-hero-image {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 100%;
+  max-height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.contact-company-details {
+  grid-column: 1;
+  grid-row: 2;
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #2d5016;
+}
+
+.contact-company-title {
+  color: #32CD32;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.contact-company-info {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.contact-company-info strong {
+  color: #2d5016;
+  min-width: 80px;
+  display: inline-block;
+}
+
+.contact-company-social-title {
+  margin: 1.5rem 0 1rem 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.contact-social-media {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.contact-social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: white;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.contact-social-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.15);
+  border-color: #2d5016;
+}
+
+.contact-social-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.contact-form-section {
+  grid-column: 2;
+  grid-row: 2;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form-label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.contact-form-input,
+.contact-form-textarea {
+  padding: 0.8rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.contact-form-input:focus,
+.contact-form-textarea:focus {
+  outline: none;
+  border-color: #2d5016;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+
+.contact-form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+.contact-submit-btn {
+  background: #32CD32;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.contact-submit-btn:hover:not(:disabled) {
+  background: #3a6420;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+}
+
+.contact-submit-btn:disabled {
+  background: #a0a0a0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.contact-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 1rem;
+  }
+
+  .contact-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 1.5rem;
+  }
+
+  .contact-hero-image {
+    grid-column: 1;
+    grid-row: 1;
+    max-height: 200px;
+  }
+
+  .contact-company-details {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 1.5rem;
+  }
+
+  .contact-form-section {
+    grid-column: 1;
+    grid-row: 3;
+    padding: 1.5rem;
+  }
+
+  .contact-social-media {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .contact-social-link {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 0.5rem;
+  }
+
+  .contact-company-details,
+  .contact-form-section {
+    padding: 1rem;
+  }
+
+  .contact-company-title {
+    font-size: 1.5rem;
+  }
+
+  .contact-social-media {
+    flex-direction: column;
+  }
+
+  .contact-form-input,
+  .contact-form-textarea {
+    padding: 0.7rem 0.8rem;
+  }
+
+  .contact-submit-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.contact-submit-btn:disabled {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.contact-form-input:focus-visible,
+.contact-form-textarea:focus-visible,
+.contact-social-link:focus-visible {
+  outline: 2px solid #2d5016;
+  outline-offset: 2px;
+}
+
+.contact-form-group div[style*="text-align: right"] {
+  margin-top: 0.3rem;
+  color: #666;
+}

@@ -1,0 +1,39 @@
+/* Scoped to the ViewContactUs page wrapper so it won't leak */
+.view-contact-container .vb-charts.contact-charts{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(280px,1fr));
+  gap:20px;
+  margin:18px 0 10px;
+}
+
+.view-contact-container .vb-card{
+  background: var(--vb-card, #fff);
+  border: 1px solid var(--vb-line, rgba(0,0,0,.08));
+  border-radius: var(--vb-radius, 16px);
+  box-shadow: var(--vb-shadow-soft, 0 6px 16px rgba(0,0,0,.05));
+  padding:14px;
+}
+
+.view-contact-container .vb-card-head{
+  display:flex; align-items:baseline; justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.view-contact-container .vb-card-head h3{
+  font-size:16px; font-weight:700; color:var(--vb-ink, #1b1f23);
+}
+
+.view-contact-container .vb-sub{
+  font-size:12px; color:var(--vb-ink-soft, #6b7280);
+}
+
+.view-contact-container .vb-actions-bar{
+  margin: 10px 0 18px;
+}
+
+/* Responsive: stack charts on small screens */
+@media (max-width: 860px){
+  .view-contact-container .vb-charts.contact-charts{
+    grid-template-columns: 1fr;
+  }
+}

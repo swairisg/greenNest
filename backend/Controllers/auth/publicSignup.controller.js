@@ -5,6 +5,7 @@ const isCompanyEmail = require("../../utils/isCompanyEmail");
 // simple strength check: 8+ chars, 1 lower, 1 upper, 1 digit
 const isStrong = (pwd) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(pwd);
 
+
 exports.customerSignup = async (req, res) => {
   try {
     const { email, password, confirmPassword, name, phone, address } = req.body;

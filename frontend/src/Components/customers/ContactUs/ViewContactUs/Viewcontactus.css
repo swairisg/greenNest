@@ -1,0 +1,155 @@
+.view-contact-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.view-contact-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #2d5016;
+}
+
+.view-contact-header h1 {
+  color: #32CD32;
+  margin-bottom: 10px;
+}
+
+.view-contact-loading,
+.view-contact-empty {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+.view-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.view-contact-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.contact-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.contact-info h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.contact-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.contact-update-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.contact-status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.contact-status.new {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.contact-status.read {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.contact-status.replied {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.contact-status.closed {
+  background: #f5f5f5;
+  color: #616161;
+}
+
+.contact-status-btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.contact-status-btn.new { background: #eef6ff; }
+.contact-status-btn.replied { background: #e7ffe7; cursor: not-allowed; }
+
+
+.contact-date {
+  font-size: 12px;
+  color: #888;
+}
+
+.contact-message {
+  margin-bottom: 15px;
+}
+
+.contact-message p {
+  margin: 0;
+  line-height: 1.5;
+  color: #333;
+}
+
+.contact-actions {
+  text-align: right;
+}
+
+.delete-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-btn:hover {
+  background: #d32f2f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .view-contact-container {
+    padding: 10px;
+  }
+  
+  .contact-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .contact-meta {
+    align-items: flex-start;
+  }
+}
