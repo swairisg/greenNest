@@ -220,4 +220,19 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { list, create, get, update, remove };
+//restore deletion
+async function restore(req, res) {
+  try {
+    const row = await Employee.findByIdAndUpdate(
+      req.params.id,
+      { isDeleted: false, currentStatus: "active", updatedBy: req.user?._id },
+      { new: true }
+    );
+    if (!row) return bad(res, "Not found", 404);
+    res.json({ data: row });
+  } catch (err) {
+    console.error("Restore error:", err);
+    bad(res, "Restore failed", 500);
+  }
+}
+module.exports = { list, create, get, update, remove, restore };

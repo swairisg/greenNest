@@ -50,6 +50,7 @@ export default function HREmployees() {
   const [editingRow, setEditingRow] = useState(null);
 
   const [deletingId, setDeletingId] = useState(null);
+  const lastDeletedRef = useRef(null);
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / pageSize)),
@@ -111,51 +112,95 @@ export default function HREmployees() {
   }, [search]);
 
 
-  const handleDelete = async (row) => {
-    const result = await MySwal.fire({
-      icon: "warning",
-      title: "Delete employee?",
-      text:
-        "This will deactivate and hide the employee from the list. " +
-        "You can still find them later if you build a 'show deleted' view.",
+const handleDelete = async (row) => {
+  const result = await MySwal.fire({
+    icon: "warning",
+    title: "Delete employee?",
+    text:
+      "This will deactivate and hide the employee from the list. " +
+      "You can undo this immediately.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#e11d48",
+    reverseButtons: true,
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    setDeletingId(row._id);
+    await api.delete(`/hr/employees/${row._id}`);
+
+    // Save deleted row so we can restore if needed
+    lastDeletedRef.current = { row, pageSnapshot: page };
+
+    // Optimistic UI: remove it now
+    setRows((prev) => prev.filter((r) => r._id !== row._id));
+    setTotal((t) => Math.max(0, t - 1));
+
+    // If page becomes empty, step back one (next render ok)
+    setTimeout(() => {
+      if (rows.length === 1 && page > 1) {
+        setPage((p) => p - 1);
+      }
+    }, 0);
+
+    // Show Undo
+    const undo = await MySwal.fire({
+      icon: "success",
+      title: "Employee deleted",
+      html:
+        `<div style="margin-top:6px;color:#374151">` +
+        `They’ve been marked inactive and hidden from the list.</div>`,
       showCancelButton: true,
-      confirmButtonText: "Yes, delete",
-      cancelButtonText: "Cancel",
-      confirmButtonColor: "#e11d48", // rose-600
+      confirmButtonText: "Undo",
+      cancelButtonText: "OK",
       reverseButtons: true,
+      timer: 8000,
+      timerProgressBar: true,
     });
 
-    if (!result.isConfirmed) return;
+    // If "Undo" clicked (and we still have the row)
+    if (undo.isConfirmed && lastDeletedRef.current?.row?._id === row._id) {
+      try {
+        const res = await api.post(`/hr/employees/${row._id}/restore`);
+        const restored = res.data?.data || lastDeletedRef.current.row;
 
-    try {
-      setDeletingId(row._id);
-      await api.delete(`/hr/employees/${row._id}`);
+        // Put it back in the list (prepend for visibility)
+        setRows((prev) => [restored, ...prev]);
+        setTotal((t) => t + 1);
 
-      // Optimistic update: remove row locally and adjust total
-      setRows((prev) => prev.filter((r) => r._id !== row._id));
-      setTotal((t) => Math.max(0, t - 1));
-
-      // If page becomes empty and there's a previous page, go back one
-      setTimeout(() => {
-        if (rows.length === 1 && page > 1) {
-          setPage((p) => p - 1);
+        // Optionally jump back to original page if it changed:
+        if (lastDeletedRef.current.pageSnapshot && lastDeletedRef.current.pageSnapshot !== page) {
+          setPage(lastDeletedRef.current.pageSnapshot);
         }
-      }, 0);
 
-      await MySwal.fire({
-        icon: "success",
-        title: "Employee deleted",
-        text: "They’ve been marked inactive and hidden from the list.",
-        confirmButtonText: "OK",
-      });
-    } catch (e) {
-      console.error(e);
-      const msg = e?.response?.data?.message || e.message || "Delete failed";
-      MySwal.fire({ icon: "error", title: "Delete failed", text: msg });
-    } finally {
-      setDeletingId(null);
+        await MySwal.fire({
+          icon: "success",
+          title: "Restored",
+          text: "The employee has been restored.",
+          confirmButtonText: "OK",
+        });
+      } catch (e) {
+        console.error(e);
+        const msg = e?.response?.data?.message || e.message || "Restore failed";
+        MySwal.fire({ icon: "error", title: "Restore failed", text: msg });
+      } finally {
+        lastDeletedRef.current = null;
+      }
+    } else {
+      // Not undone (timeout or OK)
+      lastDeletedRef.current = null;
     }
-  };
+  } catch (e) {
+    console.error(e);
+    const msg = e?.response?.data?.message || e.message || "Delete failed";
+    MySwal.fire({ icon: "error", title: "Delete failed", text: msg });
+  } finally {
+    setDeletingId(null);
+  }
+};
 
 
   return (

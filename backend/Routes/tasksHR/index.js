@@ -19,6 +19,7 @@ router.post("/employees", people.create);
 router.get("/employees/:id", people.get);
 router.patch("/employees/:id", people.update);
 router.delete("/employees/:id", people.remove);
+router.post("/employees/:id/restore", people.restore);
 
 // Tasks
 router.get("/tasks", tasks.list);
