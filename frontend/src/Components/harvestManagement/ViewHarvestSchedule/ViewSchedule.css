@@ -1,19 +1,20 @@
-/* ViewSchedule.css — scoped to .harvestView only */
-
-/* ===== Page container & palette (local vars) ===== */
 .harvestView {
-  --hv-bg-1: #bbf7d0;
+  /* Surface & text */
+  --hv-bg-1: hsl(135, 33%, 98%);
   --hv-bg-2: #dff0e6;
-  --hv-panel: #f6fbf8;
+  --hv-panel: #ffffff;
   --hv-text: #113626;
-  --hv-muted: #3e6f59;
-  --hv-accent: #27b96b;
-  --hv-accent-2: #199655;
-  --hv-border: #c7e2d4;
-  --hv-border-strong: #a9d4c1;
+  --hv-muted: #6b7f74;
 
+  --hv-accent: #32cd32;  /* primary green */
+  --hv-accent-2: #28a428;/* hover/darker green */
+
+  /* Borders & radius */
+  --hv-border: #e6f4eb;
+  --hv-border-strong: #d9efe3;
   --hv-radius: 14px;
 
+  /* Page */
   width: 100%;
   padding: clamp(12px, 3vw, 24px);
   background: linear-gradient(180deg, var(--hv-bg-1), var(--hv-bg-2));
@@ -21,7 +22,7 @@
   box-sizing: border-box;
 }
 
-/* ===== Toolbar (title + search + button) ===== */
+
 .harvestView .hv-toolbar {
   display: flex;
   align-items: center;
@@ -33,10 +34,10 @@
   border-radius: var(--hv-radius);
   padding: 12px 14px;
   margin-bottom: 14px;
-  box-shadow: 0 8px 22px rgba(16, 70, 44, 0.08);
+  box-shadow: none;
 }
 
-.harvestView .hvharvest-title {
+.harvestView .hv-toolbar-title {
   margin: 0;
   font-size: clamp(18px, 2.1vw, 22px);
   font-weight: 700;
@@ -44,51 +45,78 @@
   color: var(--hv-text);
 }
 
+/* Right side (search + buttons) */
 .harvestView .hv-toolbar-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;         /* keeps visible space between controls */
+  flex-wrap: wrap;   /* wrap on small screens */
   min-width: 0;
 }
 
 .harvestView .hv-search {
-  flex: 1 1 320px;     /* grows, but can shrink */
+  flex: 1 1 260px;   /* narrower than 320px to leave room for buttons */
   min-width: 180px;
-  max-width: 520px;
-  height: 38px;
+  max-width: 420px;
+  height: 40px;
 
-  padding: 8px 12px;
-  border: 1px solid var(--hv-border-strong);
-  border-radius: 10px;
+  padding: 8px 14px;
+  border: 2px solid var(--hv-border-strong);
+  border-radius: 12px;
   background: #ffffff;
   color: var(--hv-text);
+  font-size: 14px;
   outline: none;
-  transition: border-color .15s ease, box-shadow .15s ease;
-}
 
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.harvestView .hv-search::placeholder { color: var(--hv-muted); opacity: .85; }
 .harvestView .hv-search:focus {
   border-color: var(--hv-accent);
-  box-shadow: 0 0 0 3px rgba(39,185,107,0.18);
+  box-shadow: 0 0 0 3px rgba(50,205,50,0.18);
 }
 
+/* Top-bar buttons: shared base */
 .harvestView .hv-btn {
-  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   height: 38px;
-  padding: 0 14px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, var(--hv-accent), var(--hv-accent-2));
-  color: #bbf7d0;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid var(--hv-accent);
+  background: var(--hv-accent);    /* #32CD32 */
+  color: #ffffff;
   font-weight: 700;
+  font-size: 14px;
   letter-spacing: .2px;
-  border: 1px solid #bbf7d0;
+  text-decoration: none;           
+  line-height: 1;
   cursor: pointer;
-  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
-  box-shadow: 0 6px 16px rgba(25, 150, 85, 0.18);
+
+  box-shadow: none;
+  transition: background-color .12s ease, border-color .12s ease, opacity .12s ease, transform .06s ease;
 }
-.harvestView .hv-btn:hover { filter: brightness(1.04); }
+.harvestView .hv-btn:hover {
+  background: var(--hv-accent-2);  /* #28a428 */
+  border-color: var(--hv-accent-2);
+}
 .harvestView .hv-btn:active { transform: translateY(1px); }
 
-/* Stack toolbar on small screens */
+/* Optional neutral style (use if your Refresh already has this class) */
+.harvestView .hv-btn--secondary {
+  background: #ffffff;
+  border: 1px solid var(--hv-border-strong);
+  color: var(--hv-text);
+}
+.harvestView .hv-btn--secondary:hover {
+  background: #f7fcf9;
+  border-color: var(--hv-border);
+}
+
+/* Responsive stacking for toolbar */
 @media (max-width: 720px) {
   .harvestView .hv-toolbar {
     flex-direction: column;
@@ -100,22 +128,19 @@
   .harvestView .hv-btn { width: 100%; }
 }
 
-/* ===== Table wrapper (responsive scroll) ===== */
 .harvestView .hv-table-wrap {
   background: var(--hv-panel);
   border: 1px solid var(--hv-border);
   border-radius: var(--hv-radius);
   padding: 8px;
-  box-shadow: 0 8px 22px rgba(16, 70, 44, 0.08);
-
+  box-shadow: none;
   overflow-x: auto;                 /* enable horizontal scroll on phones */
   -webkit-overflow-scrolling: touch;
 }
 
-/* ===== Table ===== */
 .harvestView .harvestschedule-table {
   width: 100%;
-  min-width: 940px;                /* keeps columns readable; scrolls on small screens */
+  min-width: 920px;                /* keeps columns readable; scrolls on small screens */
   border-collapse: separate;
   border-spacing: 0;
   font-size: 14px;
@@ -124,7 +149,7 @@
 /* Header cells */
 .harvestView .harvestschedule-table thead th {
   position: sticky; top: 0; z-index: 1;
-  background: #e5f4ec;
+  background: #f4fbf6;
   color: #0f2d1d;
   text-align: left;
   padding: 12px 10px;
@@ -140,19 +165,17 @@
   color: var(--hv-text);
 }
 
-/* Zebra & hover rows */
-.harvestView .harvestschedule-table tbody tr:nth-child(odd) { background: #fbfdfb; }
-.harvestView .harvestschedule-table tbody tr:nth-child(even) { background: #f7fbf9; }
-.harvestView .harvestschedule-table tbody tr:hover { background: #eef8f1; }
+.harvestView .harvestschedule-table tbody tr:nth-child(odd),
+.harvestView .harvestschedule-table tbody tr:nth-child(even) { background: #ffffff; }
+.harvestView .harvestschedule-table tbody tr:hover { background: #f7fcf9; }
 
-/* Notes column: wrap long text nicely */
 .harvestView .harvestschedule-table td:nth-child(6) {
   max-width: 360px;
   white-space: normal;
   word-break: break-word;
 }
 
-/* Actions column keeps buttons tidy (buttons styled wherever they’re rendered) */
+/* Actions column keeps buttons tidy */
 .harvestView .harvestschedule-table td:last-child {
   white-space: nowrap;
   gap: 8px;
@@ -165,20 +188,20 @@
   .harvestView .harvestschedule-table tbody td { padding: 10px 8px; }
 }
 
-/* ====== Row actions (Update / Delete / Harvest) ====== */
 .harvestView .hvrow-actions {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;             /* lets buttons wrap on narrow screens */
+  flex-wrap: wrap;   /* lets buttons wrap on narrow screens */
 }
 
-/* Base button look for both <a> and <button> inside row actions */
+/* Base look for row links & buttons */
 .harvestView .hvrow-actions a,
 .harvestView .hvrow-actions button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   height: 32px;
   padding: 0 10px;
   border-radius: 9px;
@@ -188,106 +211,60 @@
   font-size: 13px;
   font-weight: 600;
   line-height: 1;
-  text-decoration: none;       /* remove underline on <a> */
+  text-decoration: none;
   cursor: pointer;
-  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease, border-color .15s ease;
-}
 
+  transition: transform .06s ease, background-color .12s ease, color .12s ease, border-color .12s ease, box-shadow .15s ease;
+}
 .harvestView .hvrow-actions a:hover,
 .harvestView .hvrow-actions button:hover {
   border-color: var(--hv-accent);
-  box-shadow: 0 4px 10px rgba(25, 150, 85, 0.15);
+  box-shadow: 0 4px 10px rgba(50, 205, 50, 0.15);
 }
-
 .harvestView .hvrow-actions a:active,
 .harvestView .hvrow-actions button:active {
   transform: translateY(1px);
 }
-
 .harvestView .hvrow-actions a:focus-visible,
 .harvestView .hvrow-actions button:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(39,185,107,0.18);
+  box-shadow: 0 0 0 3px rgba(50,205,50,0.18);
   border-color: var(--hv-accent);
 }
 
-/* Variants by position (matching your current markup order) */
-/* 1) Update = first <a> */
+/* Update  */
 .harvestView .hvrow-actions a:first-child {
   background: #ffffff;
   color: #0c3c27;
   border-color: var(--hv-border);
 }
 
-/* 2) Delete = the <button> */
+/* Delete  */
 .harvestView .hvrow-actions button {
   background: #fff5f5;
   color: #7a1d1d;
   border-color: #f2b3b3;
 }
 .harvestView .hvrow-actions button:hover {
-  border-color: #e55353;
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
   box-shadow: 0 4px 12px rgba(229, 83, 83, 0.18);
 }
 
-/* 3) Harvest = last <a> */
+/* Harvest  */
 .harvestView .hvrow-actions a:last-child {
-  background: linear-gradient(180deg, var(--hv-accent), var(--hv-accent-2));
-  color: #08391f;
-  border-color: #9ddfbe;
+  background: var(--hv-accent);
+  color: #ffffff;
+  border-color: var(--hv-accent);
+}
+.harvestView .hvrow-actions a:last-child:hover {
+  background: var(--hv-accent-2);
+  border-color: var(--hv-accent-2);
 }
 
-/* Ensure the three controls don’t squish too small inside the cell */
-.harvestView .harvestschedule-table td:last-child {
-  white-space: nowrap;
-}
-
-/* ====== Status badge ====== */
-.harvestView .hvstatus-badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 12px;
-  line-height: 1;
-  border: 1px solid var(--hv-border);
-  background: #eef8f1;
-  color: #22c55e;
-  white-space: nowrap;
-}
-
-/* Modifiers based on your derived status string */
-.harvestView .hvstatus--due-soon {
-  background: #fff7e6;
-  border-color: #f2d39a;
-  color: #7a4c08;
-}
-.harvestView .hvstatus--over-due {
-  background: #ffecec;
-  border-color: #f2b3b3;
-  color: #7a1d1d;
-}
-.harvestView .hvstatus--planted {
-  background: #edf4ff;
-  border-color: #c7d9f6;
-  color: #143a7b;
-}
-.harvestView .hvstatus--harvested {
-  background: #e9fbf2;
-  border-color: #bde8d2;
-  color: #0e5d39;
-}
-
-/* Muted helper text used for (days) next to expected date */
-.harvestView .hvmuted {
-  color: var(--hv-muted);
-  font-size: 12px;
-}
-
-/* ====== Compact tweaks on very small screens ====== */
 @media (max-width: 520px) {
-  .harvestView .hvrow-actions {
-    gap: 6px;
-  }
+  .harvestView .hvrow-actions { gap: 6px; }
   .harvestView .hvrow-actions a,
   .harvestView .hvrow-actions button {
     height: 30px;
@@ -295,8 +272,29 @@
     font-size: 12px;
   }
 }
-/* Filter Options Styles */
-.filter-options {
+
+.harvestView .hvstatus-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  color: #16a34a;
+  white-space: nowrap;
+}
+
+.harvestView .hvstatus--due-soon,
+.harvestView .hvstatus--over-due,
+.harvestView .hvstatus--planted,
+.harvestView .hvstatus--harvested {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+
+.harvestView .filter-options {
   display: flex;
   gap: 10px;
   margin: 20px 0;
@@ -304,35 +302,27 @@
   flex-wrap: wrap;
 }
 
-.filter-btn {
+.harvestView .filter-btn {
   padding: 8px 16px;
-  border: 1px solid #ddd;
-  background: white;
+  border: 1px solid #e7f2ea;
+  background: #ffffff;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color .12s ease, border-color .12s ease, color .12s ease;
   font-size: 14px;
+  color: var(--hv-text);
+}
+.harvestView .filter-btn:hover {
+  background: #f7fcf9;
+  border-color: #e0efe7;
+}
+.harvestView .filter-btn.active {
+  background: var(--hv-accent);
+  color: #ffffff;
+  border-color: var(--hv-accent);
 }
 
-.filter-btn:hover {
-  background: #f5f5f5;
-  border-color: #ccc;
-}
-
-.filter-btn.active {
-  background: #22c55e;
-  color: white;
-  border-color: #22c55e;
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
-  .filter-options {
-    gap: 5px;
-  }
-  
-  .filter-btn {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
+  .harvestView .filter-options { gap: 5px; padding: 0 12px; }
+  .harvestView .filter-btn { padding: 6px 12px; font-size: 12px; }
 }

@@ -1,214 +1,178 @@
-/* Sidebar Base Styles */
-.harvest_sidebar {
-  width: 250px;
-  height: 100vh;
-  background: #22c55e;
-  color: white;
-  position: fixed;
-  left: 0;
-  top: 0;
-  transition: all 0.3s ease;
-  z-index: 1000;
-  transform: translateX(0);
+.harvest_sidebar{
+  width:250px;
+  height:100vh;
+  position:fixed;
+  left:0; top:0;
+  z-index:1000;
+
+  background:#22c55e;     /* main sidebar background */
+  color:#ffffff;          /* default text on sidebar */
+
+  transform:translateX(0);
+  transition:transform 220ms ease, opacity 220ms ease;
+  will-change:transform, opacity;
 }
 
-.harvest_sidebar-header {
-  padding: 20px;
-  border-bottom: 1px solid #34495e;
-  text-align: center;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Hidden/vanished state (used by vanishState === 1) */
+.harvest_sidebar.is-vanished{
+  transform:translateX(-100%);
+  opacity:0;
+  pointer-events:none;
 }
 
-.harvest_sidebar-header h3 {
-  margin: 0;
-  color: #1e282a;
-  font-size: 1.2rem;
+/* ===== Header bar ===== */
+.harvest_sidebar-header{
+  height:60px;
+  padding:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+
+  background:#16a34a;          /* slightly darker green */
+  color:#be3838;                /* readable header text */
+  border-bottom:1px solid #3a9362;
+}
+.harvest_sidebar-header h3{
+  margin:0;
+  font-size:1.1rem;
+  font-weight:700;
 }
 
-.harvest_sidebar-nav {
-  padding: 20px 0;
+.harvest_sidebar-nav{
+  padding: 0px;
 }
 
-.harvest_nav-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-  color: #1e282a;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
-  background: none;
-  width: 100%;
-  cursor: pointer;
+/* Link/button items generated from menuItems */
+.harvest_nav-item{
+  display:flex;
+  align-items:center;
+  width:100%;
+  padding:12px 20px;
+
+  background:#16a34a;
+  border:none;
+  text-decoration:none;         /* remove Link underline */
+  color:#ffffff;                /* default nav text */
+
+  cursor:pointer;
+  transition:background .2s ease, color .2s ease, transform .12s ease;
+  outline: none;
 }
 
-.harvest_nav-item:hover {
-  background: #bbf7d0;
-  color: #36393a;
+/* Hover/active/focus states */
+.harvest_nav-item:hover{
+  background:#bbf7d0;           /* light green hover bg */
+  color:#0b2214;                /* dark readable text */
+}
+.harvest_nav-item:active{
+  transform: translateY(0);     /* subtle press */
+}
+.harvest_nav-item:focus-visible{
+  box-shadow:0 0 0 3px rgba(34,197,94,.35);
+  border-radius:8px;
 }
 
-.harvest_nav-item.active {
-  background: #3a9362;
-  color: white;
-  border-right: 3px solid #3a9362;
+/* Active route — applied via className when path matches */
+.harvest_nav-item.active{
+  background:#3a9362;
+  color:#ffffff;
+  border-right:3px solid #3a9362;
 }
 
-.harvest_nav-icon {
-  margin-right: 12px;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  min-width: 20px;
+/* Icon + text */
+.harvest_nav-icon{
+  min-width:20px;
+  margin-right:12px;
+  font-size:1.1rem;
+  display:flex;
+  align-items:center;
+  line-height:1;
+}
+.harvest_nav-text{
+  font-weight:600;
+  white-space:nowrap;
+  color:inherit;                /* follow parent color */
 }
 
-.harvest_nav-text {
-  font-weight: 500;
-  white-space: nowrap;
+.sidebar-overlay{
+  position:fixed; inset:0;
+  z-index:999;
+  display:none;
+  background:rgba(0,0,0,.5);
 }
+.sidebar-overlay.active{ display:block; }
 
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .harvest_sidebar {
-    transform: translateX(-100%);
-    width: 280px;
+.harvest_sidebar-open{
+  position:fixed;
+  left:12px; top:12px;
+  z-index:1100;
+  padding:10px 14px;
+  border:none;
+  border-radius:999px;
+  font-weight:600;
+  cursor:pointer;
+
+  background:#22c55e;
+  color:#ffffff;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
+
+  transition:transform 160ms ease, opacity 160ms ease;
+}
+.harvest_sidebar-open:hover{ transform:translateY(-1px); }
+.harvest_sidebar-open:active{ transform:translateY(0); }
+
+@media (max-width:768px){
+  .harvest_sidebar{
+    width:280px;
+    transform:translateX(-100%); /* hidden by default on mobile */
   }
-
-  .harvest_sidebar.mobile-open {
-    transform: translateX(0);
-  }
-
-  /* Overlay for mobile */
-  .sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: none;
-  }
-
-  .sidebar-overlay.active {
-    display: block;
-  }
-}
-
-/* Tablet Styles */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .harvest_sidebar {
-    width: 220px;
-  }
-
-  .harvest_sidebar-header h3 {
-    font-size: 1.1rem;
-  }
-
-  .harvest_nav-item {
-    padding: 10px 15px;
-    font-size: 0.9rem;
-  }
-}
-
-/* Small mobile devices */
-@media (max-width: 480px) {
-  .harvest_sidebar {
-    width: 100%;
-  }
-
-  .harvest_sidebar-header {
-    padding: 15px;
-    height: 50px;
-  }
-
-  .harvest_sidebar-header h3 {
-    font-size: 1.1rem;
-  }
-
-  .harvest_nav-item {
-    padding: 15px 20px;
-  }
-}
-
-/* Large screens */
-@media (min-width: 1200px) {
-  .harvest_sidebar {
-    width: 280px;
+  .harvest_sidebar.mobile-open{
+    transform:translateX(0);
   }
 }
+@media (min-width:769px) and (max-width:1024px){
+  .harvest_sidebar{ width:220px; }
+  .harvest_nav-item{ padding:10px 15px; font-size:.95rem; }
+}
+@media (max-width:480px){
+  .harvest_sidebar{ width:100%; }
+  .harvest_sidebar-header{ height:50px; padding:15px; }
+  .harvest_nav-item{ padding:15px 20px; }
+}
+@media (min-width:1200px){
+  .harvest_sidebar{ width:280px; }
+}
 
-/* Print styles */
-@media print {
-  .harvest_sidebar {
-    display: none;
+/* ===== Print & Accessibility ===== */
+@media print{
+  .harvest_sidebar{ display:none; }
+}
+@media (prefers-contrast: high){
+  .harvest_sidebar{
+    background:#000 !important;
+    border-right:2px solid #fff;
+    color:#fff !important;
+  }
+  .harvest_nav-item.active{
+    background:#fff !important; color:#000 !important;
   }
 }
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .harvest_sidebar {
-    background: #000;
-    border-right: 2px solid #fff;
-  }
-
-  .harvest_nav-item.active {
-    background: #fff;
-    color: #000;
-  }
+@media (prefers-reduced-motion: reduce){
+  .harvest_sidebar, .harvest_nav-item{ transition:none; }
+}
+/* === FINAL OVERRIDE: make sidebar green, no matter what === */
+html body #root .harvest_sidebar.harvest_sidebar{
+  background:#22c55e !important;
+  background-color:#22c55e !important; /* covers longhand overrides */
+  background-image:none !important;     /* in case a gradient/image was set */
+  color:#ffffff !important;
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .harvest_sidebar {
-    transition: none;
-  }
-  
-  .harvest_nav-item {
-    transition: none;
-  }
+/* header too (if it looks white) */
+html body #root .harvest_sidebar .harvest_sidebar-header{
+  background:#16a34a !important;
+  background-color:#16a34a !important;
+  color:#ffffff !important;
+  border-bottom:1px solid #3a9362 !important;
 }
-
-/* Ensure sidebar can slide out smoothly */
-.harvest_sidebar {
-  transition: transform 220ms ease, opacity 220ms ease;
-  will-change: transform, opacity;
-}
-
-/* Vanish state */
-.harvest_sidebar.is-vanished {
-  transform: translateX(-100%);
-  opacity: 0;
-  pointer-events: none;    /* don’t block clicks on page content */
-}
-
-
-
-.harvest_sidebar-open {
-  position: fixed;     /* stays clickable even when sidebar is off-screen */
-  left: 12px;
-  top: 12px;
-  z-index: 1100;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 999px;
-  background: #22c55e;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  transition: transform 160ms ease, opacity 160ms ease;
-}
-
-.harvest_sidebar-open:hover {
-  transform: translateY(-1px);
-}
-
-.harvest_sidebar-open:active {
-  transform: translateY(0);
-}
-
-
-

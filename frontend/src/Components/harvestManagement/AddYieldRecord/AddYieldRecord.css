@@ -1,146 +1,154 @@
-/* YieldAdd.css — Greenhouse Mid theme (scoped to this page only) */
 .yieldadd-form {
-  /* Mid-tone greenhouse palette */
-  --yg-bg-1: #eaf5ee;
-  --yg-bg-2: #dff0e6;
-  --yg-card: #f6fbf8;
-  --yg-input: #ffffff;
-  --yg-text: #113626;
-  --yg-muted: #3e6f59;
-  --yg-border: #c7e2d4;
-  --yg-border-strong: #a9d4c1;
-  --yg-accent: #27b96b;     /* action green */
-  --yg-accent-2: #199655;   /* hover */
-  --yg-warn: #d88908;
+  --ya-card: #ffffff;
+  --ya-card-header: #f0f3f6;
+  --ya-text: #000000;
+  --ya-muted: #6b7280;
+  --ya-border: #83e87f;
+  --ya-primary: #32cd32;
+  --ya-primary-hover: #28a428;
+  --ya-focus: #7eed92;
+  --ya-danger: #dc2626;
 
-  --yg-radius: 14px;
-  --yg-gap-x: 34px;         /* wide gutter to avoid visual crowding */
-  --yg-gap-y: 18px;
-
-  width: 100%;
-  max-width: 980px;
-  margin: clamp(12px, 3vw, 28px) auto;
-  padding: clamp(14px, 3vw, 28px);
-  background: linear-gradient(180deg, var(--yg-bg-1), var(--yg-bg-2));
-  border: 1px solid var(--yg-border);
-  border-radius: var(--yg-radius);
-  box-shadow: 0 8px 22px rgba(16, 70, 44, 0.10);
-
-  display: grid;
-  grid-template-columns: 1fr;      /* single column by default */
-  row-gap: var(--yg-gap-y);
+  --ya-shadow: 0 8px 24px rgba(16, 24, 40, 0.1);
+  --ya-radius: 12px;
 }
 
-/* Two columns on wider screens with a big gutter */
-@media (min-width: 880px) {
-  .yieldadd-form {
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--yg-gap-x);
+
+.yieldadd-form {
+  width: 100%;
+  max-width: 480px;                 /* smaller like the sample */
+  margin: 24px auto;                /* center on the page */
+  padding: 0;                       /* card handles its own padding per row */
+  background: var(--ya-card);       
+  color: var(--ya-text);
+  border: 1px solid var(--ya-border);
+  border-radius: var(--ya-radius);
+  box-shadow: 0 0 0 3px rgba(50,205,50,.12), var(--ya-shadow);
+
+
+  display: grid;
+  row-gap: 8px;                     /* tight vertical rhythm */
+  box-sizing: border-box;
+}
+
+/* Header strip */
+.yieldadd-form-header {
+  padding: 16px 20px;
+  background: var(--ya-card-header);
+  border-bottom: 1px solid var(--ya-border);
+  border-top-left-radius: var(--ya-radius);
+  border-top-right-radius: var(--ya-radius);
+}
+.yieldadd-form-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ya-primary);         
+}
+
+/* Each field row  */
+.yieldadd-form > div:not(.yieldadd-form-header) {
+  padding: 8px 20px;                /* compact spacing inside the card */
+}
+
+   
+.yieldadd_label {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--ya-muted);
+  user-select: none;
+}
+
+.yieldadd_input_readonly,
+.yieldadd_input_date,
+.yieldadd_input_number,
+.yieldadd_input_text {
+  width: 90%;                       
+  display: block;
+  margin: 0 auto;
+  height: 36px;                     /* compact height */
+  padding: 8px 12px;                /* compact padding */
+  border: 1px solid var(--ya-border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ya-text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  box-sizing: border-box;
+}
+
+/* Readonly fields */
+.yieldadd_input_readonly {
+  background: #f7f9fb;
+}
+
+/* Focus state */
+.yieldadd_input_readonly:focus,
+.yieldadd_input_date:focus,
+.yieldadd_input_number:focus,
+.yieldadd_input_text:focus {
+  border-color: var(--ya-focus);
+  box-shadow: 0 0 0 3px rgba(178, 241, 173, 0.2);
+}
+
+/* Number input polish */
+.yieldadd_input_number::-webkit-outer-spin-button,
+.yieldadd_input_number::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.yieldadd_input_number { -moz-appearance: textfield; }
+
+/* Select arrow (optional, subtle) */
+.yieldadd_input_text {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ya-muted) 50%),
+    linear-gradient(135deg, var(--ya-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(50% - 3px),
+    calc(100% - 15px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+
+.yieldadd_submitbtn {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  border: none;
+  background: var(--ya-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+
+  justify-self: end;                /* align right */
+  margin: 8px 20px 16px;           /* compact margins like sample */
+
+  transition: background-color .12s ease, transform .06s ease;
+}
+.yieldadd_submitbtn:hover { background: var(--ya-primary-hover); }
+.yieldadd_submitbtn:active { transform: translateY(1px); }
+
+/
+@media (max-width: 640px) {
+  .yieldadd-form { margin: 16px auto; border-radius: 10px; }
+  .yieldadd-form-header { padding: 14px 16px; }
+  .yieldadd-form > div:not(.yieldadd-form-header) { padding: 8px 16px; }
+  .yieldadd_submitbtn { margin-right: 16px; }
+
+  .yieldadd_input_readonly,
+  .yieldadd_input_date,
+  .yieldadd_input_number,
+  .yieldadd_input_text {
+    width: 92%;
+    height: 34px;
+    padding: 6px 10px;
   }
 }
 
-/* Header */
-.yieldadd-form .yieldadd-form-header {
-  grid-column: 1 / -1;
-  padding: 16px 18px;
-  border: 1px solid var(--yg-border);
-  border-radius: calc(var(--yg-radius) - 6px);
-  background:
-    linear-gradient(90deg, #e4f3eb 0%, #f0fbf6 100%);
-  display: flex; align-items: center;
+@media (prefers-reduced-motion: reduce) {
+  .yieldadd-form * { transition: none !important; }
 }
-.yieldadd-form .yieldadd-form-header h2 {
-  margin: 0;
-  font-size: clamp(18px, 2.1vw, 22px);
-  font-weight: 700;
-  color: var(--yg-text);
-  letter-spacing: .2px;
-}
-
-/* Field cards (each label + input pair) */
-.yieldadd-form > div {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  min-width: 0;
-  padding: 10px 12px;
-  background: var(--yg-card);
-  border: 1px solid var(--yg-border);
-  border-radius: 12px;
-}
-
-/* Labels */
-.yieldadd-form .yieldadd_label {
-  color: var(--yg-muted);
-  font-size: 13px;
-  letter-spacing: .3px;
-}
-
-/* Inputs — slightly narrower so columns never meet visually */
-.yieldadd-form .yieldadd_input_readonly,
-.yieldadd-form .yieldadd_input_date,
-.yieldadd-form .yieldadd_input_number,
-.yieldadd-form .yieldadd_input_text {
-  width: 95%;                 /* key: keeps a small inner gap */
-  max-width: 95%;
-  min-width: 0;
-  justify-self: start;
-
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: var(--yg-input);
-  color: var(--yg-text);
-  border: 1px solid var(--yg-border-strong);
-  outline: none;
-  line-height: 1.2;
-  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
-}
-
-/* Contained (inset) focus — no glow spill across the gutter */
-.yieldadd-form .yieldadd_input_date:focus,
-.yieldadd-form .yieldadd_input_number:focus,
-.yieldadd-form .yieldadd_input_text:focus {
-  border-color: var(--yg-accent);
-  box-shadow: inset 0 0 0 2px var(--yg-accent);
-}
-
-/* Hover feedback */
-.yieldadd-form .yieldadd_input_date:hover,
-.yieldadd-form .yieldadd_input_number:hover,
-.yieldadd-form .yieldadd_input_text:hover {
-  border-color: #8fd6ba;
-}
-
-/* Readonly schedule values */
-.yieldadd-form .yieldadd_input_readonly {
-  background: #f0faf4;
-  color: #2a5a46;
-  cursor: not-allowed;
-}
-
-/* Keep native invalid UX */
-.yieldadd-form .yieldadd_input_date:invalid,
-.yieldadd-form .yieldadd_input_number:invalid,
-.yieldadd-form .yieldadd_input_text:invalid {
-  border-color: var(--yg-warn);
-}
-
-/* Submit */
-.yieldadd-form .yieldadd_submitbtn {
-  grid-column: 1 / -1;
-  justify-self: end;
-  margin-top: 4px;
-
-  padding: 12px 18px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, var(--yg-accent), var(--yg-accent-2));
-  color: #08391f;
-  font-weight: 800;
-  letter-spacing: .3px;
-  border: 1px solid #9ddfbe;
-  cursor: pointer;
-  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
-  box-shadow: 0 6px 16px rgba(25, 150, 85, 0.18);
-}
-.yieldadd-form .yieldadd_submitbtn:hover { filter: brightness(1.04); }
-.yieldadd-form .yieldadd_submitbtn:active { transform: translateY(1px); }

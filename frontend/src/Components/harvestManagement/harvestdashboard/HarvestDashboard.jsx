@@ -315,7 +315,7 @@ export default function HarvestDashboard() {
             
             <div className="harvestdash-chart-container">
               {monthlyYieldData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={400}>
+             <ResponsiveContainer width="100%" height={300}>
                   <BarChart
                     data={monthlyYieldData}
                     margin={{

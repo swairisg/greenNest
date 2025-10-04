@@ -1,4 +1,3 @@
-// src/Components/HarvestManagement/EditYieldRecord/EditYieldRecord.js
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,7 +43,7 @@ export default function EditYieldRecord() {
           harvestdate: toYMD(r.harvestdate),
           greenhouseSection: r.greenhouseSection || "",
           cropType: r.cropType || "",
-          PlantedDate: toYMD(r.PlantedDate),            // capital P
+          PlantedDate: toYMD(r.PlantedDate),            
           quantity: r.quantity ?? "",
           treesPicked: r.treesPicked ?? "",
           storageLocation: r.storageLocation || "",
@@ -163,7 +162,7 @@ export default function EditYieldRecord() {
         <input
           className="yieldup_inputdate"
           type="date"
-          name="PlantedDate"          // capital P
+          name="PlantedDate"          
           value={form.PlantedDate}
           onChange={onChange}
           required

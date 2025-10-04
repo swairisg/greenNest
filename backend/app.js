@@ -3,8 +3,6 @@ require("dotenv").config(); // load .env exactly once
 
 const express = require("express");
 const mongoose = require("mongoose");
-const harvestRouter = require("./Routes/harvestManagement/harvest");
-const YieldRouter = require("./Routes/harvestManagement/Yield");
 
 const cors = require("cors");
 
@@ -23,11 +21,12 @@ app.use(express.json());
 //harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules",harvestRouter);
+
+const YieldRouter = require("./Routes/harvestManagement/Yield");
 app.use("/yieldRecords", YieldRouter);
 
 
 
-app.use("/HarvestSchedules", harvestRouter);
 
 const hrRoutes = require("./Routes/tasksHR");
 app.use("/hr", hrRoutes);

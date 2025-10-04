@@ -1,19 +1,12 @@
-/* ================================
-   AddSchedule.css  (scoped: ad_)
-   No globals, no :root, no element selectors
-   ================================ */
-
-/* ---- Local tokens (scoped on the root container) ---- */
 .ad_addSchedule {
-  /* design tokens, only apply inside this component */
   --ad-bg: #f3f5f7;
   --ad-card: #ffffff;
   --ad-card-header: #f0f3f6;
   --ad-border: #e3e8ef;
-  --ad-text: #1f2937;
+  --ad-text: #000000; /* Changed to black */
   --ad-muted: #6b7280;
-  --ad-primary: #1677ff;
-  --ad-primary-hover: #0f5fd1;
+  --ad-primary: #32CD32; /* Updated to your requested green */
+  --ad-primary-hover: #28a428; /* Darker shade for hover */
   --ad-focus: #3b82f6;
   --ad-danger: #dc2626;
   --ad-shadow: 0 8px 24px rgba(16, 24, 40, 0.1);
@@ -30,18 +23,18 @@
 /* ---- Card ---- */
 .ad_addSchedule__form {
   width: 100%;
-  max-width: 520px;
+  max-width: 480px; /* Slightly reduced max-width for more compact form */
   background: var(--ad-card);
   border: 1px solid var(--ad-border);
   border-radius: 12px;
   box-shadow: var(--ad-shadow);
   padding: 0;
   display: grid;
-  row-gap: 12px;
+  row-gap: 8px; /* Reduced gap between form elements */
   box-sizing: border-box;
 }
 
-/* Header strip */
+/* Header strip - Added green color to title */
 .ad_addSchedule__title {
   margin: 0;
   font-size: 20px;
@@ -51,9 +44,10 @@
   border-bottom: 1px solid var(--ad-border);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  color: #32CD32; /* Added green color to title text */
 }
 
-/* Inner spacing */
+/* Inner spacing - reduced padding for more compact layout */
 .ad_addSchedule__form > *:not(.ad_addSchedule__title) {
   padding-left: 20px;
   padding-right: 20px;
@@ -61,24 +55,28 @@
 
 /* Labels */
 .ad_form__label {
-  margin-top: 8px;
+  margin-top: 6px; /* Reduced margin */
   font-size: 12px;
   color: var(--ad-muted);
+  display: block;
 }
 
-/* Inputs & selects */
+/* Inputs & selects - made more compact and reduced width */
 .ad_form__input,
 .ad_form__select {
-  width: 100%;
+  width: 90%; /* Reduced width from 100% to 90% */
   box-sizing: border-box;
-  height: 40px;
+  height: 36px; /* Reduced height */
   border: 1px solid var(--ad-border);
   border-radius: 6px;
   background: #fff;
-  color: var(--ad-text);
-  padding: 10px 12px;
+  color: var(--ad-text); /* Now black text */
+  padding: 8px 12px; /* Reduced padding */
   outline: none;
+  font-size: 14px;
   transition: border-color .15s ease, box-shadow .15s ease;
+  margin: 0 auto; /* Center the reduced-width inputs */
+  display: block;
 }
 
 .ad_form__input--date {
@@ -89,6 +87,13 @@
 .ad_form__select:focus {
   border-color: var(--ad-focus);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, .2);
+}
+
+/* Notes section */
+.ad_form__notes {
+  margin-top: 4px;
+  color: var(--ad-text); /* Black text for notes */
+  font-size: 12px;
 }
 
 /* Error state */
@@ -104,17 +109,17 @@
   color: var(--ad-danger);
 }
 
-/* Status chips */
+/* Status chips - made more compact */
 .ad_statusChips {
   display: flex;
-  gap: 8px;
+  gap: 6px; /* Reduced gap */
   margin-top: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 6px; /* Reduced margin */
   flex-wrap: wrap;
 }
 
 .ad_statusChip {
-  padding: 8px 12px;
+  padding: 6px 10px; /* Reduced padding */
   font-size: 12px;
   border-radius: 999px;
   border: 1px solid var(--ad-border);
@@ -128,26 +133,27 @@
 }
 
 .ad_statusChip--active {
-  background: rgba(22, 119, 255, .1);
+  background: rgba(50, 205, 50, .1); /* Updated to use the new primary color */
   border-color: var(--ad-primary);
   color: var(--ad-primary);
 }
 
-/* Submit button (right-aligned) */
+/* Submit button (right-aligned) with requested color */
 .ad_btn {
-  height: 40px;
-  padding: 0 18px;
+  height: 36px; /* Reduced height */
+  padding: 0 16px; /* Reduced padding */
   border-radius: 6px;
   border: none;
   cursor: pointer;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .ad_btn--primary {
-  background: var(--ad-primary);
+  background: var(--ad-primary); /* Now #32CD32 */
   color: #fff;
   justify-self: end;
-  margin: 8px 20px 20px; /* right & bottom spacing inside card */
+  margin: 8px 20px 16px; /* Reduced bottom margin */
 }
 
 .ad_btn--primary:hover {
@@ -172,6 +178,18 @@
     padding-left: 16px;
     padding-right: 16px;
     margin-right: 16px;
+  }
+  
+  /* Further compact on mobile */
+  .ad_form__input,
+  .ad_form__select {
+    height: 34px;
+    padding: 6px 10px;
+    width: 92%; /* Slightly wider on mobile for better usability */
+  }
+  
+  .ad_btn {
+    height: 34px;
   }
 }
 

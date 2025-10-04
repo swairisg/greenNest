@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "./ViewSchedule.css";
 import Schedule from "./components/Schedule";
 import jsPDF from "jspdf";
@@ -206,6 +207,12 @@ function ViewSchedule() {
           <button className="hv-btn" onClick={downloadPDF}>
             Download PDF
           </button>
+
+          <Link className="hv-btn hv-btn--primary" to="/addharvestschedules">
+          + Add Schedule
+          </Link>
+
+          
         </div>
       </div>
 

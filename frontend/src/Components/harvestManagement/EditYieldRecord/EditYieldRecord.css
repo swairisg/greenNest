@@ -1,195 +1,176 @@
-/* ====== YIELDuP: Edit Yield Record (scoped) ====== */
-/* Theme tokens (tweak these to adjust the vibe) */
 .yieldup_form {
-  --yieldup-bg: #f6fbf6;               /* page/card background */
-  --yieldup-surface: #ffffff;          /* field group surface */
-  --yieldup-border: rgba(34, 139, 34, 0.18);
-  --yieldup-text: #0b2f0b;
-  --yieldup-muted: #587a58;
-  --yieldup-accent: #2e8b57;           /* primary accent (sea green) */
-  --yieldup-accent-2: #3fa269;         /* hover/active */
-  --yieldup-focus: rgba(46, 139, 87, 0.18);
-  --yieldup-shadow: 0 8px 24px rgba(18, 64, 18, 0.08);
-  --yieldup-radius-lg: 16px;
-  --yieldup-radius-md: 12px;
-  --yieldup-gap: 14px;
+  --yd-primary: #32cd32;
+  --yd-primary-2: #28a428;
+  --yd-text: #101410;
+  --yd-muted: #6b756b;
 
-  background: var(--yieldup-bg);
-  padding: 18px;
-  border-radius: var(--yieldup-radius-lg);
-  border: 1px solid var(--yieldup-border);
-  box-shadow: var(--yieldup-shadow);
-  max-width: 960px;
-  margin: 12px auto;
-  color: var(--yieldup-text);
+  --yd-card: #ffffff;
+  --yd-card-tint: #f7faf7;      /* soft very-light green */
+  --yd-border: #e5efe7;         /* neutral border */
+  --yd-focus: #eaf7f0;          /* focus halo */
+
+  --yd-shadow: 0 6px 24px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+  --yd-radius-lg: 14px;
+  --yd-radius-md: 12px;
+  --yd-gap: 12px;
+
+  /* Card container */
+  background: var(--yd-card-tint);
+  color: var(--yd-text);
+  border-radius: var(--yd-radius-lg);
+
+  /* Green shiny border + glow */
+  border: 1px solid rgba(50,205,50,.55);
+  box-shadow:
+    0 0 0 2px rgba(50,205,50,.25) inset,   /* inner crisp ring */
+    0 0 18px rgba(50,205,50,.25),          /* outer glow */
+    var(--yd-shadow);                      /* soft elevation */
+
+  padding: clamp(16px, 3vw, 24px);
+  max-width: 720px;
+  width: 100%;
+
+  /* Center the card on the page (no inner scrollbars) */
+  margin: clamp(56px, 12vh, 120px) auto clamp(64px, 12vh, 140px);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--yd-gap);
+
+  /* Sample UI font (scoped) */
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Ensure the card itself never scrolls */
+  overflow: visible;
 }
 
-/* Title inside the form (your <h2>) */
+/* Title */
 .yieldup_form > h2 {
-  margin: 0 0 12px;
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: 0.2px;
+  margin: 0 0 10px;
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--yd-primary);
+  text-align: center;
 }
 
-/* Responsive grid wrapper */
+/* Grid (single-column by default) */
 .yieldup_grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--yieldup-gap);
+  grid-template-columns: 1fr;
+  gap: var(--yd-gap);
 }
 
-/* Each field group */
+/* Field group */
 .yieldup_grid_item {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: var(--yieldup-surface);
-  border: 1px solid var(--yieldup-border);
-  border-radius: var(--yieldup-radius-md);
+  background: var(--yd-card);
+  border: 1px solid var(--yd-border);
+  border-radius: var(--yd-radius-md);
   padding: 12px;
 }
 
 /* Labels */
 .yieldup_label {
-  font-size: 0.92rem;
+  font-size: .95rem;
   font-weight: 600;
-  color: var(--yieldup-text);
-  letter-spacing: 0.2px;
+  color: var(--yd-muted);
+  letter-spacing: .2px;
 }
 
-/* Base input styles (text, number) */
+/* Inputs  */
 .yieldup_input,
 .yieldup_inputdate,
 .yieldup_inputnumber {
   appearance: none;
   width: 100%;
-  height: 42px;
-  border: 1px solid var(--yieldup-border);
-  border-radius: 10px;
+  height: 44px;
+  border: 1px solid var(--yd-border);
+  border-radius: 12px;
   background: #fff;
-  color: var(--yieldup-text);
-  padding: 0 12px;
+  color: var(--yd-text);
+  padding: 0 14px;
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.02s ease;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
 }
+.yieldup_input::placeholder { color: var(--yd-muted); }
 
-/* Focus + hover feedback */
+/* Hover & focus */
 .yieldup_input:hover,
 .yieldup_inputdate:hover,
-.yieldup_inputnumber:hover {
-  border-color: rgba(46, 139, 87, 0.35);
-}
+.yieldup_inputnumber:hover { border-color: #d5e9dd; }
 
 .yieldup_input:focus,
 .yieldup_inputdate:focus,
 .yieldup_inputnumber:focus {
-  border-color: var(--yieldup-accent);
-  box-shadow: 0 0 0 4px var(--yieldup-focus);
+  border-color: var(--yd-primary);
+  box-shadow: 0 0 0 3px var(--yd-focus);
+  background: #fff;
 }
 
-/* Invalid hint (native :invalid without global impact) */
+/* Subtle invalid hint */
 .yieldup_input:invalid,
 .yieldup_inputdate:invalid,
 .yieldup_inputnumber:invalid {
-  border-color: rgba(200, 40, 40, 0.5);
+  border-color: rgba(211,47,47,.55);
+  box-shadow: 0 0 0 3px rgba(211,47,47,.12);
 }
+
+/* Date picker affordance */
+.yieldup_inputdate::-webkit-calendar-picker-indicator {
+  opacity: .85;
+  cursor: pointer;
+}
+
+/* Remove number spinner */
+.yieldup_inputnumber::-webkit-outer-spin-button,
+.yieldup_inputnumber::-webkit-inner-spin-button { margin: 0; }
 
 /* Actions row */
 .yieldup_actions {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 16px;
+  justify-content: flex-start; /* left like sample; change to flex-end if you prefer */
+  margin-top: 6px;
 }
 
-/* Primary CTA button (highlight main function) */
+/* Primary button */
 .yieldup_button {
   height: 44px;
   padding: 0 18px;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(180deg, var(--yieldup-accent), #277a4c);
+  background: var(--yd-primary);
   color: #fff;
-  font-weight: 800;
-  letter-spacing: 0.3px;
+  font-weight: 700;
+  letter-spacing: .2px;
   cursor: pointer;
-  box-shadow: 0 10px 18px rgba(46, 139, 87, 0.22);
-  transition: transform 0.06s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 8px 20px rgba(50,205,50,.25);
+  transition: transform .08s ease, box-shadow .16s ease, background .16s ease;
 }
-
 .yieldup_button:hover {
-  filter: brightness(1.03);
-  box-shadow: 0 12px 22px rgba(46, 139, 87, 0.28);
+  background: var(--yd-primary-2);
+  box-shadow: 0 10px 26px rgba(50,205,50,.30);
+  transform: translateY(-1px);
 }
-
-.yieldup_button:active {
-  transform: translateY(1px);
-}
+.yieldup_button:active { transform: translateY(0); }
 
 /* Loading text */
 .yieldup_loading {
   text-align: center;
-  color: var(--yieldup-muted);
+  color: var(--yd-muted);
   font-weight: 600;
   padding: 12px 0;
 }
 
-/* Fine-tuning date/number inputs for consistent look */
-.yieldup_inputdate::-webkit-calendar-picker-indicator {
-  opacity: 0.8;
-  cursor: pointer;
+@media (min-width: 900px) {
+  .yieldup_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
-.yieldup_inputnumber::-webkit-outer-spin-button,
-.yieldup_inputnumber::-webkit-inner-spin-button {
-  margin: 0;
-}
-
-/* Compact screens */
 @media (max-width: 860px) {
-  .yieldup_form {
-    padding: 14px;
-    border-radius: 14px;
-  }
-  .yieldup_grid {
-    grid-template-columns: 1fr;
-  }
+  .yieldup_form { border-radius: 12px; }
 }
-
-/* Very small screens */
 @media (max-width: 420px) {
-  .yieldup_form {
-    padding: 12px;
-  }
-  .yieldup_button {
-    width: 100%;
-  }
-}
-
-/* Optional dark-mode support without affecting global theme */
-@media (prefers-color-scheme: dark) {
-  .yieldup_form {
-    --yieldup-bg: #0e1a0f;
-    --yieldup-surface: #142016;
-    --yieldup-border: rgba(110, 190, 110, 0.22);
-    --yieldup-text: #eaf6ea;
-    --yieldup-muted: #b8d2b8;
-    --yieldup-accent: #47c47f;
-    --yieldup-accent-2: #5ed595;
-    --yieldup-focus: rgba(71, 196, 127, 0.18);
-    --yieldup-shadow: 0 8px 24px rgba(8, 32, 8, 0.5);
-    background: linear-gradient(180deg, #0e1a0f, #0a140c);
-  }
-
-  .yieldup_input,
-  .yieldup_inputdate,
-  .yieldup_inputnumber {
-    background: #0f1b11;
-    color: var(--yieldup-text);
-  }
-
-  .yieldup_grid_item {
-    background: #122015;
-  }
+  .yieldup_button { width: 100%; }
 }
