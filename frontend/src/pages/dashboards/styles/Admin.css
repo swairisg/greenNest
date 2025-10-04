@@ -1,4 +1,3 @@
-/* ===== GreenNest Admin Dashboard (proper charts) ===== */
 :root{
   --gn-bg: #f5f7fb;
   --gn-ink: #1d2433;
@@ -6,9 +5,9 @@
   --gn-card: #ffffff;
   --gn-line: rgba(0,0,0,.08);
 
-  --gn-primary: #1f6feb;      /* topbar accent (blue) */
-  --gn-sidebar: #18314f;      /* navy */
-  --gn-success: #22c55e;      /* success green */
+  --gn-primary: #1f6feb;      
+  --gn-sidebar: #18314f;     
+  --gn-success: #22c55e;
   --gn-amber: #f59e0b;
   --gn-indigo: #6366f1;
 }
@@ -21,7 +20,6 @@
   color: var(--gn-ink);
 }
 
-/* sidebar */
 .gn-admin-sidebar{
   background: var(--gn-sidebar);
   color:#e6eefc;
@@ -41,10 +39,8 @@
 
 .gn-admin-sidefooter{ margin-top:auto; opacity:.7; }
 
-/* main */
 .gn-admin-main{ padding:18px 22px 26px; }
 
-/* topbar */
 .gn-admin-topbar{
   background:#2d945c;
   color:#fff;
@@ -69,7 +65,6 @@
   display:grid; place-items:center; font-weight:700;
 }
 
-/* stats row */
 .gn-admin-stats{
   display:grid; grid-template-columns: repeat(4, 1fr);
   gap:16px; margin:16px 0 18px;
@@ -84,13 +79,11 @@
 }
 .gn-admin-stat .stat-value{ font-size:28px; font-weight:800; margin-top:6px; }
 
-/* colored accents */
 .gn-admin-stat[data-accent="green"]  { border-top:4px solid var(--gn-success); }
 .gn-admin-stat[data-accent="blue"]   { border-top:4px solid var(--gn-primary); }
 .gn-admin-stat[data-accent="indigo"] { border-top:4px solid var(--gn-indigo); }
 .gn-admin-stat[data-accent="amber"]  { border-top:4px solid var(--gn-amber); }
 
-/* grid */
 .gn-admin-grid{
   display:grid;
   grid-template-columns: 2fr 1.2fr;
@@ -107,14 +100,12 @@
 .gn-admin-card .card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
 .gn-admin-card h3{ margin:0; font-size:16px; }
 
-/* legend badges (for title area) */
 .legend{ display:flex; align-items:center; gap:12px; color:var(--gn-ink-soft); font-size:12px; }
 .legend .dot{ width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:4px; }
 .legend .strawberries{ background:#2e86ff; }
 .legend .vegetables{ background:#34c759; }
 .legend .flowers{ background:#f7b500; }
 
-/* metrics row inside a card */
 .gn-admin-metrics{
   display:grid;
   grid-template-columns: repeat(3, 1fr);
@@ -127,7 +118,6 @@
 .gn-admin-metrics strong{ display:block; color:var(--gn-ink-soft); font-weight:600; }
 .gn-admin-metrics span{ font-size:18px; font-weight:800; }
 
-/* task board */
 .gn-admin-taskboard{ display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; }
 .gn-admin-taskboard .col-title{
   background:#eef3ff; border:1px solid var(--gn-line);
@@ -140,14 +130,12 @@
 }
 .gn-admin-taskboard .ok{ color:var(--gn-success); font-size:12px; }
 
-/* alert card */
 .gn-admin-alert{ background:#fff8ed; border-color:#ffe2b7; }
 .gn-admin-alert .alert-mini{ display:flex; align-items:center; gap:10px; margin-top:10px; }
 .gn-admin-alert .thumb{
   width:42px; height:42px; background:#f5a623; border-radius:8px;
 }
 
-/* simple KPIs */
 .gn-admin-kpis{ display:flex; gap:16px; }
 .gn-admin-kpis > div{
   background:#f6f9ff; padding:10px 12px; border-radius:10px; border:1px solid var(--gn-line);
@@ -155,7 +143,6 @@
 .gn-admin-kpis strong{ display:block; color:var(--gn-ink-soft); }
 .gn-admin-kpis span{ font-size:18px; font-weight:800; }
 
-/* ===== Charts ===== */
 .chart-wrap{ width:100%; overflow:hidden; }
 .chart-svg{ width:100%; height:100%; display:block; }
 .axis{ stroke: rgba(0,0,0,.18); stroke-width:1; }
@@ -163,18 +150,17 @@
 .tick{ fill:#9aa3b2; font-size:10px; text-anchor:end; }
 .line{ fill:none; stroke:#1f6feb; stroke-width:2.5; }
 
-/* --- Sidebar visibility fixes (override globals) --- */
 .gn-admin-wrap > .gn-admin-sidebar{
-  background: #2d945c !important;   /* force navy */
+  background: #2d945c !important;   
   color: #ffffff !important;
   position: sticky;
   top: 0;
-  height: 100vh;                     /* fill viewport */
-  z-index: 2;                        /* above main bg */
+  height: 100vh;                     
+  z-index: 2;                        
 }
 
 .gn-admin-nav a{
-  color: #ffffff !important;         /* stronger contrast */
+  color: #ffffff !important;         
   opacity: 0.92;
 }
 .gn-admin-nav a:hover{
@@ -187,12 +173,10 @@
   font-weight: 700;
 }
 
-/* ensure page bg doesn’t cover the sidebar */
 .gn-admin-wrap{
   background: var(--gn-bg, #f5f7fb) !important;
 }
 
-/* responsive */
 @media (max-width: 1080px){
   .gn-admin-wrap{ grid-template-columns: 74px 1fr; }
   .gn-admin-brand span{ display:none; }

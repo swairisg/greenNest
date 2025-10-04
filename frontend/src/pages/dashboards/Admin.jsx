@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import logo from "../../assests/logo-leaf.png";
 import "./styles/Admin.css";
 
-/* ------------ Reusable, dependency-free mini line chart ------------ */
 function MiniLineChart({
   series = [
     { label: "Series", data: [4, 8, 12, 18, 27, 30], color: "#1f6feb" },
@@ -26,7 +25,7 @@ function MiniLineChart({
   const x = (i, n) => (n <= 1 ? P : P + (i * innerW) / (n - 1));
   const y = (v) => P + innerH - ((v - min) / (max - min || 1)) * innerH;
 
-  // smooth path with simple quadratic curves
+  //simplequadratic curves
   const makePath = (arr) => {
     if (!arr?.length) return "";
     const n = arr.length;
@@ -83,12 +82,10 @@ function MiniLineChart({
   );
 }
 
-/* ------------ Page ------------ */
 export default function Admin() {
   return (
     <div className="gn-admin-wrap">
-      {/* Sidebar */}
-      <aside className="gn-admin-sidebar">
+       <aside className="gn-admin-sidebar">
         <div className="gn-admin-brand">
           <img src={logo} alt="GreenNest" />
           <span>GreenNest</span>
@@ -100,23 +97,21 @@ export default function Admin() {
           <Link to="/inventory">Inventory & Supply</Link>
           <Link to="/admin/Products/dashboard">Products & Pricing</Link>
           <Link to="/finance">Sales & Finance</Link>
-          <Link to="/customers">Customers & Buyers</Link>
+          <Link to="/visits/bookings">Customers & Buyers</Link>
+          <Link to="/orderMangement">Order Management</Link>
         </nav>
         <div className="gn-admin-sidefooter">
           <small>© {new Date().getFullYear()} GreenNest</small>
         </div>
       </aside>
 
-      {/* Main */}
       <main className="gn-admin-main">
-        {/* Topbar */}
         <header className="gn-admin-topbar">
           <div className="gn-admin-search">
             <input placeholder="Search" />
           </div>
           <div className="gn-admin-right">
-            <button className="gn-admin-icon" aria-label="Notifications">🔔</button>
-            <div className="gn-admin-user">
+              <div className="gn-admin-user">
               <div className="avatar">A</div>
               <span>Admin</span>
             </div>
