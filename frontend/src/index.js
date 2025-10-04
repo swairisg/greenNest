@@ -6,7 +6,7 @@ import "./styles/app.css";   // if this file doesn't exist, remove this line
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 //qualitycontrol
-import { createRoot } from 'react-dom/client';
+//import { createRoot } from 'react-dom/client';
 import './index.css';
 //const root = createRoot(document.getElementById('root'));
 

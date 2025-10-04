@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -26,6 +24,15 @@ import QualityList from "./Components/qualityControl/QualityList";
 import QualityCreate from "./Components/qualityControl/QualityCreate";
 import QualityEdit from "./Components/qualityControl/QualityEdit";
 import QualityDetail from "./Components/qualityControl/QualityDetail";
+
+//Order
+
+import OrderList from "./Components/finance/Orders/OrderList";
+import OrderDetail from "./Components/finance/Orders/OrderDetail";
+import OrderForm from "./Components/finance/Orders/OrderForm";
+
+//cart
+import Cart from "./Components/cart/cart";
 
 export default function App() {
   return (
@@ -70,22 +77,6 @@ export default function App() {
 
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
-        </Routes>
-
-  {/* Simple header/nav */}
-      <header className="card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-        <h2 style={{ margin: 0 }}>GreenNest</h2>
-        <nav style={{ display: "flex", gap: 12 }}>
-          <NavLink to="/quality">Quality</NavLink>
-          <NavLink to="/quality/new">Add</NavLink>
-        </nav>
-      </header>
-
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
-        
-        <Routes>
-          {/* redirect root to quality list */}
-          <Route path="/" element={<Navigate to="/quality" replace />} />
 
           {/* Quality Control CRUD */}
           <Route path="/quality" element={<QualityList />} />
@@ -93,10 +84,34 @@ export default function App() {
           <Route path="/quality/:id" element={<QualityDetail />} />
           <Route path="/quality/:id/edit" element={<QualityEdit />} />
 
-          {/* fallback */}
-          <Route path="*" element={<Navigate to="/quality" replace />} />
+          {/* order crud */}
+          <Route path="/orders" element={<OrderList />} />
+          <Route path="/orders/new" element={<OrderForm />} />
+          <Route path="/orders/:id" element={<OrderDetail />} />
+
+          {/*cart*/}
+          <Route path="/cart" element={<Cart userId="U12345" />} />
+
         </Routes>
-      </main>
+
+        {/* Simple header/nav 
+      <header className="card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <h2 style={{ margin: 0 }}>GreenNest</h2>
+        <nav style={{ display: "flex", gap: 12 }}>
+          <NavLink to="/quality">Quality</NavLink>
+          <NavLink to="/quality/new">Add</NavLink>
+        </nav>
+      </header>*/}
+
+        {/*<main style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
+        
+        <Routes>
+          {/* redirect root to quality list 
+          
+
+         
+        </Routes>
+      </main>*/}
       </AuthProvider>
     </BrowserRouter>
   );
@@ -126,4 +141,3 @@ function App() {
 }
 
 export default App;*/
-

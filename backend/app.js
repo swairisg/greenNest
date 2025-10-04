@@ -27,7 +27,11 @@ app.use(express.json());
 
 
 const qualityRoutes = require('./Routes/qualityControl/qualityControlRoute');
+const orderRoutes = require("./Routes/finance/orderRoute");
+const invoiceRoutes = require("./Routes/finance/invoiceRoute");
 app.use('/quality', qualityRoutes);
+app.use("/orders", orderRoutes);
+app.use("/invoices", invoiceRoutes);
 
 
 app.use("/HarvestSchedules",harvestRouter);
