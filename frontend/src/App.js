@@ -30,7 +30,7 @@ import QualityList from "./Components/qualityControl/QualityList";
 import QualityCreate from "./Components/qualityControl/QualityCreate";
 import QualityDetail from "./Components/qualityControl/QualityDetail";
 import QualityEdit from "./Components/qualityControl/QualityEdit";
-import Cart from "./Components/cart/cart";
+import Cart from "./Components/cart/Cart";
 
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
