@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-//import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
 import { useHRChrome } from "./HRLayout";
 import api from "../../api";
 import "./EmployeesNew.css";
 
+// SweetAlert2
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 const isPhone = (v = "") => /^[+()\-.\s\d]{7,20}$/.test(v);
 const isEmail = (v = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -43,7 +46,7 @@ const ROLE_OPTIONS = [
 
 export default function EmployeesNew() {
   const nav = useNavigate();
-  const { token } = useAuth();
+  const { token } = useAuth(); // ok if unused; your AuthProvider may set api default header
   const chrome = useHRChrome();
   const formRef = useRef(null);
 
@@ -130,7 +133,7 @@ export default function EmployeesNew() {
       return {
         email: form.email.trim(),
         password: form.password,
-        primaryRole: form.primaryRole,       // server will set roles = [primaryRole]
+        primaryRole: form.primaryRole, // server will set roles = [primaryRole]
         // profile
         fullName: form.fullName.trim(),
         phone: form.phone.trim() || undefined,
@@ -168,6 +171,28 @@ export default function EmployeesNew() {
     };
   };
 
+  // === Sweet helper: clear the form when user chooses "Add another" ===
+  const resetForm = () => {
+    setForm((p) => ({
+      ...p,
+      userId: "",
+      email: "",
+      password: "",
+      fullName: "",
+      phone: "",
+      address: "",
+      department: "",
+      designation: "",
+      joinDate: todayStr,
+      currentStatus: "active",
+      salary: "",
+      bank_accountNo: "",
+      bank_bankName: "",
+      bank_branch: "",
+    }));
+    setErr("");
+  };
+
   const handleSubmit = async (e) => {
     e?.preventDefault?.();
     setErr("");
@@ -178,13 +203,39 @@ export default function EmployeesNew() {
     }
     try {
       setSaving(true);
-     await api.post("/hr/employees", buildPayload());
+      const resp = await api.post("/hr/employees", buildPayload());
+      const newId = resp?.data?.data?._id;
 
-      alert("Employee created");
-      nav("/hr/employees");
+      // Fancy success modal with actions
+      MySwal.fire({
+        icon: "success",
+        title: "Employee created",
+        text: "The new staff account and profile were created successfully.",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Go to list",
+        denyButtonText: "Add another",
+        cancelButtonText: "View profile",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          nav("/hr/employees");
+        } else if (result.isDenied) {
+          resetForm();
+        } else if (result.isDismissed && newId) {
+          nav(`/hr/employees/${newId}`);
+        }
+      });
     } catch (e2) {
       console.error(e2);
-      setErr(e2?.response?.data?.message || e2.message || "Create failed");
+      const msg = e2?.response?.data?.message || e2.message || "Create failed";
+      setErr(msg);
+      MySwal.fire({
+        icon: "error",
+        title: "Failed to create employee",
+        text: msg,
+        confirmButtonText: "OK",
+      });
     } finally {
       setSaving(false);
     }
