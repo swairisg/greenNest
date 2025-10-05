@@ -1,21 +1,32 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:5001"; // adjust if needed
+// Use env when available; strip trailing slashes. Default to current local port.
+const API_BASE =
+  (process.env.REACT_APP_API_BASE && process.env.REACT_APP_API_BASE.replace(/\/+$/, "")) ||
+  "http://localhost:5001";
+
+// Backend mount path defined in backend/app.js:
+// app.use("/api/finance/orders", orderRoutes);
+const ORDERS_BASE = `${API_BASE}/api/finance/orders`;
 
 // Create new order
-export const createOrder = (data) => axios.post(`${API_BASE}/orders`, data);
+export const createOrder = (data) =>
+  axios.post(ORDERS_BASE, data, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
 
 // Get all orders
-export const fetchOrders = () => axios.get(`${API_BASE}/orders`);
+export const fetchOrders = () => axios.get(ORDERS_BASE);
 
 // Get order by ID
-export const fetchOrderById = (id) => axios.get(`${API_BASE}/orders/${id}`);
+export const fetchOrderById = (id) => axios.get(`${ORDERS_BASE}/${id}`);
 
 // Confirm order
-export const confirmOrder = (id) => axios.post(`${API_BASE}/orders/${id}/confirm`);
+export const confirmOrder = (id) => axios.post(`${ORDERS_BASE}/${id}/confirm`);
 
 // Mark as paid
-export const markPaid = (id) => axios.post(`${API_BASE}/orders/${id}/mark-paid`);
+export const markPaid = (id) => axios.post(`${ORDERS_BASE}/${id}/mark-paid`);
 
 // Delete order
-export const deleteOrder = (id) => axios.delete(`${API_BASE}/orders/${id}`);
+export const deleteOrder = (id) => axios.delete(`${ORDERS_BASE}/${id}`);

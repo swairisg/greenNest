@@ -80,6 +80,7 @@ export default function Cart() {
     };
 
     try {
+      console.log("createOrder payload ▶", payload);
       const res = await createOrder(payload);
       // Clear cart and go to order details or list
       clearCart();
@@ -92,8 +93,20 @@ export default function Cart() {
         navigate(`/orders`, { replace: true });
       }
     } catch (e) {
-      console.error(e);
-      alert("Failed to place order. Please try again.");
+      // Surface as much info as possible from axios-style errors
+      const status = e?.response?.status;
+      const data = e?.response?.data;
+      const msg =
+        (data && (data.error || data.message)) ||
+        e?.message ||
+        "Unknown error";
+      console.error("createOrder failed ▶", {
+        status,
+        data,
+        message: msg,
+        raw: e,
+      });
+      alert(`Failed to place order: ${msg}`);
     }
   };
 

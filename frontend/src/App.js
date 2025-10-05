@@ -18,7 +18,7 @@ import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
-<<<<<<<<< Temporary merge branch 1
+
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
 import HREmployees from "./Components/tasksHR/Employees";
