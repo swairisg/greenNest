@@ -72,7 +72,7 @@ export default function Farmer() {
 
         <nav className="fd-actions">
           <Link className="fd-link" to="/farmer/tasks">Assigned Tasks</Link>
-          <Link className="fd-link" to="/employee/profile">Profile</Link>
+          <Link className="fd-link" to="/profile">Profile</Link>
           <button className="fd-btn danger" onClick={handleLogout}>Logout</button>
         </nav>
       </header>
