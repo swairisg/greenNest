@@ -42,6 +42,7 @@ import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalo
 import SectionHome from "./Components/plantCultivation/SectionHome";
 import SeedsPage from "./Components/plantCultivation/SeedsPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
+import GrowthPage from "./Components/plantCultivation/GrowthPage";
 
 export default function App() {
   return (
@@ -105,11 +106,7 @@ export default function App() {
 
               <Route
                 path="/farmer/cultivation/growth"
-                element={
-                  <div style={{ padding: 20 }}>
-                    Growth Monitoring — coming next
-                  </div>
-                }
+                element={<GrowthPage />}
               />
             </Route>
           </Route>

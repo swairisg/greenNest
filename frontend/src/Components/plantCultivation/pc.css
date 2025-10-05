@@ -71,3 +71,19 @@
 .badge.active{background:#ecfdf5;color:#065f46}
 .badge.completed{background:#eff6ff;color:#1e40af}
 .badge.cancelled{background:#fef2f2;color:#991b1b}
+
+
+.badge.germination{background:#f0f9ff;color:#075985}
+.badge.seedling{background:#ecfdf5;color:#065f46}
+.badge.vegetative{background:#f5f3ff;color:#5b21b6}
+.badge.flowering{background:#fff7ed;color:#9a3412}
+.badge.fruiting{background:#fefce8;color:#854d0e}
+
+
+.pc-page[data-module="growth"] .pc-card-title{
+  color:#9a3412;            /* warm amber/brown accent */
+}
+.pc-page[data-module="growth"] .pc-table thead th{
+  background:#fff7ed;       /* light amber background */
+  color:#9a3412;
+}
