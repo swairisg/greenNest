@@ -18,7 +18,7 @@ import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
-//HR 
+<<<<<<<<< Temporary merge branch 1
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
 import HREmployees from "./Components/tasksHR/Employees";
@@ -31,7 +31,6 @@ import HRPerformance from "./Components/tasksHR/Performance";
 import HRReports from "./Components/tasksHR/Reports";
 import HRSettings from "./Components/tasksHR/Settings";
 
-//pest and product catalogue
 import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
 import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
 import PestDetectDashboard from './Components/pestControl/PestDetectDashboard/PestDetectDashboard';
