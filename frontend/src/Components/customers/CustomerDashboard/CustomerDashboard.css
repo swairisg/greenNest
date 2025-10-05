@@ -1,0 +1,290 @@
+.vb-wrap{
+  --vb-primary:#32CD32;
+  --vb-primary-600:#2cb82c;
+  --vb-primary-50:#f2fbf2;
+  --vb-ink:#1b1f23; --vb-ink-soft:#6b7280;
+  --vb-line:rgba(0,0,0,.08); --vb-card:#fff;
+  --vb-radius:16px;
+  --vb-shadow:0 10px 26px rgba(0,0,0,.06);
+  --vb-shadow-soft:0 6px 16px rgba(0,0,0,.05);
+
+  min-height:100px;
+
+  background:
+    radial-gradient(900px 480px at 85% -10%, var(--vb-primary-50), transparent 60%),
+    radial-gradient(900px 480px at -10% 120%, #f7fafc, transparent 60%),
+    #f9fbfa;
+  padding:28px clamp(16px,3vw,32px);
+  box-sizing:border-box;
+  color:var(--vb-ink);
+  font-synthesis-weight:none;
+}
+
+.vb-head{ 
+  display:flex;
+  align-items:center; 
+  justify-content:space-between;
+  gap:16px; margin:0 auto 18px;
+  max-width:1200px;
+ }
+
+.vb-title
+{
+  margin: 0;
+  font-size: clamp(24px, 3vw, 32px);  
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #32CD32;                     
+}
+.vb-filters{ 
+  display:flex; 
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  justify-content:flex-end;
+ }
+ 
+.vb-input{
+   height:40px; 
+   padding:8px 12px; 
+   border-radius:12px;
+    border:1px solid var(--vb-line); 
+    background:var(--vb-card); 
+    min-width:240px; 
+    color:var(--vb-ink); transition:border .18s, box-shadow .18s, background .18s; 
+    box-shadow:var(--vb-shadow-soft); 
+  }
+
+.vb-input::placeholder{ 
+  color:#9aa3af;
+ }
+
+.vb-input:focus{
+   outline:none; 
+   border-color: color-mix(in srgb, var(--vb-primary) 70%, transparent); 
+   box-shadow:0 0 0 3px color-mix(in srgb, var(--vb-primary) 18%, transparent);
+   }
+
+.vb-btn{ 
+  height:40px;
+  padding:0 14px; 
+  border-radius:12px;
+  border:1px solid transparent;
+  background:var(--vb-primary); 
+  color:#fff; font-weight:700;
+  letter-spacing:.2px;
+  box-shadow:var(--vb-shadow-soft);
+  cursor:pointer; transition:transform .08s, filter .12s, box-shadow .12s, background .12s, border-color .12s; 
+  white-space:nowrap; 
+  }
+.vb-btn:hover{
+  filter:brightness(.98);
+  transform:translateY(-1px);
+  }
+
+.vb-btn:active{
+   transform:translateY(0); 
+  }
+
+.vb-btn:disabled{ 
+  opacity:.6; cursor:not-allowed; 
+  transform:none;
+ }
+
+.vb-btn.ghost{ 
+  background:var(--vb-primary-50); 
+  color:var(--vb-ink); 
+  border-color:var(--vb-line);
+ }
+
+.vb-btn.ghost:hover{ background:#eaf8ea; }
+
+.vb-btn.outline{ 
+  background:#fff; 
+  color:var(--vb-primary); 
+  border-color:var(--vb-primary);
+ }
+.vb-btn.outline:hover{ 
+  background:color-mix(in srgb, var(--vb-primary) 10%, #fff);
+ }
+.vb-btn.danger{ 
+  background:#ef4444;
+   border-color:#ef4444;
+   }
+.vb-btn.danger:hover{ filter:brightness(.98); }
+
+.vb-table{
+  width: clamp(680px, 72vw, 920px);
+  max-width:100%;
+  margin: 6px auto 0;
+  background:var(--vb-card);
+  border:1px solid var(--vb-line);
+  border-radius:var(--vb-radius);
+  box-shadow:var(--vb-shadow);
+  overflow:hidden;
+  font-size:13px;            
+  line-height:1.25;
+}
+
+.vb-thead{
+  display:grid;
+  grid-template-columns: 0.95fr 1.05fr .75fr .80fr .75fr .50fr .90fr 1.20fr; 
+  background:linear-gradient(180deg, var(--vb-primary), var(--vb-primary-600));
+  color:#fff;
+  font-weight:800;
+  letter-spacing:.2px;
+  position:sticky; top:0; z-index:1;
+}
+.vb-thead > div{
+  padding:10px 12px;        
+  border-right:1px solid rgba(255,255,255,.18);
+  white-space:nowrap;
+}
+.vb-thead > div:last-child{ border-right:0; }
+
+.vb-row{
+  display:grid;
+  grid-template-columns: 0.95fr 1.05fr .75fr .80fr .75fr .50fr .90fr 1.20fr; 
+  border-top:1px solid var(--vb-line);
+  background:#fff;
+  transition:background .12s;
+}
+.vb-row:nth-child(odd){ background:#fcfefc; }
+.vb-row:hover{ background:#f6fbf6; }
+.vb-row > div{
+  padding:8px 12px;         
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.vb-row > div:last-child,
+.vb-thead > div:last-child{
+  overflow:visible;
+  padding-right:16px;
+}
+
+
+.vb-actions{
+  display:flex; align-items:center; justify-content:flex-end; gap:8px;
+}
+.vb-status-select{
+  height:28px;
+  padding:0 8px;
+  border-radius:8px;
+  border:1px solid var(--vb-line);
+  background:#fff;
+  color:var(--vb-ink);
+  font-size:12px;
+  cursor:pointer;
+  max-width:140px;
+  transition:border .18s, box-shadow .18s;
+}
+.vb-status-select:focus{
+  outline:none;
+  border-color: color-mix(in srgb, var(--vb-primary) 50%, transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--vb-primary) 18%, transparent);
+}
+.vb-actions .vb-btn.danger{
+  height:28px; padding:0 10px; border-radius:8px; font-size:12px; font-weight:600;
+  min-width:72px;
+}
+
+
+.vb-loading,
+.vb-empty{
+  width: clamp(680px, 72vw, 920px);
+  margin: 16px auto;
+  background:var(--vb-card);
+  border:1px dashed var(--vb-line);
+  color:var(--vb-ink-soft);
+  padding:18px;
+  border-radius:var(--vb-radius);
+  text-align:center;
+  box-shadow:var(--vb-shadow-soft);
+}
+
+
+
+@media (max-width: 980px){
+  .vb-table{ width:100%; overflow:auto; }
+  .vb-thead, .vb-row{ width:980px; } 
+}
+@media (max-width: 560px){
+  .vb-head{ flex-direction:column; align-items:stretch; gap:12px; }
+  .vb-filters{ justify-content:stretch; }
+  .vb-input{ min-width:0; flex:1; }
+}
+.vb-section-title{
+  margin: 28px 6px 10px;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--vb-ink);
+}
+
+.vb-actions-bar{
+  margin: 12px 6px 22px;
+}
+
+
+
+.vb-analytics { margin-top: 28px; }
+
+.vb-section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--vb-ink);
+  margin: 8px 0 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.vb-analytics-grid.one {            /* single, centered card area */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Same card look as the top charts */
+.vb-card {
+  background: var(--vb-card, #fff);
+  border-radius: var(--vb-radius, 16px);
+  box-shadow: var(--vb-shadow, 0 10px 26px rgba(0,0,0,.06));
+  border: 1px solid var(--vb-line, rgba(0,0,0,.08));
+  padding: 16px;
+}
+
+.vb-chart-box { position: relative; overflow: hidden; }
+.vb-chart-box--sm { height: 340px; }   
+
+.vb-chart-box--sm canvas {
+  width: 100% !important;
+  height: 100% !important;   /* pairs with maintainAspectRatio:false if provided */
+  display: block;
+}
+
+/* Optional: shrink internal titles inside the chart card */
+.vb-chart-box--sm h3,
+.vb-chart-box--sm .chart-title,
+.vb-chart-box--sm .cmc-title {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--vb-ink, #1b1f23);
+}
+
+/* Button row under the compact chart */
+.vb-actions-bar {
+  margin-top: 12px;
+  display: flex; gap: 10px; justify-content: flex-start;
+}
+/* was 340px */
+.vb-chart-box--sm { height: 420px; }  /* try 380–440px if you want finer control */
+
+/* Small loading text */
+.vb-loading.sm { font-size: .95rem; color: var(--vb-ink-soft, #6b7280); padding: 10px 0; }
+
+/* Responsive nicety: if later you add more contact charts, they’ll grid nicely */
+@media (min-width: 768px) {
+  .vb-analytics-grid.one { grid-template-columns: 1fr; }
+}

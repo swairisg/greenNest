@@ -26,13 +26,33 @@ app.use(
 );
 app.use(express.json());
 
+
+//harvest
+const harvestRouter = require("./Routes/harvestManagement/harvest");
+app.use("/HarvestSchedules",harvestRouter);
+
 app.use("/HarvestSchedules", harvestRouter);
 
 const hrRoutes = require("./Routes/tasksHR");
 app.use("/hr", hrRoutes);
 
-// Finance → Orders
-app.use("/api/finance/orders", orderRoutes);
+const plantCultRoutes = require("./Routes/plantCultivation");
+app.use("/plant-cultivation", plantCultRoutes);
+
+//customer
+const publicVisitRoutes = require("./Routes/customers/visitBooking");
+const authRouter = require("./Routes/auth");
+app.use("/public", publicVisitRoutes);
+
+app.use("/public", publicVisitRoutes);
+app.use(express.json());                     
+app.use("/api/auth", authRouter);
+
+const visitBookingRoutes = require("./Routes/customers/visitBooking");
+app.use("/api", visitBookingRoutes);
+
+const contactRoutes = require("./Routes/customers/contactUs/contactus");
+app.use(contactRoutes);
 
 
 // routes
@@ -46,6 +66,7 @@ app.get("/", (_req, res) => res.send("Hello from backend"));
 
 /* ---------- routes ---------- */
 app.use("/auth", require("./Routes/auth"));
+
 
 // connect DB then start server
 const PORT = Number(process.env.PORT) || 5001;

@@ -1,0 +1,192 @@
+body.bv-body{
+  background-image: url("../../../assests/customers/bookvisit.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  min-height: 100vh;
+}
+
+.bv-section{
+  display:flex;
+  justify-content:center;
+  background: transparent;
+  margin:32px auto;
+  padding:56px 48px;
+  max-width:1500px;
+  box-sizing:border-box;
+}
+
+.bv-frame{
+  width:100%;
+  max-width:1280px;
+  display:grid;
+  grid-template-columns:520px minmax(520px,1fr);
+  gap:24px;
+  align-items:stretch;
+}
+
+.bv-left{
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 14px 40px rgba(0,0,0,.12);
+  border:1px solid rgba(0,0,0,.06);
+}
+
+.bookvisit-title{
+  margin:4px 0 6px;
+  font-size:22px;
+  font-weight:800;
+  color:#32CD32;
+}
+.bookvisit-sub{
+  margin:0 0 16px;
+  color:#7a8a89;
+  font-size:13px;
+}
+
+.bookvisit-form label{
+  display:block;
+  margin-bottom:8px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.2px;
+  color:#4a5a57;
+  text-transform:uppercase;
+}
+.bookvisit-form label span{ color:#c0392b; }
+
+.bookvisit-form input,
+.bookvisit-form select,
+.bookvisit-form textarea{
+  width:100%;
+  padding:12px 12px;
+  font-size:14px;
+  border:1px solid #dfe7e4;
+  border-radius:8px;
+  background:#fff;
+  outline:none;
+  transition:border .15s, box-shadow .15s;
+  min-height:48px;
+  box-sizing:border-box;
+}
+.bookvisit-form textarea{ min-height:110px; resize:vertical; }
+.bookvisit-form input::placeholder,
+.bookvisit-form textarea::placeholder{ color:#9aa8a5; }
+.bookvisit-form input:focus,
+.bookvisit-form select:focus,
+.bookvisit-form textarea:focus{
+  border-color:#2aa36b;
+  box-shadow:0 0 0 3px rgba(42,163,107,.15);
+}
+
+.bv-row{ margin-bottom:14px; }
+.bv-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:14px;
+}
+.bv-col{ display:flex; flex-direction:column; }
+
+.bv-input-wrap{ position:relative; }
+.bv-input-wrap .bv-ico{
+  position:absolute;
+  right:10px; top:50%; transform:translateY(-50%);
+  font-size:16px; color:#6e7b78; pointer-events:none;
+}
+
+.bookvisit-form select{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #6e7b78 50%),
+    linear-gradient(135deg, #6e7b78 50%, transparent 50%),
+    linear-gradient(to right, transparent, transparent);
+  background-position:
+    calc(100% - 22px) calc(50% - 4px),
+    calc(100% - 14px) calc(50% - 4px),
+    calc(100% - 42px) 50%;
+  background-size:8px 8px, 8px 8px, 1px 60%;
+  background-repeat:no-repeat;
+}
+
+.bv-check{ display:flex; align-items:center; gap:10px; margin:10px 0 12px; color:#41524f; }
+.bv-check input[type="checkbox"]{
+  width:18px; height:18px; accent-color:#2aa36b; cursor:pointer;
+}
+
+.bv-actions{ margin-top:4px; }
+.bv-btn{
+  width:100%;
+  background:#32CD32;
+  color:#fff;
+  border:0;
+  padding:12px 16px;
+  border-radius:10px;
+  font-weight:800;
+  letter-spacing:.2px;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(45,187,92,.25);
+  transition:transform .08s, filter .08s;
+}
+.bv-btn:hover{ filter:brightness(.98); transform:translateY(-1px); }
+.bv-note{ margin:10px 0 0; color:#6f7f7c; font-size:13px; }
+
+.bv-hp{ position:absolute; left:-5000px; width:1px; height:1px; overflow:hidden; }
+
+.bv-sideimg{
+  border-radius:16px;
+  min-height:560px;
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 14px 40px rgba(0,0,0,.12);
+  position:relative;
+}
+.bv-sideimg::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.22) 100%);
+  border-radius:inherit;
+}
+.bv-mark{
+  position:absolute; left:16px; bottom:16px; z-index:1;
+  color:#fff; font-weight:800; text-shadow:0 2px 10px rgba(0,0,0,.35);
+}
+
+@media (max-width:1200px){
+  .bv-section{ margin:24px auto; padding:40px 32px; }
+}
+@media (max-width:1000px){
+  .bv-frame{ grid-template-columns:1fr; }
+  .bv-sideimg{ min-height:260px; }
+}
+@media (max-width:560px){
+  .bv-section{ margin:16px auto; padding:20px 16px; }
+  .bv-left{ padding:18px; }
+  .bookvisit-title{ font-size:20px; }
+  .bv-grid{ grid-template-columns:1fr; }
+}
+
+.bookvisit-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: transparent; 
+  padding:24px;
+  box-sizing:border-box;
+}
+.bookvisit-card{
+  width:100%;
+  max-width:560px;
+  background:#fff;
+  border-radius:16px;
+  padding:28px;
+  box-shadow:0 14px 40px rgba(0,0,0,.12);
+  border:1px solid rgba(0,0,0,.06);
+  text-align:center;
+}
+@media (max-width:560px){
+  .bookvisit-card{ padding:20px; }
+}
