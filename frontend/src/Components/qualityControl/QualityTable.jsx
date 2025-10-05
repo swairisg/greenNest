@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import "./QualityTable.css";
 
 export default function QualityTable({ items, onDelete }) {
   if (!items?.length) return <div className="card empty">No records yet.</div>;
 
   return (
-    <div className="card" style={{ overflow: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <div className="card quality-table-container">
+      <table className="quality-table">
         <thead>
           <tr>
             <th>Batch</th>

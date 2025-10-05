@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./QualityForm.css";
 
 const initial = {
   batchId: "",

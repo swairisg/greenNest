@@ -47,6 +47,10 @@ app.get("/", (_req, res) => res.send("Hello from backend"));
 /* ---------- routes ---------- */
 app.use("/auth", require("./Routes/auth"));
 
+
+const qualityRoutes = require("./Routes/qualityControl/qualityControlRoute");
+app.use("/api/quality", qualityRoutes);
+
 // connect DB then start server
 const PORT = Number(process.env.PORT) || 5001;
 const MONGO_URI = process.env.MONGO_URI;

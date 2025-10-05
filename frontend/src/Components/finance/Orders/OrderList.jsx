@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchOrders, confirmOrder, markPaid, deleteOrder } from "./orderApi";
+import "./OrderList.css";
 
 export default function OrderList() {
   const [orders, setOrders] = useState([]);
@@ -23,9 +24,9 @@ export default function OrderList() {
   };
 
   return (
-    <div>
+    <div className="order-list">
       <h2>Orders</h2>
-      <table border="1" cellPadding="8">
+      <table className="order-table">
         <thead>
           <tr>
             <th>Order No</th>
@@ -45,9 +46,11 @@ export default function OrderList() {
               <td>{o.paymentStatus}</td>
               <td>{o.amounts?.grandTotal}</td>
               <td>
-                <button onClick={() => handleConfirm(o._id)}>Confirm</button>
-                <button onClick={() => handleMarkPaid(o._id)}>Mark Paid</button>
-                <button onClick={() => handleDelete(o._id)}>Delete</button>
+                <div className="actions">
+                  <button className="btn confirm" onClick={() => handleConfirm(o._id)}>Confirm</button>
+                  <button className="btn paid" onClick={() => handleMarkPaid(o._id)}>Mark Paid</button>
+                  <button className="btn delete" onClick={() => handleDelete(o._id)}>Delete</button>
+                </div>
               </td>
             </tr>
           ))}

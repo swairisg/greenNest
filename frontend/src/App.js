@@ -1,5 +1,15 @@
+// src/App.js
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+
+import GreenNestFooter from "./Components/common/GreenNestFooter";
+import GreenNestHeader from "./Components/common/GreenNestHeader";
 
 import AuthProvider from "./auth/AuthProvider";
 import Login from "./pages/auth/Login";
@@ -16,8 +26,8 @@ import Finance from "./pages/dashboards/Finance";
 import Inventory from "./pages/dashboards/Inventory";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
-import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
+import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
@@ -31,162 +41,139 @@ import HRPerformance from "./Components/tasksHR/Performance";
 import HRReports from "./Components/tasksHR/Reports";
 import HRSettings from "./Components/tasksHR/Settings";
 
-import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
-import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
-import PestDetectDashboard from './Components/pestControl/PestDetectDashboard/PestDetectDashboard';
+import PestDetectDisplay from "./Components/pestControl/PestDetectDisplay/PestDetectDisplay";
+import PestDetectAdd from "./Components/pestControl/PestDetectAdd/PestDetectAdd";
+import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/PestDetectDashboard";
+
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
-import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalogDashboard";
+
 import QualityList from "./Components/qualityControl/QualityList";
 import QualityCreate from "./Components/qualityControl/QualityCreate";
 import QualityDetail from "./Components/qualityControl/QualityDetail";
 import QualityEdit from "./Components/qualityControl/QualityEdit";
-import Cart from "./Components/cart/Cart";
 
+import Cart from "./Components/cart/Cart";
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
+
+function Layout({ children }) {
+  const location = useLocation();
+
+  // Hide header/footer on auth pages
+  const hideOnPaths = ["/auth/login", "/auth/signup"];
+  const shouldHide = hideOnPaths.includes(location.pathname);
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        background: "#fff",
+      }}
+    >
+      {!shouldHide && <GreenNestHeader />}
+      {children}
+      {!shouldHide && <GreenNestFooter />}
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Navigate to="/auth/login" replace />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/signup" element={<Signup />} />
+        <Layout>
+          <Routes>
+            {/* Public / Auth */}
+            <Route path="/" element={<Navigate to="/auth/login" replace />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Signup />} />
 
-          <Route element={<RequireRole roles={["customer"]} />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/profile" element={<CustomerProfile />} />
-          </Route>
-
-          <Route element={<RequireAuth />}>
-            <Route element={<RequireRole roles={["admin"]} />}>
-              <Route path="/admin" element={<Admin />} />
+            {/* Customer area */}
+            <Route element={<RequireRole roles={["customer"]} />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile" element={<CustomerProfile />} />
             </Route>
 
-            <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
-              <Route path="/hr" element={<HRLayout />}>
-                <Route index element={<HROverview />} />
-                <Route path="employees" element={<HREmployees />} />
-                <Route path="employees/new" element={<HREmployeesNew />} />
-                <Route path="tasks" element={<HRTasks />} />
-                <Route path="tasks/new" element={<HRTasksNew />} />
-                <Route path="attendance" element={<HRAttendance />} />
-                <Route path="payroll" element={<HRPayroll />} />
-                <Route path="performance" element={<HRPerformance />} />
-                <Route path="reports" element={<HRReports />} />
-                <Route path="settings" element={<HRSettings />} />
+            {/* Protected areas */}
+            <Route element={<RequireAuth />}>
+              {/* Admin */}
+              <Route element={<RequireRole roles={["admin"]} />}>
+                <Route path="/admin" element={<Admin />} />
+              </Route>
+
+              {/* HR */}
+              <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
+                <Route path="/hr" element={<HRLayout />}>
+                  <Route index element={<HROverview />} />
+                  <Route path="employees" element={<HREmployees />} />
+                  <Route path="employees/new" element={<HREmployeesNew />} />
+                  <Route path="tasks" element={<HRTasks />} />
+                  <Route path="tasks/new" element={<HRTasksNew />} />
+                  <Route path="attendance" element={<HRAttendance />} />
+                  <Route path="payroll" element={<HRPayroll />} />
+                  <Route path="performance" element={<HRPerformance />} />
+                  <Route path="reports" element={<HRReports />} />
+                  <Route path="settings" element={<HRSettings />} />
+                </Route>
+              </Route>
+
+              {/* Finance / Inventory / Product / Farmer */}
+              <Route element={<RequireRole roles={["finance_manager"]} />}>
+                <Route path="/finance" element={<Finance />} />
+              </Route>
+
+              <Route element={<RequireRole roles={["inventory_manager"]} />}>
+                <Route path="/inventory" element={<Inventory />} />
+              </Route>
+
+              <Route element={<RequireRole roles={["product_manager"]} />}>
+                <Route path="/products" element={<Product />} />
+              </Route>
+
+              <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
+                <Route path="/farmer" element={<Farmer />} />
               </Route>
             </Route>
 
-            <Route element={<RequireRole roles={["finance_manager"]} />}>
-              <Route path="/finance" element={<Finance />} />
-            </Route>
+            {/* Pests */}
+            <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
+            <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+            <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
+            <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
 
-            <Route element={<RequireRole roles={["inventory_manager"]} />}>
-              <Route path="/inventory" element={<Inventory />} />
-            </Route>
+            {/* Product Catalog */}
+            <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/products/new" element={<ProductCatalogForm />} />
+            <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
+            <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
 
-            <Route element={<RequireRole roles={["product_manager"]} />}>
-              <Route path="/products" element={<Product />} />
-            </Route>
+            {/* Harvest */}
+            <Route path="/addharvestschedules" element={<AddSchedule />} />
 
-            <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
-              <Route path="/farmer" element={<Farmer />} />
-            </Route>
-          </Route>
+            {/* Quality Control (matches backend /api/quality) */}
+            <Route path="/quality" element={<QualityList />} />
+            <Route path="/quality/new" element={<QualityCreate />} />
+            <Route path="/quality/:id" element={<QualityDetail />} />
+            <Route path="/quality/:id/edit" element={<QualityEdit />} />
 
-      <Route path="/admin" element={<Admin />} />
-   
-      <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
-      <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
-      <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
-      <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
+            {/* Orders */}
+            <Route path="/orders" element={<OrderList />} />
+            <Route path="/orders/:id" element={<OrderDetail />} />
 
-      {/* Product Catalog (Customer) */}
-      <Route path="/catalog" element={<CatalogPage />} />
+            {/* Cart */}
+            <Route path="/cart" element={<Cart />} />
 
-      {/*Product Catalog (Admin) */}
-      <Route path="/admin/products" element={<AdminProducts />} />
-      <Route path="/admin/products/new" element={<ProductCatalogForm />} />
-      <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
-       <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
-      
-      <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
-
-          <Route path="/addharvestschedules" element={<AddSchedule />} />
-          <Route path="*" element={<Navigate to="/auth/login" replace />} />
-
-          {/* Quality Control CRUD */}
-          <Route path="/quality" element={<QualityList />} />
-          <Route path="/quality/new" element={<QualityCreate />} />
-          <Route path="/quality/:id" element={<QualityDetail />} />
-          <Route path="/quality/:id/edit" element={<QualityEdit />} />
-
-          {/* order crud (temporarily disabled until components are imported)
-          <Route path="/orders" element={<OrderList />} />
-          <Route path="/orders/new" element={<OrderForm />} />
-          <Route path="/orders/:id" element={<OrderDetail />} />
-          */}
-
-<Route path="/orders" element={<OrderList />} />
-<Route path="/orders/:id" element={<OrderDetail />} />
-<Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
-          
-
-          {/*cart*/}
-          <Route path="/cart" element={<Cart />} />
-
-          
-
-        </Routes>
-
-        {/* Simple header/nav 
-      <header className="card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-        <h2 style={{ margin: 0 }}>GreenNest</h2>
-        <nav style={{ display: "flex", gap: 12 }}>
-          <NavLink to="/quality">Quality</NavLink>
-          <NavLink to="/quality/new">Add</NavLink>
-        </nav>
-      </header>*/}
-
-        {/*<main style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
-        
-        <Routes>
-          {/* redirect root to quality list 
-          
-
-         
-        </Routes>
-      </main>*/}
+            {/* Final catch-all */}
+            <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
+          </Routes>
+        </Layout>
       </AuthProvider>
     </BrowserRouter>
   );
 }
-// frontend/src/App.js
-/*import "./App.css";
-import { useEffect, useState } from "react";
-import { api, API_BASE } from "./api";
-
-
-
-import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
-
-
-
-function App() {
-  return (
-    <Routes>
-  
-      
-      <Route path="/addharvestschedules" element={<AddSchedule />} />
-      
-
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
-}
-
-export default App;*/

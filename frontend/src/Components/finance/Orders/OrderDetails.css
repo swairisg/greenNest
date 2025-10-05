@@ -1,0 +1,93 @@
+/* frontend/src/Components/finance/Orders/OrderDetails.css */
+
+.order-detail {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: #2e2e2e;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .order-detail h2 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: #1b5e20;
+  }
+  
+  .order-detail h3 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+    color: #2e7d32;
+  }
+  
+  .order-detail p {
+    margin: 6px 0;
+    line-height: 1.4;
+  }
+  
+  .order-detail p b {
+    color: #1b5e20;
+  }
+  
+  .btn {
+    padding: 8px 14px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: #388e3c;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, transform .08s ease;
+  }
+  
+  .btn:hover { background: #2e7d32; }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { background: #a5d6a7; cursor: not-allowed; }
+  
+  .btn.outline {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #c8e6c9;
+  }
+  
+  .btn.outline:hover {
+    background: #dcedc8;
+    border-color: #a5d6a7;
+  }
+  
+  /* Items list – optional if you add classes later */
+  .item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .item-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+  }
+  .item-list li:nth-child(odd) { background: #fcfffc; }
+  .item-list li:last-child { border-bottom: none; }
+  
+  .item-list .name { flex: 1 1 auto; min-width: 160px; }
+  .item-list .meta { flex: 0 0 auto; text-align: right; white-space: nowrap; }
+  
+  @media (max-width: 640px) {
+    .order-detail { padding: 16px; }
+    .actions { flex-wrap: wrap; }
+    .item-list li { flex-direction: column; align-items: flex-start; }
+  }

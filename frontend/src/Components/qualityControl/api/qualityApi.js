@@ -1,16 +1,17 @@
 // src/Components/qualityControl/api/qualityApi.js
 import { api } from "./axios";
 
-const base = "/quality"; // backend route
+// Backend mounts at /api/quality
+const base = "/api/quality";
 
 export const listQuality = async () => {
   const { data } = await api.get(base);
-  return data.users ?? [];
+  return data.items ?? [];
 };
 
 export const createQuality = async (payload) => {
   const { data } = await api.post(base, payload);
-  return data.users;
+  return data.item;
 };
 
 export const getQuality = async (id) => {

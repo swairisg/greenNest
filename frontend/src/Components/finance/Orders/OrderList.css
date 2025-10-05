@@ -1,0 +1,104 @@
+/* ==============================
+   OrderList Styles (GreenNest)
+   ============================== */
+
+   .order-list {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-family: "Inter", sans-serif;
+    color: #2e2e2e;
+  }
+  
+  /* Heading */
+  .order-list h2 {
+    color: #1b5e20;
+    margin-bottom: 16px;
+  }
+  
+  /* Table */
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  .order-table th,
+  .order-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .order-table th {
+    background-color: #2e7d32;
+    color: #fff;
+    font-weight: 600;
+  }
+  
+  .order-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: white;
+  }
+  
+  /* Confirm (Green) */
+  .btn.confirm {
+    background-color: #43a047;
+  }
+  .btn.confirm:hover {
+    background-color: #2e7d32;
+  }
+  
+  /* Mark Paid (Fresh Light Green) */
+  .btn.paid {
+    background-color: #66bb6a;
+  }
+  .btn.paid:hover {
+    background-color: #43a047;
+  }
+  
+  /* Delete (Red) */
+  .btn.delete {
+    background-color: #e53935;
+  }
+  .btn.delete:hover {
+    background-color: #c62828;
+  }
+  
+  /* Actions container */
+  .actions {
+    display: flex;
+    gap: 6px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .order-table th,
+    .order-table td {
+      font-size: 12px;
+      padding: 8px;
+    }
+  
+    .actions {
+      flex-wrap: wrap;
+    }
+  
+    .btn {
+      flex: 1 1 auto;
+    }
+  }

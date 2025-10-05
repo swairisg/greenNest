@@ -1,154 +1,94 @@
+// backend/Controllers/qualityControl/qualityControllers.js
 const Quality = require("../../Model/qualityControl/qualityControlmodel");
 
-
-//display
-const getAllUsers = async (req, res, next)=> {
-    let users;
-    try{
-        users = await Quality.find();
-    }catch(err){
-        console.error(err.message);
-        return res.status(500).json({ message: "Server Error" });
-    }
-
-    if(!users||users.length===0){
-        return res.status(404).json({message:"Users not found!"});
-    }
-
-     return res.status(200).json({users});
+// GET /api/quality
+const getAll = async (_req, res) => {
+  try {
+    const items = await Quality.find().lean();
+    return res.status(200).json({ items });
+  } catch (err) {
+    console.error("getAll error:", err);
+    return res.status(500).json({ error: "Server error" });
+  }
 };
 
-
-//insert
-
-const addQuality = async (req, res, next) => {
-    const body = req.body || {};
+// POST /api/quality
+const addQuality = async (req, res) => {
+  try {
     const {
-        batchId,
-        productName,
-        variety,
-        size,
-        color,
-        freshness,
-        weight,
-        notes,
-        grade,
-    } = body;
+      batchId, productName, variety, size, color, freshness, weight, notes, grade,
+    } = req.body || {};
 
-    // Basic validation to avoid crashes and give useful feedback
-    if (!batchId) {
-        return res.status(400).json({
-            error: "batchId is required",
-            hint: "Send JSON with Content-Type: application/json",
-            receivedBody: body,
-        });
+    if (!batchId || !productName || !variety || !grade) {
+      return res.status(400).json({ error: "batchId, productName, variety, and grade are required" });
     }
 
-    let users;
+    const item = await Quality.create({
+      batchId,
+      productName,
+      variety,
+      size,
+      color,
+      freshness,
+      weight,
+      notes,
+      grade,
+    });
 
-    try {
-        users = new Quality({ batchId, productName, variety, size, color, freshness, weight, notes, grade });
-        await users.save();
-    } catch (err) {
-        console.error("addQuality save error:", err);
-        return res.status(404).json({ error: "Failed to save quality record" });
+    return res.status(201).json({ item });
+  } catch (err) {
+    console.error("addQuality error:", err);
+    if (err?.code === 11000) {
+      return res.status(409).json({ error: "batchId already exists" });
     }
-
-    //if not inserting
-    if (!users) {
-        return res.status(404).json({ message: "Data not entered!" });
+    if (err?.name === "ValidationError") {
+      return res.status(400).json({ error: "Validation failed", details: err.errors });
     }
-
-    return res.status(200).json({ users });
+    return res.status(500).json({ error: "Server error" });
+  }
 };
 
-//getbyId
-
-const getById = async (req, res, next) =>{
-    
-    const itemId = req.params.itemId;
-    
-    let item;
-
-    try{
-        item = await Quality.findById(itemId);
-    }catch(err){
-        console.log(err);
-    }
-
-    //if item not found
-    if (!item) {
-        return res.status(404).json({ message: "Item not Found!" });
-    }
+// GET /api/quality/:itemId
+const getById = async (req, res) => {
+  try {
+    const item = await Quality.findById(req.params.itemId).lean();
+    if (!item) return res.status(404).json({ error: "Not found" });
     return res.status(200).json({ item });
+  } catch (err) {
+    console.error("getById error:", err);
+    return res.status(500).json({ error: "Server error" });
+  }
 };
 
-const updateItem = async (req, res, next) =>{
-
-    const itemId = req.params.itemId;
-    const body = req.body || {};
-    const {
-        batchId,
-        productName,
-        variety,
-        size,
-        color,
-        freshness,
-        weight,
-        notes,
-        grade,
-    } = body;
-
-    let item;
-
-    try{
-        item = await Quality.findByIdAndUpdate(itemId,{batchId:batchId,
-            productName:productName,
-            variety:variety,
-            size:size,
-            color:color,
-            freshness:freshness,
-            weight:weight,
-            notes:notes,
-            grade:grade,})
-
-            item = await item.save();
-    }catch(err){
-        console.log(err);
-    }
-
-    //if item not updated
-    if (!item) {
-        return res.status(404).json({ message: "Item not Updated!" });
-    }
+// PUT /api/quality/:itemId
+const updateItem = async (req, res) => {
+  try {
+    const item = await Quality.findByIdAndUpdate(
+      req.params.itemId,
+      req.body || {},
+      { new: true, runValidators: true }
+    ).lean();
+    if (!item) return res.status(404).json({ error: "Not found" });
     return res.status(200).json({ item });
-
-
-
+  } catch (err) {
+    console.error("updateItem error:", err);
+    if (err?.name === "ValidationError") {
+      return res.status(400).json({ error: "Validation failed", details: err.errors });
+    }
+    return res.status(500).json({ error: "Server error" });
+  }
 };
 
-//delete item records
-
-const deleteItem = async (req, res, next) =>{
-
-    const itemId = req.params.itemId;
-
-    let item;
-    try{
-        item = await Quality.findByIdAndDelete(itemId);
-    }catch(err){
-        console.log(err);
-    }
-//if item not deleted
-    if (!item) {
-        return res.status(404).json({ message: "Item not deleted!" });
-    }
+// DELETE /api/quality/:itemId
+const deleteItem = async (req, res) => {
+  try {
+    const item = await Quality.findByIdAndDelete(req.params.itemId).lean();
+    if (!item) return res.status(404).json({ error: "Not found" });
     return res.status(200).json({ item });
+  } catch (err) {
+    console.error("deleteItem error:", err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
 
-}
-
-exports.deleteItem = deleteItem;
-exports.updateItem = updateItem;
-exports.getById = getById;
-exports.addQuality = addQuality;
-exports.getAllUsers = getAllUsers;
+module.exports = { getAll, addQuality, getById, updateItem, deleteItem };
