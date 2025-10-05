@@ -3,7 +3,9 @@ require("dotenv").config(); // load .env exactly once
 
 const express = require("express");
 const mongoose = require("mongoose");
-const harvestRouter = require("./Routes/harvestManagement/harvest");
+
+
+
 
 const cors = require("cors");
 
@@ -19,7 +21,31 @@ app.use(
 app.use(express.json());
 
 
+//harvest
+const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules",harvestRouter);
+
+app.use("/HarvestSchedules", harvestRouter);
+
+const hrRoutes = require("./Routes/tasksHR");
+app.use("/hr", hrRoutes);
+
+
+//customer
+const publicVisitRoutes = require("./Routes/customers/visitBooking");
+const authRouter = require("./Routes/auth");
+app.use("/public", publicVisitRoutes);
+
+app.use("/public", publicVisitRoutes);
+app.use(express.json());                     
+app.use("/api/auth", authRouter);
+
+const visitBookingRoutes = require("./Routes/customers/visitBooking");
+app.use("/api", visitBookingRoutes);
+
+const contactRoutes = require("./Routes/customers/contactUs/contactus");
+app.use(contactRoutes);
+
 
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
@@ -33,6 +59,7 @@ app.get("/", (_req, res) => res.send("Hello from backend"));
 /* ---------- routes ---------- */
 app.use("/auth", require("./Routes/auth"));
 
+
 // connect DB then start server
 const PORT = Number(process.env.PORT) || 5001;
 const MONGO_URI = process.env.MONGO_URI;
@@ -43,6 +70,7 @@ if (!MONGO_URI) {
 }
 
 const User = require("./Model/auth/User");
+const EmployeeProfile = require("./Model/tasksHR/EmployeeProfile");
 mongoose
   .connect(MONGO_URI)
   .then(async () => {
@@ -51,6 +79,7 @@ mongoose
 
     // Ensure indexes are in place (safe to call on every boot)
     await User.syncIndexes();
+    await EmployeeProfile.syncIndexes();
 
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);

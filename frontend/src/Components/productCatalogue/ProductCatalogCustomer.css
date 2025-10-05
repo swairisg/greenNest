@@ -1,10 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Urbanist:wght@300;400;600;700&display=swap");
 
-/* ---------- Tokens */
 :root {
   --sc-bg: transparent;
-
-  /* glass base */
   --sc-card-r: 200;
   --sc-card-g: 200;
   --sc-card-b: 200;
@@ -15,11 +12,11 @@
   --sc-card-shadow-hover: 0 12px 40px rgba(0,0,0,0.12), 0 4px 14px rgba(0,0,0,0.06);
   --sc-blur: blur(16px) saturate(120%);
 
-  --sc-accent: #009688;
-  --sc-accent-2: #12b8aa;
+  --sc-accent: #32CD32;
+  --sc-accent-2: #32CD32;
 
   --sc-text: #0f172a;     /* slate-900 */
-  --sc-muted: #64748b;    /* slate-500 */
+  --sc-muted: #6a956e;    /* slate-500 */
 
   --sc-radius-lg: 18px;
   --sc-radius-md: 14px;
@@ -31,7 +28,6 @@
   --sk-bg: rgba(240, 240, 240, 0.55);
 }
 
-/* ---------- Base */
 * { box-sizing: border-box; }
 
 html, body, #root { height: 100%; }
@@ -43,18 +39,16 @@ body {
   color: var(--sc-text);
   line-height: 1.45;
 }
-
 .App, main, .page, .layout, .container, .sc-container {
   background: transparent;
 }
-/* ---------- Container */
+
 .sc-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 28px 18px 60px;
 }
 
-/* ---------- Header */
 .sc-header {
   display: flex;
   align-items: center;
@@ -71,7 +65,6 @@ body {
 .sc-sub { margin: 0; color: var(--sc-muted); font-size: 0.98rem; }
 .sc-toolbar-right { display: flex; align-items: center; gap: 12px; }
 
-/* ---------- Filters (tidy layout, white theme, compact) */
 .sc-filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -86,12 +79,10 @@ body {
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
 
-/* Make search wider when space allows */
 @media (min-width: 1000px) {
   .sc-filters .sc-search { grid-column: span 2; }
 }
 
-/* Tags take a full row and wrap nicely */
 .sc-filters .sc-tags { grid-column: 1 / -1; }
 .sc-tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
 
@@ -137,13 +128,13 @@ body {
   background-size: 20px 20px, auto;
 }
 .sc-search .sc-input:hover {
-  border-color: #00968880;
+  border-color: #32CD32;
   box-shadow: 0 0 0 3px rgba(0,150,136,0.12), 0 10px 24px rgba(0,0,0,0.10);
   transform: translateY(-1px);
 }
 .sc-search .sc-input:focus,
 .sc-search .sc-input:focus-visible {
-  border-color: #009688;
+  border-color: #32CD32;
   box-shadow: 0 0 0 3px rgba(0,150,136,0.22), 0 12px 28px rgba(0,0,0,0.12);
   outline: none;
 }
@@ -195,8 +186,8 @@ body {
 
 .sc-btn-primary {
   color: #ffffff;
-  background: linear-gradient(180deg, var(--sc-accent), #028f82);
-  border: 1px solid rgba(0,150,136,0.55);
+  background: linear-gradient(180deg, var(--sc-accent), #32CD32);
+  border: 1px solid rgba(25, 150, 0, 0.55);
   box-shadow: 0 10px 24px rgba(0,150,136,0.25), 0 2px 10px rgba(0,0,0,0.06);
 }
 .sc-btn-primary:hover {
@@ -302,7 +293,7 @@ body {
   color: #b91c1c;
 }
 
-/* ---------- Pagination */
+/*Pagination */
 .sc-pagination { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 20px; }
 .sc-page-pill {
   padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(0,0,0,0.08);
@@ -310,7 +301,7 @@ body {
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
 }
 
-/* ---------- Skeletons */
+/*Skeletons */
 .skeleton { position: relative; overflow: hidden; }
 .sk-media, .sk-line, .sk-footer { background: var(--sk-bg); border-radius: 10px; overflow: hidden; position: relative; }
 .sk-media { height: 180px; margin: 12px; }
@@ -324,7 +315,7 @@ body {
 }
 @keyframes sc-shimmer { 100% { transform: translateX(100%); } }
 
-/* ---------- Accessibility & Motion */
+/*Accessibility & Motion */
 .sc-btn:focus-visible,
 .sc-chip:focus-visible,
 .sc-input:focus-visible,
@@ -336,7 +327,7 @@ body {
   * { transition: none !important; animation: none !important; }
 }
 
-/* ---------- Responsive card spans */
+/*Responsive card spans */
 @media (max-width: 1024px) { .sc-card { grid-column: span 4; } }
 @media (max-width: 720px)  { .sc-card { grid-column: span 6; } }
 @media (max-width: 480px)  {
@@ -344,7 +335,6 @@ body {
   .sc-filters { grid-template-columns: 1fr; }
 }
 
-/* WebKit clear (×) for search */
 .sc-input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
   height: 14px; width: 14px;
@@ -353,7 +343,7 @@ body {
     no-repeat center / 14px 14px;
   cursor: pointer;
 }
-/* Bigger logo and stacked title/subtitle */
+
 .sc-brand {
   display: flex;
   align-items: center;

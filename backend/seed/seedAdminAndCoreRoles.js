@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 
 // Models (per your structure)
 const { User, EmployeeProfile } = require("../Model/auth");
-// Password helper (from earlier)
+// Password helper
 const { hashPassword } = require("../services/passwordService");
 
-// ---- Config (env with sensible defaults) ----
+// ---- Config ----
 const MONGO_URI = process.env.MONGO_URI;
 
 const SEEDS = [
@@ -69,7 +69,6 @@ const SEEDS = [
   },
 ];
 
-// ---- Seed runner ----
 (async () => {
   try {
     if (!MONGO_URI) {
@@ -80,35 +79,79 @@ const SEEDS = [
     await mongoose.connect(MONGO_URI);
     console.log("✅ Connected to MongoDB:", mongoose.connection.name);
 
+    // Ensure indexes exist first
+    try {
+      await User.syncIndexes();
+      await EmployeeProfile.syncIndexes();
+      console.log("🧭 Indexes synced (User, EmployeeProfile)");
+    } catch (e) {
+      console.warn("⚠️ Index sync warning:", e?.message || e);
+    }
+
     for (const s of SEEDS) {
       const email = s.email.toLowerCase().trim();
+
+      // 1) USER: upsert without touching password if user already exists
       let user = await User.findOne({ email });
 
-      if (user) {
-        console.log(`⏭️  Exists: ${email} (${user.roles.join(",")})`);
-        continue;
+      if (!user) {
+        // create brand-new user
+        const passwordHash = await hashPassword(s.password);
+        user = await User.create({
+          email,
+          passwordHash,
+          roles: s.roles,
+          primaryRole: s.roles[0],
+          status: "active",
+          source: "seed",
+          isEmailVerified: true,
+        });
+        console.log(`👤 Created user: ${email} → [${s.roles.join(", ")}]`);
+      } else {
+        // ensure roles contain seed roles (no duplicates)
+        const currentRoles = new Set(user.roles || []);
+        for (const r of s.roles) currentRoles.add(r);
+
+        const updates = { roles: Array.from(currentRoles) };
+
+        // set primaryRole if missing
+        if (!user.primaryRole) updates.primaryRole = s.roles[0];
+
+        // Do not overwrite passwordHash or email verification here
+        await User.updateOne({ _id: user._id }, { $set: updates });
+        user = await User.findById(user._id).lean();
+
+        console.log(
+          `↺ Updated user roles: ${email} → [${user.roles.join(", ")}]`
+        );
       }
 
-      const passwordHash = await hashPassword(s.password);
+      // 2) EMPLOYEE PROFILE: create or refresh (idempotent)
+      const exists = await EmployeeProfile.findOne({ userId: user._id });
 
-      user = await User.create({
-        email,
-        passwordHash,
-        roles: s.roles,
-        primaryRole: s.roles[0],
-        status: "active",
-        source: "seed",
-        isEmailVerified: true,
-      });
-
-      await EmployeeProfile.create({
-        userId: user._id,
-        fullName: s.fullName,
-        department: s.department,
-        designation: s.designation,
-      });
-
-      console.log(`✅ Seeded: ${email} → [${s.roles.join(", ")}]`);
+      if (!exists) {
+        await EmployeeProfile.create({
+          userId: user._id,
+          fullName: s.fullName,
+          department: s.department,
+          designation: s.designation,
+          // you can also set defaults for joinDate/currentStatus/salary later if you add them to seeds
+        });
+        console.log(`🗂️  Created profile for: ${email}`);
+      } else {
+        // optional refresh of visible fields
+        await EmployeeProfile.updateOne(
+          { _id: exists._id },
+          {
+            $set: {
+              fullName: s.fullName,
+              department: s.department,
+              designation: s.designation,
+            },
+          }
+        );
+        console.log(`🛠️  Updated profile for: ${email}`);
+      }
     }
 
     console.log("🎉 Seeding complete.");
