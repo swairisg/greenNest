@@ -44,7 +44,7 @@ export default function Farmer() {
       key: "harvest",
       title: "Harvest",
       desc: "Schedules, yield tracking, and post-harvest handling.",
-      to: "/harvest",
+      to: "/harvestdashboard",
       img: TileHarvest,
     },
   ];
