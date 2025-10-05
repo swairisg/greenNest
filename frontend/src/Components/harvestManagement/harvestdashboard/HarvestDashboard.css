@@ -1,0 +1,391 @@
+/* Harvest Dashboard Styles with harvestdash- prefix */
+.harvestdash-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+  min-height: 100px;
+}
+
+/* Loading State */
+.harvestdash-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: #7f8c8d;
+}
+
+.harvestdash-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: harvestdash-spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+.harvestdash-loading-text {
+  margin: 0;
+  font-size: 16px;
+}
+
+@keyframes harvestdash-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Tab Navigation */
+.harvestdash-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.harvestdash-tab-button {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.harvestdash-tab-button:hover {
+  color: #495057;
+  background-color: #f8f9fa;
+}
+
+.harvestdash-tab-active {
+  color: #3498db;
+  border-bottom-color: #3498db;
+  background-color: #f8f9fa;
+}
+
+/* Dashboard Header */
+.harvestdash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.harvestdash-title {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 28px;
+}
+
+.harvestdash-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.harvestdash-refresh-btn, 
+.harvestdash-time-select {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+}
+
+.harvestdash-refresh-btn:hover {
+  background: #f8f9fa;
+}
+
+/* Summary Cards */
+.harvestdash-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.harvestdash-summary-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.harvestdash-card-total {
+  border-top: 4px solid #3498db;
+}
+
+.harvestdash-card-current {
+  border-top: 4px solid #27ae60;
+}
+
+.harvestdash-card-last {
+  border-top: 4px solid #e74c3c;
+}
+
+.harvestdash-card-title {
+  margin: 0 0 15px 0;
+  color: #7f8c8d;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.harvestdash-card-quantity {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.harvestdash-card-trend {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.harvestdash-change-positive {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.harvestdash-change-negative {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.harvestdash-trend-label {
+  margin-left: 5px;
+}
+
+/* Crop Cards Section */
+.harvestdash-crops-section {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+
+.harvestdash-section-title {
+  margin: 0 0 20px 0;
+  color: #2c3e50;
+  font-size: 22px;
+}
+
+.harvestdash-crop-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.harvestdash-crop-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.harvestdash-crop-name {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.harvestdash-crop-quantities {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.harvestdash-quantity-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.harvestdash-quantity-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.harvestdash-month-quantity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.harvestdash-quantity-label,
+.harvestdash-month-label {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.harvestdash-quantity-value,
+.harvestdash-month-value {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.harvestdash-growth-indicator {
+  text-align: right;
+  margin-top: 5px;
+}
+
+.harvestdash-indicator-positive {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.harvestdash-indicator-negative {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Chart Section */
+.harvestdash-chart-section {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.harvestdash-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.harvestdash-chart-title {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 22px;
+}
+
+.harvestdash-chart-legend {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.harvestdash-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.harvestdash-legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.harvestdash-legend-text {
+  color: #2c3e50;
+}
+
+.harvestdash-chart-container {
+  margin-top: 20px;
+}
+
+.harvestdash-no-data {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+}
+
+.harvestdash-no-data-text {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .harvestdash-container {
+    padding: 10px;
+  }
+  
+  .harvestdash-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .harvestdash-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .harvestdash-summary-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .harvestdash-crop-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .harvestdash-chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .harvestdash-chart-legend {
+    justify-content: flex-start;
+  }
+
+  .harvestdash-top-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* Layout wrapper */
+.harvestdash-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg1, #0b1d16);
+}
+
+/* Left sidebar area */
+.harvest_sidebar {
+  flex: 0 0 260px; /* fixed width */
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  background: var(--bg2, #0f2a1f);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Right content area */
+.harvestdash-main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  overflow: auto;
+}
+
+
+.harvestdash-summary-column,
+.harvestdash-schedules-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .harvestdash-top-section
+   {grid-template-columns: 1fr;}
+}
+}
