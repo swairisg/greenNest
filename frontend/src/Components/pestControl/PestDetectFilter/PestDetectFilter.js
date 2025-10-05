@@ -1,7 +1,8 @@
 import React from "react";
 import "./PestDetectFilter.css";
 
-export default function PestDetectFilters({
+// Keep values lowercase to match the client-side compare
+export default function PestDetectFilter({
   crop, setCrop,
   severity, setSeverity,
   onSearch, onClear
@@ -22,9 +23,9 @@ export default function PestDetectFilters({
         onChange={(e) => setSeverity(e.target.value)}
       >
         <option value="">All severity</option>
-        <option value="Low">Low</option>
-        <option value="Moderate">Moderate</option>
-        <option value="High">High</option>
+        <option value="low">Low</option>
+        <option value="moderate">Moderate</option>
+        <option value="high">High</option>
       </select>
 
       <button className="pd-btn" type="submit">Search</button>

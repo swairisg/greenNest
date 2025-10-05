@@ -1,0 +1,166 @@
+/* Farmer Dashboard */
+
+.fd-page {
+  --fd-green-700: #155b39;
+  --fd-green-600: #1e7a4b;
+  --fd-green-100: #eaf6ee;
+  --fd-ink-900: #103224;
+  --fd-ink-500: #3b6e57;
+  --fd-card: #ffffff;
+
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #f2fbf5 0%, #e9f8ee 100%);
+  color: var(--fd-ink-900);
+}
+
+/* Top bar */
+.fd-nav {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #dcefe2;
+}
+
+.fd-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fd-mark {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: var(--fd-green-100);
+  color: var(--fd-green-700);
+  border-radius: 12px;
+  font-size: 20px;
+}
+.fd-company {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.fd-name { font-weight: 800; letter-spacing: .2px; }
+.fd-role { font-size: .8rem; color: var(--fd-ink-500); }
+
+.fd-actions { display: flex; align-items: center; gap: 12px; }
+.fd-link {
+  color: var(--fd-green-700);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: background .2s ease, transform .2s ease;
+}
+.fd-link:hover { background: var(--fd-green-100); transform: translateY(-1px); }
+
+.fd-btn {
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--fd-green-600);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter .2s ease, transform .2s ease;
+}
+.fd-btn:hover { filter: brightness(.95); transform: translateY(-1px); }
+.fd-btn.danger { background: #b0232a; }
+
+
+/* Hero */
+.fd-hero {
+  position: relative;
+  width: min(1200px, 94%);
+  margin: 18px auto 0 auto;
+  min-height: 230px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #dcefe2;
+  box-shadow: 0 8px 24px rgba(22,66,50,.12);
+}
+.fd-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 100%);
+}
+.fd-hero-inner {
+  position: relative; color: #fff; padding: 20px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+.fd-hero-title { margin: 0; font-size: clamp(1.4rem, 3vw, 2rem); }
+.fd-hero-sub { margin-top: 6px; max-width: 65ch; }
+
+/* Cards */
+.fd-tiles {
+  width: min(1200px, 94%);
+  margin: 16px auto 28px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.fd-tile {
+  grid-column: span 4;
+  display: grid;
+  grid-template-rows: 160px auto;      /* taller media for “bigger” tiles */
+  background: var(--fd-card);
+  border: 1px solid #dcefe2;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--fd-ink-900);
+  box-shadow: 0 6px 16px rgba(22,66,50,.08);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.fd-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(22,66,50,.13);
+  background: #f7fcf9;
+}
+
+.fd-tile-img {
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.fd-tile-body { padding: 14px 16px 16px; }
+.fd-tile-title { margin: 0 0 4px 0; font-weight: 800; }
+.fd-tile-desc { margin: 0 0 10px 0; color: var(--fd-ink-500); }
+.fd-tile-cta {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--fd-green-600);
+  color: #fff;
+  font-weight: 700;
+  font-size: .9rem;
+}
+
+
+.fd-tiles > a:nth-child(4),
+.fd-tiles > a:nth-child(5) {
+  grid-column: span 6;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .fd-tile { grid-column: span 6; } /* 2 per row on tablet */
+  .fd-tiles > a:nth-child(4),
+  .fd-tiles > a:nth-child(5) { grid-column: span 6; }
+}
+
+@media (max-width: 720px) {
+  .fd-tile { grid-column: span 12; } /* 1 per row on phones */
+  .fd-tile { grid-template-rows: 150px auto; }
+}
