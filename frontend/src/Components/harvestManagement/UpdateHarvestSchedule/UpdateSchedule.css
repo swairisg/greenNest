@@ -1,21 +1,11 @@
 .up_page {
-  --up-primary: #32cd32;       /* main green */
-  --up-primary-2: #28a428;     /* hover/darker */
-  --up-text: #101410;
-  --up-muted: #6b756b;
-  --up-card: #ffffff;
-  --up-card-tint: #f7faf7;     /* very light green background for card */
-  --up-border: #e5efe7;
-  --up-focus: #eaf7f0;         /* soft green focus ring */
-  --up-radius: 14px;
-
-  background: #ffffff;         /* remove strong green background */
+  background: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: clamp(16px, 4vw, 32px);
-  color: var(--up-text);
+  color: #101410;
   font-family: "Segoe UI","Roboto",Arial,sans-serif;
 }
 
@@ -25,20 +15,20 @@
   font-size: clamp(22px, 2.8vw, 28px);
   font-weight: 700;
   letter-spacing: .2px;
-  color: var(--up-primary);
+  color: #32cd32;
   text-align: center;
 }
 
 /* Card-like form container */
 .up_form {
-  background: var(--up-card-tint);
-  border: 1px solid var(--up-border);
-  border-radius: var(--up-radius);
+  background: #f7faf7;
+  border: 2px solid #32cd32; /* single, intentional border */
+  border-radius: 14px;
   padding: clamp(16px, 3vw, 24px);
-  border: 2px solid var(--up-primary);
   box-shadow:
     0 0 0 4px rgba(50, 205, 50, 0.10),
-    0 10px 28px rgba(16, 40, 24, 0.08);  width: 100%;
+    0 10px 28px rgba(16, 40, 24, 0.08);
+  width: 100%;
   max-width: 720px;
 
   display: grid;
@@ -50,7 +40,7 @@
 /* Field labels */
 .up_label {
   font-size: .92rem;
-  color: var(--up-muted);
+  color: #6b756b;
   margin-top: 6px;
 }
 
@@ -61,19 +51,19 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid var(--up-border);  /* neutral border (no lime outline) */
-  background: var(--up-card);
-  color: var(--up-text);
+  border: 1px solid #e5efe7;
+  background: #ffffff;
+  color: #101410;
   outline: none;
   transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
 }
-.up_input::placeholder { color: var(--up-muted); }
+.up_input::placeholder { color: #6b756b; }
 
-/* Focus ring (soft green) */
+/* Focus ring */
 .up_input:focus,
 .up_select:focus {
-  border-color: var(--up-primary);
-  box-shadow: 0 0 0 3px var(--up-focus);
+  border-color: #32cd32;
+  box-shadow: 0 0 0 3px #eaf7f0;
 }
 
 /* Status chips row */
@@ -85,9 +75,9 @@
 
 /* Status chip */
 .up_statusChip {
-  border: 1px solid var(--up-border);
-  background: var(--up-card);
-  color: var(--up-text);
+  border: 1px solid #e5efe7;
+  background: #ffffff;
+  color: #101410;
   padding: 8px 12px;
   border-radius: 999px;
   font-size: .92rem;
@@ -96,13 +86,13 @@
   transition: border-color .16s ease, background .16s ease, transform .08s ease;
 }
 .up_statusChip:hover {
-  border-color: var(--up-primary);
-  background: var(--up-focus);
+  border-color: #32cd32;
+  background: #eaf7f0;
 }
 .up_statusChip--active {
-  background: var(--up-primary);
-  color: #fff;
-  border-color: var(--up-primary);
+  background: #32cd32;
+  color: #ffffff;
+  border-color: #32cd32;
   transform: translateY(-1px);
 }
 
@@ -118,12 +108,12 @@
   transition: transform .08s ease, box-shadow .16s ease, background .16s ease;
 }
 .up_btn--primary {
-  background: var(--up-primary);
-  color: #fff;
+  background: #32cd32;
+  color: #ffffff;
   box-shadow: 0 8px 20px rgba(50,205,50,.25);
 }
 .up_btn--primary:hover {
-  background: var(--up-primary-2);
+  background: #28a428;
   box-shadow: 0 10px 26px rgba(50,205,50,.30);
   transform: translateY(-1px);
 }
@@ -139,15 +129,25 @@
   margin-bottom: 8px;
   font-size: .92rem;
 }
-.up_fieldError { color: #d32f2f; font-size: 12px; margin-top: 4px; line-height: 1.25; }
+.up_fieldError {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+  line-height: 1.25;
+}
 .up_input--invalid {
-  border-color: #d32f2f !important;
-  box-shadow: 0 0 0 3px rgba(211,47,47,.12) !important;
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 3px rgba(211,47,47,.12);
 }
 
+/* Responsive */
 @media (min-width: 720px) {
   .up_form { padding: 28px; }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  .up_btn, .up_statusChip, .up_input, .up_select { transition: none; }
+  .up_btn,
+  .up_statusChip,
+  .up_input,
+  .up_select { transition: none; }
 }

@@ -1,23 +1,8 @@
 .viewyield-root {
-  --vy-bg-1: hsl(135, 33%, 98%);
-  --vy-bg-2: #dff0e6;
-
-  --vy-panel: #ffffff;
-  --vy-text: #113626;
-  --vy-muted: #6b7f74;
-
-  --vy-accent: #32cd32;     /* primary green */
-  --vy-accent-2: #28a428;   /* hover/darker green */
-
-  --vy-border: #e6f4eb;
-  --vy-border-strong: #d9efe3;
-
-  --vy-radius: 14px;
-
   width: 100%;
   padding: clamp(12px, 3vw, 24px);
-  background: linear-gradient(180deg, var(--vy-bg-1), var(--vy-bg-2));
-  color: var(--vy-text);
+  background: linear-gradient(180deg, #f8fcf9, #dff0e6); /* hsl(135,33%,98%) -> #f8fcf9 */
+  color: #113626;
   box-sizing: border-box;
 }
 
@@ -26,9 +11,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: var(--vy-panel);
-  border: 1px solid var(--vy-border);
-  border-radius: var(--vy-radius);
+  background: #ffffff;
+  border: 1px solid #e6f4eb;
+  border-radius: 14px;
   padding: 12px 14px;
   margin-bottom: 14px;
 }
@@ -37,7 +22,7 @@
   margin: 0;
   font-size: clamp(18px, 2.1vw, 22px);
   font-weight: 700;
-  color: var(--vy-text);
+  color: #113626;
 }
 
 .viewyield-actions {
@@ -55,18 +40,18 @@
   max-width: 420px;
   height: 40px;
   padding: 8px 14px;
-  border: 2px solid var(--vy-border-strong);
+  border: 2px solid #d9efe3;
   border-radius: 12px;
-  background: #fff;
-  color: var(--vy-text);
+  background: #ffffff;
+  color: #113626;
   font-size: 14px;
   outline: none;
   box-shadow: 0 1px 0 rgba(0,0,0,.02);
   transition: border-color .15s, box-shadow .15s, background-color .15s;
 }
-.viewyield-search::placeholder { color: var(--vy-muted); opacity: .85; }
+.viewyield-search::placeholder { color: #6b7f74; opacity: .85; }
 .viewyield-search:focus {
-  border-color: var(--vy-accent);
+  border-color: #32cd32;
   box-shadow: 0 0 0 3px rgba(50,205,50,.18);
 }
 
@@ -88,25 +73,25 @@
 /* Secondary Refresh & Clear Filters */
 .viewyield-btn--refresh,
 .viewyield-btn--clear {
-  background: #fff;
-  border: 1px solid var(--vy-border-strong);
-  color: var(--vy-text);
+  background: #ffffff;
+  border: 1px solid #d9efe3;
+  color: #113626;
 }
 .viewyield-btn--refresh:hover,
 .viewyield-btn--clear:hover {
   background: #f7fcf9;
-  border-color: var(--vy-border);
+  border-color: #e6f4eb;
 }
 
 /* Primary green Download PDF */
 .viewyield-btn--download {
-  background: var(--vy-accent);
-  border: 1px solid var(--vy-accent);
-  color: #fff;
+  background: #32cd32;
+  border: 1px solid #32cd32;
+  color: #ffffff;
 }
 .viewyield-btn--download:hover {
-  background: var(--vy-accent-2);
-  border-color: var(--vy-accent-2);
+  background: #28a428;
+  border-color: #28a428;
 }
 .viewyield-btn--download:active { transform: translateY(1px); }
 
@@ -119,9 +104,9 @@
 }
 
 .filter-options {
-  background: var(--vy-panel);
-  border: 1px solid var(--vy-border);
-  border-radius: var(--vy-radius);
+  background: #ffffff;
+  border: 1px solid #e6f4eb;
+  border-radius: 14px;
   padding: 12px;
   margin-bottom: 12px;
 }
@@ -131,31 +116,31 @@
 
 .filter-label {
   font-weight: 600;
-  color: var(--vy-muted);
+  color: #6b7f74;
   font-size: 14px;
   white-space: nowrap;
 }
 
 .filter-select {
   padding: 8px 12px;
-  border: 1px solid var(--vy-border-strong);
+  border: 1px solid #d9efe3;
   border-radius: 10px;
   font-size: 14px;
-  background: #fff;
+  background: #ffffff;
   min-width: 150px;
   cursor: pointer;
   transition: border-color .15s, box-shadow .15s;
 }
 .filter-select:focus {
   outline: none;
-  border-color: var(--vy-accent);
+  border-color: #32cd32;
   box-shadow: 0 0 0 3px rgba(50,205,50,.18);
 }
 
 .viewyield-tablewrap {
-  background: var(--vy-panel);
-  border: 1px solid var(--vy-border);
-  border-radius: var(--vy-radius);
+  background: #ffffff;
+  border: 1px solid #e6f4eb;
+  border-radius: 14px;
   padding: 8px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -175,19 +160,19 @@
   color: #0f2d1d;
   text-align: left;
   padding: 12px 10px;
-  border-bottom: 2px solid var(--vy-border-strong);
+  border-bottom: 2px solid #d9efe3;
   white-space: nowrap;
 }
 
 .viewyield-table tbody td {
   padding: 10px;
-  border-bottom: 1px solid var(--vy-border);
+  border-bottom: 1px solid #e6f4eb;
   vertical-align: top;
-  color: var(--vy-text);
+  color: #113626;
 }
 
 .viewyield-table tbody tr:nth-child(odd),
-.viewyield-table tbody tr:nth-child(even) { background: #fff; }
+.viewyield-table tbody tr:nth-child(even) { background: #ffffff; }
 .viewyield-table tbody tr:hover { background: #f7fcf9; }
 
 .viewyield-cell--id {
@@ -200,9 +185,9 @@
 .viewyield-empty td {
   text-align: center;
   padding: 18px;
-  color: var(--vy-muted);
-  background: #fff;
-  border-bottom: 1px solid var(--vy-border);
+  color: #6b7f74;
+  background: #ffffff;
+  border-bottom: 1px solid #e6f4eb;
 }
 
 @media (max-width: 560px) {
@@ -231,12 +216,12 @@
 
 .viewyield-table .viewyield-btn--update {
   background: #aded9d;
-  border: 1px solid var(--vy-border-strong);
+  border: 1px solid #d9efe3;
   color: #0c3c27;
 }
 .viewyield-table .viewyield-btn--update:hover {
   background: #f7fcf9;
-  border-color: var(--vy-accent);
+  border-color: #32cd32;
 }
 
 /* Delete — light red chip that becomes solid red on hover */

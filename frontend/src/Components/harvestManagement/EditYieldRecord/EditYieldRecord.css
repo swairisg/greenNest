@@ -1,43 +1,27 @@
 .yieldup_form {
-  --yd-primary: #32cd32;
-  --yd-primary-2: #28a428;
-  --yd-text: #101410;
-  --yd-muted: #6b756b;
-
-  --yd-card: #ffffff;
-  --yd-card-tint: #f7faf7;      /* soft very-light green */
-  --yd-border: #e5efe7;         /* neutral border */
-  --yd-focus: #eaf7f0;          /* focus halo */
-
-  --yd-shadow: 0 6px 24px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
-  --yd-radius-lg: 14px;
-  --yd-radius-md: 12px;
-  --yd-gap: 12px;
-
   /* Card container */
-  background: var(--yd-card-tint);
-  color: var(--yd-text);
-  border-radius: var(--yd-radius-lg);
+  background: #f7faf7;
+  color: #101410;
+  border-radius: 14px;
 
-  /* Green shiny border + glow */
+  /* Green shiny border */
   border: 1px solid rgba(50,205,50,.55);
   box-shadow:
-    0 0 0 2px rgba(50,205,50,.25) inset,   /* inner crisp ring */
-    0 0 18px rgba(50,205,50,.25),          /* outer glow */
-    var(--yd-shadow);                      /* soft elevation */
+    0 0 0 2px rgba(50,205,50,.25) inset,
+    0 0 18px rgba(50,205,50,.25),
+    0 6px 24px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
 
   padding: clamp(16px, 3vw, 24px);
   max-width: 720px;
   width: 100%;
 
-  /* Center the card on the page (no inner scrollbars) */
+  /* Center the card on the page */
   margin: clamp(56px, 12vh, 120px) auto clamp(64px, 12vh, 140px);
 
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--yd-gap);
+  gap: 12px;
 
-  /* Sample UI font (scoped) */
   font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
 
   /* Ensure the card itself never scrolls */
@@ -50,7 +34,7 @@
   font-size: clamp(22px, 2.6vw, 28px);
   font-weight: 700;
   letter-spacing: .2px;
-  color: var(--yd-primary);
+  color: #32cd32;
   text-align: center;
 }
 
@@ -58,7 +42,7 @@
 .yieldup_grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--yd-gap);
+  gap: 12px;
 }
 
 /* Field group */
@@ -66,9 +50,9 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: var(--yd-card);
-  border: 1px solid var(--yd-border);
-  border-radius: var(--yd-radius-md);
+  background: #ffffff;
+  border: 1px solid #e5efe7;
+  border-radius: 12px;
   padding: 12px;
 }
 
@@ -76,39 +60,40 @@
 .yieldup_label {
   font-size: .95rem;
   font-weight: 600;
-  color: var(--yd-muted);
+  color: #6b756b;
   letter-spacing: .2px;
 }
 
-/* Inputs  */
+/* Inputs */
 .yieldup_input,
 .yieldup_inputdate,
 .yieldup_inputnumber {
   appearance: none;
   width: 100%;
   height: 44px;
-  border: 1px solid var(--yd-border);
+  border: 1px solid #e5efe7;
   border-radius: 12px;
-  background: #fff;
-  color: var(--yd-text);
+  background: #ffffff;
+  color: #101410;
   padding: 0 14px;
   outline: none;
   font-size: 1rem;
   transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
 }
-.yieldup_input::placeholder { color: var(--yd-muted); }
+.yieldup_input::placeholder { color: #6b756b; }
 
 /* Hover & focus */
 .yieldup_input:hover,
 .yieldup_inputdate:hover,
-.yieldup_inputnumber:hover { border-color: #d5e9dd; }
-
+.yieldup_inputnumber:hover {
+  border-color: #d5e9dd;
+}
 .yieldup_input:focus,
 .yieldup_inputdate:focus,
 .yieldup_inputnumber:focus {
-  border-color: var(--yd-primary);
-  box-shadow: 0 0 0 3px var(--yd-focus);
-  background: #fff;
+  border-color: #32cd32;
+  box-shadow: 0 0 0 3px #eaf7f0;
+  background: #ffffff;
 }
 
 /* Subtle invalid hint */
@@ -125,14 +110,14 @@
   cursor: pointer;
 }
 
-/* Remove number spinner */
+/* Remove number spinner (WebKit) */
 .yieldup_inputnumber::-webkit-outer-spin-button,
 .yieldup_inputnumber::-webkit-inner-spin-button { margin: 0; }
 
 /* Actions row */
 .yieldup_actions {
   display: flex;
-  justify-content: flex-start; /* left like sample; change to flex-end if you prefer */
+  justify-content: flex-start;
   margin-top: 6px;
 }
 
@@ -142,8 +127,8 @@
   padding: 0 18px;
   border: none;
   border-radius: 12px;
-  background: var(--yd-primary);
-  color: #fff;
+  background: #32cd32;
+  color: #ffffff;
   font-weight: 700;
   letter-spacing: .2px;
   cursor: pointer;
@@ -151,7 +136,7 @@
   transition: transform .08s ease, box-shadow .16s ease, background .16s ease;
 }
 .yieldup_button:hover {
-  background: var(--yd-primary-2);
+  background: #28a428;
   box-shadow: 0 10px 26px rgba(50,205,50,.30);
   transform: translateY(-1px);
 }
@@ -160,11 +145,12 @@
 /* Loading text */
 .yieldup_loading {
   text-align: center;
-  color: var(--yd-muted);
+  color: #6b756b;
   font-weight: 600;
   padding: 12px 0;
 }
 
+/* Responsive */
 @media (min-width: 900px) {
   .yieldup_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

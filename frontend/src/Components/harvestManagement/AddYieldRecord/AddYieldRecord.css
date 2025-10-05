@@ -1,30 +1,15 @@
 .yieldadd-form {
-  --ya-card: #ffffff;
-  --ya-card-header: #f0f3f6;
-  --ya-text: #000000;
-  --ya-muted: #6b7280;
-  --ya-border: #83e87f;
-  --ya-primary: #32cd32;
-  --ya-primary-hover: #28a428;
-  --ya-focus: #7eed92;
-  --ya-danger: #dc2626;
-
-  --ya-shadow: 0 8px 24px rgba(16, 24, 40, 0.1);
-  --ya-radius: 12px;
-}
-
-
-.yieldadd-form {
   width: 100%;
-  max-width: 480px;                 /* smaller like the sample */
+  max-width: 480px;                 
   margin: 24px auto;                /* center on the page */
-  padding: 0;                       /* card handles its own padding per row */
-  background: var(--ya-card);       
-  color: var(--ya-text);
-  border: 1px solid var(--ya-border);
-  border-radius: var(--ya-radius);
-  box-shadow: 0 0 0 3px rgba(50,205,50,.12), var(--ya-shadow);
-
+  padding: 0;                      
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #83e87f;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 3px rgba(50,205,50,0.12),
+    0 8px 24px rgba(16,24,40,0.10);
 
   display: grid;
   row-gap: 8px;                     /* tight vertical rhythm */
@@ -34,16 +19,16 @@
 /* Header strip */
 .yieldadd-form-header {
   padding: 16px 20px;
-  background: var(--ya-card-header);
-  border-bottom: 1px solid var(--ya-border);
-  border-top-left-radius: var(--ya-radius);
-  border-top-right-radius: var(--ya-radius);
+  background: #f0f3f6;
+  border-bottom: 1px solid #83e87f;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 .yieldadd-form-header h2 {
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  color: var(--ya-primary);         
+  color: #32cd32;
 }
 
 /* Each field row  */
@@ -51,13 +36,12 @@
   padding: 8px 20px;                /* compact spacing inside the card */
 }
 
-   
 .yieldadd_label {
   display: block;
   margin-top: 6px;
   margin-bottom: 6px;
   font-size: 12px;
-  color: var(--ya-muted);
+  color: #6b7280;
   user-select: none;
 }
 
@@ -65,15 +49,15 @@
 .yieldadd_input_date,
 .yieldadd_input_number,
 .yieldadd_input_text {
-  width: 90%;                       
+  width: 90%;
   display: block;
   margin: 0 auto;
   height: 36px;                     /* compact height */
   padding: 8px 12px;                /* compact padding */
-  border: 1px solid var(--ya-border);
+  border: 1px solid #83e87f;
   border-radius: 6px;
-  background: #fff;
-  color: var(--ya-text);
+  background: #ffffff;
+  color: #000000;
   font-size: 14px;
   outline: none;
   transition: border-color .15s ease, box-shadow .15s ease;
@@ -90,21 +74,26 @@
 .yieldadd_input_date:focus,
 .yieldadd_input_number:focus,
 .yieldadd_input_text:focus {
-  border-color: var(--ya-focus);
-  box-shadow: 0 0 0 3px rgba(178, 241, 173, 0.2);
+  border-color: #7eed92;
+  box-shadow: 0 0 0 3px rgba(178,241,173,0.2);
 }
 
 /* Number input polish */
 .yieldadd_input_number::-webkit-outer-spin-button,
-.yieldadd_input_number::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.yieldadd_input_number { -moz-appearance: textfield; }
+.yieldadd_input_number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.yieldadd_input_number {
+  -moz-appearance: textfield;
+}
 
 /* Select arrow (optional, subtle) */
 .yieldadd_input_text {
   appearance: none;
   background-image:
-    linear-gradient(45deg, transparent 50%, var(--ya-muted) 50%),
-    linear-gradient(135deg, var(--ya-muted) 50%, transparent 50%);
+    linear-gradient(45deg, transparent 50%, #6b7280 50%),
+    linear-gradient(135deg, #6b7280 50%, transparent 50%);
   background-position:
     calc(100% - 20px) calc(50% - 3px),
     calc(100% - 15px) calc(50% - 3px);
@@ -112,27 +101,30 @@
   background-repeat: no-repeat;
 }
 
-
 .yieldadd_submitbtn {
   height: 36px;
   padding: 0 16px;
   border-radius: 6px;
   border: none;
-  background: var(--ya-primary);
-  color: #fff;
+  background: #32cd32;
+  color: #ffffff;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
 
   justify-self: end;                /* align right */
-  margin: 8px 20px 16px;           /* compact margins like sample */
+  margin: 8px 20px 16px;          
 
   transition: background-color .12s ease, transform .06s ease;
 }
-.yieldadd_submitbtn:hover { background: var(--ya-primary-hover); }
-.yieldadd_submitbtn:active { transform: translateY(1px); }
+.yieldadd_submitbtn:hover {
+  background: #28a428;
+}
+.yieldadd_submitbtn:active {
+  transform: translateY(1px);
+}
 
-/
+/* Responsive */
 @media (max-width: 640px) {
   .yieldadd-form { margin: 16px auto; border-radius: 10px; }
   .yieldadd-form-header { padding: 14px 16px; }
@@ -149,6 +141,7 @@
   }
 }
 
+/* Motion safety */
 @media (prefers-reduced-motion: reduce) {
-  .yieldadd-form * { transition: none !important; }
+  .yieldadd-form * { transition: none; }
 }
