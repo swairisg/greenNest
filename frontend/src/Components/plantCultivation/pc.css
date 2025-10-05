@@ -63,3 +63,11 @@
 .pc-row.gap > *{min-width:160px}
 .pc-search-rows{display:flex;flex-direction:column;gap:10px}
 .pc-search .pc-btn + .pc-btn { margin-left: 4px; }
+
+
+
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700;text-transform:capitalize}
+.badge.planned{background:#eef2ff;color:#3730a3}
+.badge.active{background:#ecfdf5;color:#065f46}
+.badge.completed{background:#eff6ff;color:#1e40af}
+.badge.cancelled{background:#fef2f2;color:#991b1b}

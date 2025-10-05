@@ -41,6 +41,7 @@ import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalo
 
 import SectionHome from "./Components/plantCultivation/SectionHome";
 import SeedsPage from "./Components/plantCultivation/SeedsPage";
+import PlansPage from "./Components/plantCultivation/PlansPage";
 
 export default function App() {
   return (
@@ -100,14 +101,8 @@ export default function App() {
               />
               <Route path="/farmer/cultivation/seeds" element={<SeedsPage />} />
 
-              <Route
-                path="/farmer/cultivation/plans"
-                element={
-                  <div style={{ padding: 20 }}>
-                    Planting Plans — coming next
-                  </div>
-                }
-              />
+              <Route path="/farmer/cultivation/plans" element={<PlansPage />} />
+
               <Route
                 path="/farmer/cultivation/growth"
                 element={
