@@ -107,7 +107,7 @@ const HomePage = () => {
             </p>
             <div className="home-cta-buttons">
               <Link className="home-btn home-primary" to="/Aboutus">Learn More</Link>
-              <Link className="home-btn home-secondary" to="/contactus">Contact Us</Link>
+              <Link className="home-btn home-secondary" to="/visit/book">Contact Us</Link>
             </div>
           </div>
         </div>
@@ -164,7 +164,7 @@ const HomePage = () => {
           </div>
 
           <div className="home-crops-cta">
-            <Link className="home-btn home-primary" to="/products">
+            <Link className="home-btn home-primary" to="/catalog">
               View All Products
             </Link>
           </div>
