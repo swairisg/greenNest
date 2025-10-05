@@ -41,6 +41,7 @@ import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalo
 
 import SectionHome from "./Components/plantCultivation/SectionHome";
 import SeedsPage from "./Components/plantCultivation/SeedsPage";
+import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
 import GrowthPage from "./Components/plantCultivation/GrowthPage";
 
@@ -96,14 +97,10 @@ export default function App() {
               <Route path="/farmer/cultivation" element={<SectionHome />} />
               <Route
                 path="/farmer/cultivation/land"
-                element={
-                  <div style={{ padding: 20 }}>Land Prep — coming next</div>
-                }
+                element={<LandPrepPage />}
               />
               <Route path="/farmer/cultivation/seeds" element={<SeedsPage />} />
-
               <Route path="/farmer/cultivation/plans" element={<PlansPage />} />
-
               <Route
                 path="/farmer/cultivation/growth"
                 element={<GrowthPage />}

@@ -2,6 +2,7 @@ const express = require("express");
 const { ensureAuth, requireRoles } = require("../../middleware/auth");
 
 const seed = require("../../Controllers/plantCultivation/seedController");
+const land = require("../../Controllers/plantCultivation/landPrepController");
 const plan = require("../../Controllers/plantCultivation/planController");
 const growth = require("../../Controllers/plantCultivation/growthController");
 
@@ -16,6 +17,13 @@ router.post("/seeds", seed.create);
 router.get("/seeds/:id", seed.get);
 router.patch("/seeds/:id", seed.update);
 router.delete("/seeds/:id", seed.remove);
+
+// Land Preparation
+router.get("/land-prep", land.list);
+router.post("/land-prep", land.create);
+router.get("/land-prep/:id", land.get);
+router.patch("/land-prep/:id", land.update);
+router.delete("/land-prep/:id", land.remove);
 
 /* Plans */
 router.get("/plans", plan.list);
