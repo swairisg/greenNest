@@ -5,6 +5,7 @@ import "./pc.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
+
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
