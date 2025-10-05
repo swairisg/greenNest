@@ -9,7 +9,6 @@ import RequireAuth from "./routes/guards/RequireAuth";
 import RequireRole from "./routes/guards/RequireRole";
 
 import Home from "./pages/public/Home";
-import CustomerProfile from "./pages/profile/CustomerProfile";
 
 import Admin from "./pages/dashboards/Admin";
 import HR from "./pages/dashboards/HR";
@@ -17,7 +16,31 @@ import Finance from "./pages/dashboards/Finance";
 import Inventory from "./pages/dashboards/Inventory";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
+
+
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+
+
+import CustomerProfile from "./pages/profile/CustomerProfile";
+import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
+import BookVisit from "./Components/customers/BookVisit/BookVisit";
+import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess";
+import CustomerDashboard from "./Components/customers/CustomerDashboard/CustomerDashboard"
+import ContactUs from "./Components/customers/ContactUs/ContactUs";
+import Viewcontactus from "./Components/customers/ContactUs/ViewContactUs/Viewcontactus";
+
+
+import HRLayout from "./Components/tasksHR/HRLayout";
+import HROverview from "./Components/tasksHR/Overview";
+import HREmployees from "./Components/tasksHR/Employees";
+import HREmployeesNew from "./Components/tasksHR/EmployeesNew";
+import HRTasks from "./Components/tasksHR/Tasks";
+import HRTasksNew from "./Components/tasksHR/TasksNew";
+import HRAttendance from "./Components/tasksHR/Attendance";
+import HRPayroll from "./Components/tasksHR/Payroll";
+import HRPerformance from "./Components/tasksHR/Performance";
+import HRReports from "./Components/tasksHR/Reports";
+import HRSettings from "./Components/tasksHR/Settings";
 
 import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
 import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
@@ -42,12 +65,13 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<Login />} />
-
           <Route path="/auth/signup" element={<Signup />} />
 
           <Route element={<RequireRole roles={["customer"]} />}>
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<CustomerProfile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+
           </Route>
 
           <Route element={<RequireAuth />}>
@@ -55,8 +79,19 @@ export default function App() {
               <Route path="/admin" element={<Admin />} />
             </Route>
 
-            <Route element={<RequireRole roles={["hr_manager"]} />}>
-              <Route path="/hr" element={<HR />} />
+            <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
+              <Route path="/hr" element={<HRLayout />}>
+                <Route index element={<HROverview />} />
+                <Route path="employees" element={<HREmployees />} />
+                <Route path="employees/new" element={<HREmployeesNew />} />
+                <Route path="tasks" element={<HRTasks />} />
+                <Route path="tasks/new" element={<HRTasksNew />} />
+                <Route path="attendance" element={<HRAttendance />} />
+                <Route path="payroll" element={<HRPayroll />} />
+                <Route path="performance" element={<HRPerformance />} />
+                <Route path="reports" element={<HRReports />} />
+                <Route path="settings" element={<HRSettings />} />
+              </Route>
             </Route>
 
             <Route element={<RequireRole roles={["finance_manager"]} />}>
@@ -94,49 +129,21 @@ export default function App() {
       
       <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
 
+          {/*harvest schedule*/}
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
 
-          {/* Quality Control CRUD */}
-          <Route path="/quality" element={<QualityList />} />
-          <Route path="/quality/new" element={<QualityCreate />} />
-          <Route path="/quality/:id" element={<QualityDetail />} />
-          <Route path="/quality/:id/edit" element={<QualityEdit />} />
+          {/*customer and buyer management*/} 
+          <Route path="/visit/book" element={<BookVisit />} />
+          <Route path="/visit/success" element={<BookVisitSuccess />} />
+          <Route path="/visits/bookings" element={<CustomerDashboard />} />
 
-          {/* order crud (temporarily disabled until components are imported)
-          <Route path="/orders" element={<OrderList />} />
-          <Route path="/orders/new" element={<OrderForm />} />
-          <Route path="/orders/:id" element={<OrderDetail />} />
-          */}
+          {/*customer profile*/}
+          <Route path="/profile" element={<CustomerProfile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/viewcontactus" element={<Viewcontactus />} />
 
-<Route path="/orders" element={<OrderList />} />
-<Route path="/orders/:id" element={<OrderDetail />} />
-<Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
-          
-
-          {/*cart*/}
-          <Route path="/cart" element={<Cart />} />
-
-          
-
-        </Routes>
-
-        {/* Simple header/nav 
-      <header className="card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-        <h2 style={{ margin: 0 }}>GreenNest</h2>
-        <nav style={{ display: "flex", gap: 12 }}>
-          <NavLink to="/quality">Quality</NavLink>
-          <NavLink to="/quality/new">Add</NavLink>
-        </nav>
-      </header>*/}
-
-        {/*<main style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
-        
-        <Routes>
-          {/* redirect root to quality list 
-          
-
-         
         </Routes>
       </main>*/}
       </AuthProvider>
