@@ -30,6 +30,8 @@ app.use("/HarvestSchedules", harvestRouter);
 const hrRoutes = require("./Routes/tasksHR");
 app.use("/hr", hrRoutes);
 
+const plantCultRoutes = require("./Routes/plantCultivation");
+app.use("/plant-cultivation", plantCultRoutes);
 
 //customer
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
