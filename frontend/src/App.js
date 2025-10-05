@@ -11,7 +11,7 @@ import RequireRole from "./routes/guards/RequireRole";
 import Home from "./pages/public/Home";
 
 import Admin from "./pages/dashboards/Admin";
-import HR from "./pages/dashboards/HR";
+//import HR from "./pages/dashboards/HR";
 import Finance from "./pages/dashboards/Finance";
 import Inventory from "./pages/dashboards/Inventory";
 import Product from "./pages/dashboards/Product";
@@ -42,13 +42,22 @@ import HRPerformance from "./Components/tasksHR/Performance";
 import HRReports from "./Components/tasksHR/Reports";
 import HRSettings from "./Components/tasksHR/Settings";
 
+import PestDetectDisplay from "./Components/pestControl/PestDetectDisplay/PestDetectDisplay";
+import PestDetectAdd from "./Components/pestControl/PestDetectAdd/PestDetectAdd";
+import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/PestDetectDashboard";
 import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
 import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
 import PestDetectDashboard from './Components/pestControl/PestDetectDashboard/PestDetectDashboard';
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
-import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalogDashboard";
+
+import SectionHome from "./Components/plantCultivation/SectionHome";
+import SeedsPage from "./Components/plantCultivation/SeedsPage";
+import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
+import PlansPage from "./Components/plantCultivation/PlansPage";
+import GrowthPage from "./Components/plantCultivation/GrowthPage";
 
 export default function App() {
   return (
@@ -100,26 +109,56 @@ export default function App() {
 
             <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
               <Route path="/farmer" element={<Farmer />} />
+
+              <Route path="/farmer/cultivation" element={<SectionHome />} />
+              <Route
+                path="/farmer/cultivation/land"
+                element={<LandPrepPage />}
+              />
+              <Route path="/farmer/cultivation/seeds" element={<SeedsPage />} />
+              <Route path="/farmer/cultivation/plans" element={<PlansPage />} />
+              <Route
+                path="/farmer/cultivation/growth"
+                element={<GrowthPage />}
+              />
             </Route>
           </Route>
 
-      <Route path="/admin" element={<Admin />} />
-   
-      <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
-      <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
-      <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
-      <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
+          <Route path="/admin" element={<Admin />} />
 
-      {/* Product Catalog (Customer) */}
-      <Route path="/catalog" element={<CatalogPage />} />
+          <Route
+            path="/PestDetectDashboard"
+            element={<PestDetectDashboard />}
+          />
+          <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+          <Route
+            path="/pests/farmer"
+            element={<PestDetectAdd role="farmer" />}
+          />
+          <Route
+            path="/pests/:id/update"
+            element={<PestDetectAdd role="specialist" />}
+          />
 
-      {/*Product Catalog (Admin) */}
-      <Route path="/admin/products" element={<AdminProducts />} />
-      <Route path="/admin/products/new" element={<ProductCatalogForm />} />
-      <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
-       <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
-      
-      <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
+          {/* Product Catalog (Customer) */}
+          <Route path="/catalog" element={<CatalogPage />} />
+
+          {/*Product Catalog (Admin) */}
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/new" element={<ProductCatalogForm />} />
+          <Route
+            path="/admin/products/:id/edit"
+            element={<ProductCatalogForm />}
+          />
+          <Route
+            path="/admin/products/dashboard"
+            element={<ProductCatalogDashboard />}
+          />
+
+          <Route
+            path="*"
+            element={<div style={{ padding: 16 }}>404: Not found</div>}
+          />
 
           {/*harvest schedule*/}
           <Route path="/addharvestschedules" element={<AddSchedule />} />
@@ -141,28 +180,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-// frontend/src/App.js
-/*import "./App.css";
-import { useEffect, useState } from "react";
-import { api, API_BASE } from "./api";
-
-
-
-import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
-
-
-
-function App() {
-  return (
-    <Routes>
-  
-      
-      <Route path="/addharvestschedules" element={<AddSchedule />} />
-      
-
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
-}
-
-export default App;*/
