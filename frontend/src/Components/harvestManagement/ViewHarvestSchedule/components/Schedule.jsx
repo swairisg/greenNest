@@ -5,7 +5,7 @@ import { API_BASE } from "../../../../api";
 import Swal from "sweetalert2";
 
 
-//calculating expected harvest date
+//calculating expected harvest date using stratergy pattern / table-driven / dictionary (hash-map) dispatch.
 function getExpectedHarvestDate(cropType, plantedDate, ctx = {}) {
   const rules = {
     strawberry: ({ dayNeutral = false, tempFactor = 1 } = {}) =>
@@ -17,16 +17,22 @@ function getExpectedHarvestDate(cropType, plantedDate, ctx = {}) {
     tomatoes: ({ varietyDays = 70, greenhouseBoost = 0 } = {}) =>
       Math.max(55, Number(varietyDays) - Number(greenhouseBoost)),
 
-    lilly: ({ base = 90, extra = 0 } = {}) => Number(base) + Number(extra),
+    lilly: ({ base = 90, extra = 0 } = {}) => 
+      Number(base) + Number(extra),
   };
 
+  //avoids null undefined
   const key = String(cropType || "").toLowerCase().trim();
+  //pick rule function,default 10
   const daysFn = rules[key] || (() => 10); 
+  //max 0
   const days = Math.max(0, Math.floor(Number(daysFn(ctx)) || 0));
 
+  //bad planted date
   const d = new Date(plantedDate);
   if (isNaN(d.getTime())) return { date: null, days: 0 }; 
 
+  //added dates to planted date
   d.setDate(d.getDate() + days);
   return { date: d, days };
 }
@@ -34,13 +40,14 @@ function getExpectedHarvestDate(cropType, plantedDate, ctx = {}) {
 //Formatting date
 function formatDateLike(d) {
   if (!d) return "—";
-  const date = d instanceof Date ? d : new Date(d);
+  const date = d instanceof Date ? d : new Date(d); //ISO timestramp
   return isNaN(date.getTime())
     ? "—"
     : date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
 }
 
 //Changing due date status
+//due soon
 const DUE_SOON_DAYS = 7; 
 
 function startOfDay(d) {
@@ -49,6 +56,7 @@ function startOfDay(d) {
   return x;
 }
 
+//due soon and over due
 function derivedStatus(expectedDate, currentStatus) {
   if(currentStatus === "harvested" ){
     return currentStatus;
