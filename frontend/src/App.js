@@ -9,7 +9,6 @@ import RequireAuth from "./routes/guards/RequireAuth";
 import RequireRole from "./routes/guards/RequireRole";
 
 import Home from "./pages/public/Home";
-import CustomerProfile from "./pages/profile/CustomerProfile";
 
 import Admin from "./pages/dashboards/Admin";
 //import HR from "./pages/dashboards/HR";
@@ -17,7 +16,19 @@ import Finance from "./pages/dashboards/Finance";
 import Inventory from "./pages/dashboards/Inventory";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
+
+
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+
+
+import CustomerProfile from "./pages/profile/CustomerProfile";
+import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
+import BookVisit from "./Components/customers/BookVisit/BookVisit";
+import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess";
+import CustomerDashboard from "./Components/customers/CustomerDashboard/CustomerDashboard"
+import ContactUs from "./Components/customers/ContactUs/ContactUs";
+import Viewcontactus from "./Components/customers/ContactUs/ViewContactUs/Viewcontactus";
+
 
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
@@ -34,6 +45,9 @@ import HRSettings from "./Components/tasksHR/Settings";
 import PestDetectDisplay from "./Components/pestControl/PestDetectDisplay/PestDetectDisplay";
 import PestDetectAdd from "./Components/pestControl/PestDetectAdd/PestDetectAdd";
 import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/PestDetectDashboard";
+import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
+import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
+import PestDetectDashboard from './Components/pestControl/PestDetectDashboard/PestDetectDashboard';
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
@@ -57,6 +71,8 @@ export default function App() {
           <Route element={<RequireRole roles={["customer"]} />}>
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<CustomerProfile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+
           </Route>
 
           <Route element={<RequireAuth />}>
@@ -144,8 +160,21 @@ export default function App() {
             element={<div style={{ padding: 16 }}>404: Not found</div>}
           />
 
+          {/*harvest schedule*/}
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
+
+          {/*customer and buyer management*/} 
+          <Route path="/visit/book" element={<BookVisit />} />
+          <Route path="/visit/success" element={<BookVisitSuccess />} />
+          <Route path="/visits/bookings" element={<CustomerDashboard />} />
+
+          {/*customer profile*/}
+          <Route path="/profile" element={<CustomerProfile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/viewcontactus" element={<Viewcontactus />} />
+
         </Routes>
       </AuthProvider>
     </BrowserRouter>
