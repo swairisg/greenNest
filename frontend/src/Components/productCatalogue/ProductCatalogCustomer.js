@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../cart/cartUtils";
 import "./ProductCatalogCustomer.css";
@@ -46,7 +46,7 @@ function ProductCard({ p, onAdd }) {
         </div>
 
         <div className="sc-card-bottom">
-          <Price value={p.basePrice} />
+          <Price value={p.basePrice ?? p.price} />
           <button
             className="sc-btn sc-btn-primary"
             disabled={p.stockQuantity <= 0}
@@ -154,11 +154,9 @@ export default function CatalogPage() {
     }));
 
   const onAdd = (p) => {
-    const onAdd = (p) => {
-      if (p.stockQuantity <= 0 || p.isVisible === false) return;
-      addToCart(p, 1);
-      navigate("/cart"); 
-   };
+    if (p.stockQuantity <= 0 || p.isVisible === false) return;
+    addToCart(p, 1);
+    navigate("/cart");
   };
 
   // derive min/max from server range

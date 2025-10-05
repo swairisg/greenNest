@@ -1,5 +1,15 @@
+// src/App.js
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+
+import GreenNestFooter from "./Components/common/GreenNestFooter";
+import GreenNestHeader from "./Components/common/GreenNestHeader";
 
 import AuthProvider from "./auth/AuthProvider";
 import Login from "./pages/auth/Login";
@@ -59,6 +69,39 @@ import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/Pe
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
+import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalogDashboard";
+
+import QualityList from "./Components/qualityControl/QualityList";
+import QualityCreate from "./Components/qualityControl/QualityCreate";
+import QualityDetail from "./Components/qualityControl/QualityDetail";
+import QualityEdit from "./Components/qualityControl/QualityEdit";
+
+import Cart from "./Components/cart/Cart";
+import OrderList from "./Components/finance/Orders/OrderList";
+import OrderDetail from "./Components/finance/Orders/OrderDetail";
+
+function Layout({ children }) {
+  const location = useLocation();
+
+  // Hide header/footer on auth pages
+  const hideOnPaths = ["/auth/login", "/auth/signup"];
+  const shouldHide = hideOnPaths.includes(location.pathname);
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        background: "#fff",
+      }}
+    >
+      {!shouldHide && <GreenNestHeader />}
+      {children}
+      {!shouldHide && <GreenNestFooter />}
+    </div>
+  );
+}
 
 import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
 import Landing from "./pages/public/Landing/Landing";
@@ -76,6 +119,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+
+       
+
+     <Layout>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/welcome" element={<Landing />} />
@@ -91,34 +138,55 @@ export default function App() {
           <Route element={<RequireAuth />}>
             <Route element={<RequireRole roles={["admin"]} />}>
               <Route path="/admin" element={<Admin />} />
+
             </Route>
 
-            <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
-              <Route path="/hr" element={<HRLayout />}>
-                <Route index element={<HROverview />} />
-                <Route path="employees" element={<HREmployees />} />
-                <Route path="employees/new" element={<HREmployeesNew />} />
-                <Route path="tasks" element={<HRTasks />} />
-                <Route path="tasks/new" element={<HRTasksNew />} />
-                <Route path="attendance" element={<HRAttendance />} />
-                <Route path="payroll" element={<HRPayroll />} />
-                <Route path="performance" element={<HRPerformance />} />
-                <Route path="reports" element={<HRReports />} />
-                <Route path="settings" element={<HRSettings />} />
+            {/* Protected areas */}
+            <Route element={<RequireAuth />}>
+              {/* Admin */}
+              <Route element={<RequireRole roles={["admin"]} />}>
+                <Route path="/admin" element={<Admin />} />
               </Route>
-            </Route>
 
-            <Route element={<RequireRole roles={["finance_manager"]} />}>
-              <Route path="/finance" element={<Finance />} />
-            </Route>
+              {/* HR */}
+              <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
+                <Route path="/hr" element={<HRLayout />}>
+                  <Route index element={<HROverview />} />
+                  <Route path="employees" element={<HREmployees />} />
+                  <Route path="employees/new" element={<HREmployeesNew />} />
+                  <Route path="tasks" element={<HRTasks />} />
+                  <Route path="tasks/new" element={<HRTasksNew />} />
+                  <Route path="attendance" element={<HRAttendance />} />
+                  <Route path="payroll" element={<HRPayroll />} />
+                  <Route path="performance" element={<HRPerformance />} />
+                  <Route path="reports" element={<HRReports />} />
+                  <Route path="settings" element={<HRSettings />} />
+                </Route>
+              </Route>
 
-            <Route element={<RequireRole roles={["inventory_manager"]} />}>
-              <Route path="/inventory" element={<Inventory />} />
-            </Route>
+              {/* Finance / Inventory / Product / Farmer */}
+              <Route element={<RequireRole roles={["finance_manager"]} />}>
+                <Route path="/finance" element={<Finance />} />
+              </Route>
 
-            <Route element={<RequireRole roles={["product_manager"]} />}>
-              <Route path="/products" element={<Product />} />
-            </Route>
+              <Route element={<RequireRole roles={["inventory_manager"]} />}>
+                <Route path="/inventory" element={<Inventory />} />
+              </Route>
+
+              <Route element={<RequireRole roles={["product_manager"]} />}>
+                <Route path="/products" element={<Product />} />
+              </Route>
+
+
+           
+
+
+            
+
+            
+          
+        
+
 
             <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
               <Route path="/farmer" element={<Farmer />} />
@@ -216,8 +284,28 @@ export default function App() {
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/viewcontactus" element={<Viewcontactus />} />
+            
+            {/* Quality Control (matches backend /api/quality) */}
+            <Route path="/quality" element={<QualityList />} />
+            <Route path="/quality/new" element={<QualityCreate />} />
+            <Route path="/quality/:id" element={<QualityDetail />} />
+            <Route path="/quality/:id/edit" element={<QualityEdit />} />
+              
+              
+              {/* Orders */}
+            <Route path="/orders" element={<OrderList />} />
+            <Route path="/orders/:id" element={<OrderDetail />} />
+
+            {/* Cart */}
+            <Route path="/cart" element={<Cart />} />
+
+            {/* Final catch-all */}
+            <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
+              
         </Routes>
+        </Layout>
       </AuthProvider>
     </BrowserRouter>
   );
 }
+
