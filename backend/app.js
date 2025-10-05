@@ -3,8 +3,17 @@ require("dotenv").config(); // load .env exactly once
 
 const express = require("express");
 const mongoose = require("mongoose");
+const harvestRouter = require("./Routes/harvestManagement/harvest");
+const orderRoutes = require("./Routes/finance/orderRoute");
 
 const cors = require("cors");
+
+// temporary minimal users router to prevent crash
+const { Router } = require('express');
+const router = Router();
+router.get('/', (_req, res) => {
+  res.json({ message: 'Users route healthy' });
+});
 
 const app = express();
 
@@ -62,6 +71,9 @@ app.get("/", (_req, res) => res.send("Hello from backend"));
 /* ---------- routes ---------- */
 app.use("/auth", require("./Routes/auth"));
 
+
+const qualityRoutes = require("./Routes/qualityControl/qualityControlRoute");
+app.use("/api/quality", qualityRoutes);
 
 // connect DB then start server
 const PORT = Number(process.env.PORT) || 5001;
