@@ -91,3 +91,73 @@ html.dark body { background: var(--bg-dark); color: #e5e7eb; }
 html.dark .gn-card, html.dark .gn-topbar { background: #0b1220; border-color: #243044; }
 html.dark .gn-input { background: #0b1220; color: #e5e7eb; border-color: #243044; }
 html.dark .gn-btn.ghost { background: #0b1220; color: #e5e7eb; border-color: #243044; }
+
+
+
+/*  Authentication - login page */
+.gn-auth-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(1200px 400px at 50% -10%, color-mix(in oklab, var(--green-light) 65%, transparent), transparent 70%),
+    var(--bg-light);
+}
+
+.gn-auth-card {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.06);
+  padding: 28px 28px 22px;
+}
+
+.gn-auth-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.gn-auth-logo {
+  width: 48px; height: 48px; border-radius: 12px;
+  margin: 0 auto 10px;
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+}
+.gn-auth-title {
+  margin: 0; font-size: 28px; color: var(--text);
+}
+.gn-auth-sub {
+  margin: 6px 0 0; color: var(--muted); font-size: 14px;
+}
+
+.gn-auth-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.gn-label { font-weight: 600; font-size: 13px; color: var(--text); }
+
+.gn-input.lg { padding: 14px 14px; font-size: 15px; }
+
+.gn-password-wrap { position: relative; }
+.gn-eye {
+  position: absolute;
+  right: 8px; top: 50%; transform: translateY(-50%);
+  border: 1px solid var(--border);
+  background: #fff;
+  height: 34px; width: 40px; border-radius: 8px;
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+
+.gn-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.gn-btn.xl { padding: 14px; font-size: 16px; }
+
+.gn-auth-footer {
+  text-align: center;
+  margin-top: 14px;
+}
+

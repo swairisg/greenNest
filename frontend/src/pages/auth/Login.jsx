@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+
 
 const nextPathByUser = (user) => {
   const primary = user?.primaryRole;
@@ -22,67 +25,99 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPw, setShowPw] = useState(false); // <-- added
-  const [err, setErr] = useState("");
+  const [showPw, setShowPw] = useState(false); 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setEmail("");
     setPassword("");
-    setErr("");
   }, []);
 
-  const onSubmit = async (e) => {
+   const onSubmit = async (e) => {
     e.preventDefault();
-    setErr("");
     setLoading(true);
     try {
       const u = await login(email.trim(), password);
-      setEmail("");
-      setPassword("");
+
+      // success popup
+      await Swal.fire({
+        icon: "success",
+        title: "Signed in",
+        text: `Welcome back, ${u?.email || "user"}!`,
+        timer: 1200,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        position: "top",
+      });
+
+      setEmail(""); setPassword("");
       nav(nextPathByUser(u), { replace: true });
     } catch (e) {
-      setErr(e?.response?.data?.message || "Login failed");
+      const msg = e?.response?.data?.message || "Login failed";
+      await Swal.fire({
+        icon: "error",
+        title: "Login failed",
+        text: msg,
+        confirmButtonColor: "#22c55e", // your green
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="gn-container">
-      <div className="gn-card" style={{ maxWidth: 480, margin: "0 auto" }}>
-        <h2 style={{ marginTop: 0 }}>Login</h2>
 
-        <form
-          onSubmit={onSubmit}
-          autoComplete="off"
-          style={{ display: "grid", gap: 12 }}
-        >
+  return (
+    <main className="gn-auth-shell">
+      <div className="gn-auth-card">
+        <header className="gn-auth-header">
+          <div className="gn-auth-logo" aria-hidden />
+          <h1 className="gn-auth-title">Login</h1>
+          <p className="gn-auth-sub">Welcome back to GreenNest</p>
+        </header>
+
+        <form onSubmit={onSubmit} autoComplete="off" className="gn-auth-form">
+          <label className="gn-label" htmlFor="email">Email</label>
           <input
-            className="gn-input"
+            id="email"
+            className="gn-input lg"
             type="email"
             name="gn-email"
             autoComplete="off"
-            placeholder="Email"
+            placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
 
-          <input
-            className="gn-input"
-            type={showPw ? "text" : "password"}   // <-- toggle here
-            name="gn-pass"
-            autoComplete="new-password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            aria-label="Password"
-          />
+  {email && <div className="gn-hint">You’re signing in as <strong>{email}</strong></div>}
 
-          {/* Show password checkbox */}
-          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+
+          <label className="gn-label" htmlFor="password">Password</label>
+          <div className="gn-password-wrap">
+            <input
+              id="password"
+              className="gn-input lg"
+              type={showPw ? "text" : "password"}
+              name="gn-pass"
+              autoComplete="new-password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              aria-label="Password"
+            />
+            <button
+              type="button"
+              className="gn-eye"
+              aria-label={showPw ? "Hide password" : "Show password"}
+              onClick={() => setShowPw((s) => !s)}
+               title={showPw ? "Hide password" : "Show password"}
+            >
+              {showPw ? "🙈" : "👁️"}
+            </button>
+          </div>
+
+           <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <input
               type="checkbox"
               checked={showPw}
@@ -92,27 +127,16 @@ export default function Login() {
             <span className="text-muted" style={{ fontSize: 13 }}>Show password</span>
           </label>
 
-          {err && (
-            <div
-              className="gn-badge"
-              style={{
-                borderColor: "var(--strawberry-dark)",
-                color: "var(--strawberry-dark)",
-              }}
-            >
-              {err}
-            </div>
-          )}
-
-          <button type="submit" className="gn-btn primary" disabled={loading}>
-            {loading ? "Signing in..." : "Login"}
+          <button type="submit" className="gn-btn primary xl press" disabled={loading}>
+            {loading ? "Signing in…" : "Login"}
           </button>
         </form>
 
-        <p className="text-muted" style={{ marginTop: 12, textAlign: "center" }}>
-          Don’t have an account? <Link to="/auth/signup">Create one</Link>
-        </p>
+        <footer className="gn-auth-footer small">
+          <span className="text-muted">Don’t have an account?</span>{" "}
+          <Link to="/auth/signup" className="link-green">Create one</Link>
+        </footer>
       </div>
-    </div>
+    </main>
   );
 }
