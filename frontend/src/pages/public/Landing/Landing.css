@@ -1,0 +1,168 @@
+/* ===== GreenNest Landing — scoped by .lp ===== */
+.lp{
+  /* brand tokens */
+  --gn:#19a463; --gn-700:#0e7a46; --tint:#e6fff5;
+  --ink:#0f172a; --soft:#475569; --line:rgba(2,6,23,.08);
+
+  /* full-page background image + gentle tint (JS sets --lp-bg) */
+  background-image:
+    radial-gradient(1000px 460px at 80% -10%, rgba(230,255,245,.75), rgba(230,255,245,.25)),
+    var(--lp-bg);
+  background-size: auto, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
+
+  color:var(--ink);
+  min-height:100vh;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif;
+}
+
+/* layout helpers */
+.lp-container{max-width:1180px;margin:0 auto;padding:0 18px;}
+.lp-center{text-align:center;}
+.lp-soft{color:var(--soft);}
+.mt-16{margin-top:16px;}
+.hidden-sm{display:none;}
+@media (min-width:640px){.hidden-sm{display:inline-flex;}}
+
+/* ===== NAV ===== */
+.lp-nav{
+  position:sticky; top:0; z-index:20;
+  background:#ffffffcc; backdrop-filter:blur(8px);
+  border-bottom:1px solid #e5eef5;
+}
+.lp-nav-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;}
+.lp-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:-.02em;}
+.lp-logo{width:28px;height:28px;object-fit:contain;display:block;}
+.lp-links{display:flex;align-items:center;gap:14px;}
+.lp-links a{color:var(--soft);text-decoration:none;font-size:.95rem;padding:6px 10px;border-radius:10px;}
+.lp-links a:hover{background:#f1f5f9; color:#0f172a;}
+.lp-links .lp-btn{padding:8px 14px;border:1px solid #e2e8f0;border-radius:12px;font-weight:600;}
+.lp-links .lp-btn:hover{background:#f8fafc;}
+
+/* ===== BUTTONS ===== */
+.lp-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:12px;border:1px solid #e2e8f0;padding:10px 14px;
+  font-weight:700;text-decoration:none;color:var(--ink);
+  transition:background .15s ease,box-shadow .2s ease,transform .08s ease;
+}
+.lp-btn:active{transform:translateY(1px);}
+.lp-primary{background:var(--gn);color:#fff;border-color:var(--gn);box-shadow:0 10px 22px rgba(25,164,99,.25);}
+.lp-primary:hover{background:var(--gn-700);}
+.lp-outline{background:#fff;}
+.lp-outline:hover{background:#f8fafc;}
+
+/* ===== HERO ===== */
+.lp-hero{
+  padding:64px 0 48px;
+  /* a translucent backdrop so text is readable over photo */
+  background:linear-gradient(to bottom, rgba(255,255,255,.7), rgba(255,255,255,.55));
+  border-bottom:1px solid rgba(226,232,240,.8);
+}
+.lp-hero-grid{
+  display:grid; gap:24px; align-items:center;
+  grid-template-columns: 1.15fr 1fr;
+}
+.lp-hero h1{
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 900; letter-spacing:-.02em; line-height:1.1;
+  color:#0b1526;
+  text-shadow: 0 1px 0 #ffffff70;
+}
+.lp-hero p{
+  margin-top:12px; color:#1f2937;
+  background:#ffffffcc; padding:10px 12px; border-radius:12px;
+  max-width: 52ch;
+}
+.lp-actions{margin-top:16px; display:flex; flex-wrap:wrap; gap:10px;}
+/* right hero image card */
+.lp-hero-card{
+  border:1px solid #dcfce7; border-radius:22px; overflow:hidden;
+  box-shadow: 0 16px 40px rgba(2,6,23,.18);
+  background:#fff;
+}
+.lp-hero-card img{
+  display:block; width:100%; height:auto; object-fit:cover;
+  max-height:420px;
+}
+
+@media (max-width: 991px){
+  .lp-hero-grid{grid-template-columns: 1fr;}
+  .lp-hero-card img{max-height:360px;}
+}
+
+/* ===== SECTIONS ===== */
+.lp-section{padding:56px 0;}
+/* subtle white layer to ensure readability over background */
+.lp-section:not(.lp-muted){
+  background:#ffffffc2; backdrop-filter: blur(2px);
+}
+
+/* ===== FEATURES ===== */
+.lp-grid{display:grid; gap:16px; margin-top:18px;}
+@media (min-width:640px){.lp-grid{grid-template-columns:repeat(2,1fr);}}
+@media (min-width:1024px){.lp-grid{grid-template-columns:repeat(4,1fr);}}
+
+.lp-card{
+  background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; padding:18px;
+  box-shadow:0 8px 22px rgba(2,6,23,.06);
+  transition:transform .08s ease, box-shadow .2s ease;
+}
+.lp-card:hover{transform:translateY(-1px); box-shadow:0 16px 36px rgba(2,6,23,.10);}
+.lp-card h3{margin:2px 0 6px; font-size:1.05rem; font-weight:800;}
+.lp-card p{color:var(--soft);}
+
+/* ===== ABOUT ===== */
+.lp-muted{
+  background:#f8fafccc; backdrop-filter: blur(2px);
+  border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0;
+}
+.lp-about{display:grid; gap:18px; align-items:center;}
+.lp-about img{
+  width:100%; border:1px solid #dcfce7; border-radius:18px;
+  box-shadow:0 12px 28px rgba(2,6,23,.10);
+}
+@media (min-width: 992px){
+  .lp-about{grid-template-columns:1.1fr 1fr;}
+}
+/* contact cards (no form) */
+.lp-info-cards{
+  display:grid; gap:12px; margin-top:14px;
+}
+@media (min-width:640px){
+  .lp-info-cards{ grid-template-columns: repeat(3, 1fr); }
+}
+.lp-info-card{
+  display:flex; align-items:center; gap:12px;
+  background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; padding:14px;
+  box-shadow:0 8px 18px rgba(2,6,23,.05);
+}
+.lp-info-ico{
+  width:40px; height:40px; display:grid; place-items:center;
+  border-radius:10px; background:#ecfdf5; color:#065f46; font-size:18px;
+}
+.lp-info-title{ font-weight:700; }
+.lp-info-link{ color:#0f172a; text-decoration:none; }
+.lp-info-link:hover{ text-decoration:underline; }
+.lp-info-text{ color:#475569; }
+
+/* map box */
+.lp-map{
+  background:#ffffffdd; backdrop-filter:blur(2px);
+  border:1px solid #e2e8f0; border-radius:18px; overflow:hidden;
+  box-shadow:0 10px 24px rgba(2,6,23,.08); min-height:300px;
+}
+.lp-map iframe{ width:100%; height:100%; border:0; min-height:300px; }
+@media (min-width:992px){ .lp-map{ min-height:360px; } }
+
+/* ===== FOOTER ===== */
+.lp-footer{
+  background:#ffffffcc; backdrop-filter: blur(4px);
+  border-top:1px solid #e2e8f0; padding:18px 0;
+}
+.lp-footer-row{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+.lp-links{display:flex; gap:12px;}
+.lp-links a{text-decoration:none; color:var(--soft);}
+.lp-links a:hover{color:#0f172a;}

@@ -1,0 +1,228 @@
+/* Harvest Calculator Styles with harvestcal- prefix */
+.harvestcal-section {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.harvestcal-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.harvestcal-header h2 {
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+}
+
+.harvestcal-header p {
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.harvestcal-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 30px;
+  padding: 25px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.harvestcal-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.harvestcal-label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.harvestcal-select,
+.harvestcal-input {
+  padding: 10px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.harvestcal-select:focus,
+.harvestcal-input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.harvestcal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.harvestcal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.harvestcal-btn-calculate {
+  background: #27ae60;
+  color: white;
+}
+
+.harvestcal-btn-calculate:hover:not(:disabled) {
+  background: #219a52;
+}
+
+.harvestcal-btn-calculate:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.harvestcal-btn-reset {
+  background: #e74c3c;
+  color: white;
+}
+
+.harvestcal-btn-reset:hover {
+  background: #c0392b;
+}
+
+/* Calculation Results */
+.harvestcal-result {
+  background: #e8f5e8;
+  padding: 25px;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+  margin-bottom: 30px;
+}
+
+.harvestcal-result-title {
+  margin: 0 0 20px 0;
+  color: #27ae60;
+}
+
+.harvestcal-result-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.harvestcal-result-card {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.harvestcal-result-card-highlight {
+  background: #27ae60;
+  color: white;
+}
+
+.harvestcal-result-label {
+  font-size: 12px;
+  color: #7f8c8d;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.harvestcal-result-card-highlight .harvestcal-result-label {
+  color: white;
+}
+
+.harvestcal-result-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.harvestcal-result-card-highlight .harvestcal-result-value {
+  color: white;
+}
+
+.harvestcal-footnote {
+  text-align: center;
+}
+
+.harvestcal-footnote-text {
+  margin: 0;
+  font-size: 12px;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* Crop Reference */
+.harvestcal-reference {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.harvestcal-reference-title {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.harvestcal-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.harvestcal-reference-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 5px;
+  border-left: 3px solid #3498db;
+}
+
+.harvestcal-crop-name {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.harvestcal-yield-value {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.harvestcal-record-count {
+  font-size: 11px;
+  color: #7f8c8d;
+}
+
+/* Responsive Design for Calculator */
+@media (max-width: 768px) {
+  .harvestcal-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .harvestcal-actions {
+    justify-content: center;
+  }
+  
+  .harvestcal-result-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .harvestcal-reference-grid {
+    grid-template-columns: 1fr;
+  }
+}

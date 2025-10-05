@@ -26,13 +26,37 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/HarvestSchedules", harvestRouter);
+
+//harvest
+const harvestRouter = require("./Routes/harvestManagement/harvest");
+app.use("/HarvestSchedules",harvestRouter);
+
+const YieldRouter = require("./Routes/harvestManagement/Yield");
+app.use("/yieldRecords", YieldRouter);
+
+
+
 
 const hrRoutes = require("./Routes/tasksHR");
 app.use("/hr", hrRoutes);
 
-// Finance → Orders
-app.use("/api/finance/orders", orderRoutes);
+const plantCultRoutes = require("./Routes/plantCultivation");
+app.use("/plant-cultivation", plantCultRoutes);
+
+//customer
+const publicVisitRoutes = require("./Routes/customers/visitBooking");
+const authRouter = require("./Routes/auth");
+app.use("/public", publicVisitRoutes);
+
+app.use("/public", publicVisitRoutes);
+app.use(express.json());                     
+app.use("/api/auth", authRouter);
+
+const visitBookingRoutes = require("./Routes/customers/visitBooking");
+app.use("/api", visitBookingRoutes);
+
+const contactRoutes = require("./Routes/customers/contactUs/contactus");
+app.use(contactRoutes);
 
 
 // routes
