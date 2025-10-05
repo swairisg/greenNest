@@ -50,21 +50,7 @@ export const saveCart = (cart) => {
   
   // clear all
   export const clearCart = () => localStorage.removeItem("cart");
-  
-  // --- compatibility exports for Cart.jsx (non-breaking) ---
-  // Alias so components can call getCart()
-  export const getCart = loadCart;
-  
-  // Delta-based quantity updater used by the new Cart.jsx:
-  // updateQuantity(productId, delta) => adjusts qty by +delta / -delta, floors at 1
-  export const updateQuantity = (productId, delta = 0) => {
-    const cart = loadCart();
-    const idx = cart.findIndex(i => i.productId === productId);
-    if (idx === -1) return cart; // nothing to update
-    
-    const current = cart[idx];
-    const nextQty = Math.max(1, (Number(current.qty) || 0) + (Number(delta) || 0));
-    cart[idx] = { ...current, qty: nextQty };
-    saveCart(cart);
-    return cart;
-  };
+
+// compatibility aliases (so older code importing getCart/updateQuantity still works)
+export const getCart = loadCart;
+export const updateQuantity = updateQty;

@@ -154,31 +154,8 @@ export default function CatalogPage() {
     }));
 
   const onAdd = (p) => {
-    // guard: only allow adding visible, in-stock items
-    if (p?.stockQuantity <= 0 || p?.isVisible === false) return;
-
-    // normalize product shape for cart storage
-    const item = {
-      // IDs
-      productId: p._id || p.productId || p.id,
-
-      // Names
-      name: p.productName || p.name || p.title,
-
-      // Pricing (provide aliases so downstream cart/components can read any of these)
-      price: Number((p.basePrice ?? p.price ?? p.unitPrice ?? 0)),
-      unitPrice: Number((p.basePrice ?? p.price ?? p.unitPrice ?? 0)),
-
-      // Quantity default
-      qty: 1,
-
-      // Images (resolve first available)
-      image: Array.isArray(p.images) && p.images.length ? p.images[0] : (p.imageUrl || p.image || p.thumbnail || ""),
-      imageUrl: Array.isArray(p.images) && p.images.length ? p.images[0] : (p.imageUrl || p.image || p.thumbnail || ""),
-    };
-
-    // add to cart and navigate to cart page
-    addToCart(item);
+    if (p.stockQuantity <= 0 || p.isVisible === false) return;
+    addToCart(p, 1);
     navigate("/cart");
   };
 

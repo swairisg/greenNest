@@ -38,7 +38,6 @@ import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
 import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
-
 import QualityList from "./Components/qualityControl/QualityList";
 import QualityCreate from "./Components/qualityControl/QualityCreate";
 import QualityDetail from "./Components/qualityControl/QualityDetail";
@@ -47,7 +46,6 @@ import Cart from "./Components/cart/Cart";
 
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
-
 
 export default function App() {
   return (
@@ -127,20 +125,21 @@ export default function App() {
           <Route path="/quality/:id" element={<QualityDetail />} />
           <Route path="/quality/:id/edit" element={<QualityEdit />} />
 
-          {/* order crud (temporarily disabled until components are added/imported)
+          {/* order crud (temporarily disabled until components are imported)
           <Route path="/orders" element={<OrderList />} />
           <Route path="/orders/new" element={<OrderForm />} />
           <Route path="/orders/:id" element={<OrderDetail />} />
           */}
 
+<Route path="/orders" element={<OrderList />} />
+<Route path="/orders/:id" element={<OrderDetail />} />
+<Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
+          
+
           {/*cart*/}
           <Route path="/cart" element={<Cart />} />
 
-          <Route path="/catalog" element={<CatalogPage />} />
-
           
-          <Route path="/orders" element={<OrderList />} />
-          <Route path="/orders/:id" element={<OrderDetail />} />
 
         </Routes>
 
