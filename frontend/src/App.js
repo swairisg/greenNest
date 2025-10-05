@@ -38,10 +38,6 @@ import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
 
 import HarvestDashboard from "./Components/harvestManagement/harvestdashboard/HarvestDashboard";
 
-
-
-
-
 import CustomerProfile from "./pages/profile/CustomerProfile";
 import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
 import BookVisit from "./Components/customers/BookVisit/BookVisit";
@@ -80,11 +76,20 @@ import Cart from "./Components/cart/Cart";
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
 
+//import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+import Landing from "./pages/public/Landing/Landing";
+
+import SectionHome from "./Components/plantCultivation/SectionHome";
+import SeedsPage from "./Components/plantCultivation/SeedsPage";
+import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
+import PlansPage from "./Components/plantCultivation/PlansPage";
+import GrowthPage from "./Components/plantCultivation/GrowthPage";
+
 function Layout({ children }) {
   const location = useLocation();
 
   // Hide header/footer on auth pages
-  const hideOnPaths = ["/auth/login", "/auth/signup"];
+  const hideOnPaths = ["/auth/Login", "/auth/Signup", "/"];
   const shouldHide = hideOnPaths.includes(location.pathname);
 
   return (
@@ -103,42 +108,26 @@ function Layout({ children }) {
   );
 }
 
-import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
-import Landing from "./pages/public/Landing/Landing";
-
-
-
-import SectionHome from "./Components/plantCultivation/SectionHome";
-import SeedsPage from "./Components/plantCultivation/SeedsPage";
-import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
-import PlansPage from "./Components/plantCultivation/PlansPage";
-import GrowthPage from "./Components/plantCultivation/GrowthPage";
-
-
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/welcome" element={<Landing />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Signup />} />
 
-       
+            <Route element={<RequireRole roles={["customer"]} />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile" element={<CustomerProfile />} />
+              <Route path="/profile/edit" element={<EditProfile />} />
+            </Route>
 
-     <Layout>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/welcome" element={<Landing />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/signup" element={<Signup />} />
-
-          <Route element={<RequireRole roles={["customer"]} />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/profile" element={<CustomerProfile />} />
-            <Route path="/profile/edit" element={<EditProfile />} />
-          </Route>
-
-          <Route element={<RequireAuth />}>
+            <Route element={<RequireAuth />} />
             <Route element={<RequireRole roles={["admin"]} />}>
               <Route path="/admin" element={<Admin />} />
-
             </Route>
 
             {/* Protected areas */}
@@ -177,122 +166,144 @@ export default function App() {
                 <Route path="/products" element={<Product />} />
               </Route>
 
+              <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
+                <Route path="/farmer" element={<Farmer />} />
 
-           
-
-
-            
-
-            
-          
-        
-
-
-            <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
-              <Route path="/farmer" element={<Farmer />} />
-
-              <Route path="/farmer/cultivation" element={<SectionHome />} />
-              <Route
-                path="/farmer/cultivation/land"
-                element={<LandPrepPage />}
-              />
-              <Route path="/farmer/cultivation/seeds" element={<SeedsPage />} />
-              <Route path="/farmer/cultivation/plans" element={<PlansPage />} />
-              <Route
-                path="/farmer/cultivation/growth"
-                element={<GrowthPage />}
-              />
+                <Route path="/farmer/cultivation" element={<SectionHome />} />
+                <Route
+                  path="/farmer/cultivation/land"
+                  element={<LandPrepPage />}
+                />
+                <Route
+                  path="/farmer/cultivation/seeds"
+                  element={<SeedsPage />}
+                />
+                <Route
+                  path="/farmer/cultivation/plans"
+                  element={<PlansPage />}
+                />
+                <Route
+                  path="/farmer/cultivation/growth"
+                  element={<GrowthPage />}
+                />
+              </Route>
             </Route>
-          </Route>
 
-       <Route path="/addharvestschedules" element={<AddSchedule />} />
-       <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
-       <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
-       <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
+            <Route path="/addharvestschedules" element={<AddSchedule />} />
+            <Route
+              path="/viewharvestschedules/:id"
+              element={<UpdateSchedule />}
+            />
+            <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
+            <Route
+              path="/yieldrecords/edit/:id"
+              element={<EditYieldRecord />}
+            />
 
+            <Route element={<HarvestLayout />}>
+              <Route path="/harvestdashboard" element={<HarvestDashboard />} />
+              <Route path="/viewharvestschedules" element={<ViewSchedule />} />
+              <Route path="/ViewYieldRecords" element={<ViewYield />} />
+            </Route>
 
-      <Route element={<HarvestLayout />}>
-        <Route path="/harvestdashboard" element={<HarvestDashboard />} />
-        <Route path="/viewharvestschedules" element={<ViewSchedule />} />
-        <Route path="/ViewYieldRecords" element={<ViewYield />} />
-      </Route>
+            <Route path="/admin" element={<Admin />} />
 
-      <Route path="/admin" element={<Admin />} />
-   
-      <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
-      <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
-      <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
-      <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
+            <Route
+              path="/PestDetectDashboard"
+              element={<PestDetectDashboard />}
+            />
+            <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+            <Route
+              path="/pests/farmer"
+              element={<PestDetectAdd role="farmer" />}
+            />
+            <Route
+              path="/pests/:id/update"
+              element={<PestDetectAdd role="specialist" />}
+            />
 
-      {/* Product Catalog (Customer) */}
-      <Route path="/catalog" element={<CatalogPage />} />
+            {/* Product Catalog (Customer) */}
+            <Route path="/catalog" element={<CatalogPage />} />
 
-      {/*Product Catalog (Admin) */}
-      <Route path="/admin/products" element={<AdminProducts />} />
-      <Route path="/admin/products/new" element={<ProductCatalogForm />} />
-      <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
-       <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
-      
-      <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
+            {/*Product Catalog (Admin) */}
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route
+              path="/admin/products/new"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/:id/edit"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/dashboard"
+              element={<ProductCatalogDashboard />}
+            />
 
-          <Route path="/admin" element={<Admin />} />
+            <Route
+              path="*"
+              element={<div style={{ padding: 16 }}>404: Not found</div>}
+            />
 
-          <Route
-            path="/PestDetectDashboard"
-            element={<PestDetectDashboard />}
-          />
-          <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
-          <Route
-            path="/pests/farmer"
-            element={<PestDetectAdd role="farmer" />}
-          />
-          <Route
-            path="/pests/:id/update"
-            element={<PestDetectAdd role="specialist" />}
-          />
+            <Route path="/admin" element={<Admin />} />
 
-          {/* Product Catalog (Customer) */}
-          <Route path="/catalog" element={<CatalogPage />} />
+            <Route
+              path="/PestDetectDashboard"
+              element={<PestDetectDashboard />}
+            />
+            <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+            <Route
+              path="/pests/farmer"
+              element={<PestDetectAdd role="farmer" />}
+            />
+            <Route
+              path="/pests/:id/update"
+              element={<PestDetectAdd role="specialist" />}
+            />
 
-          {/*Product Catalog (Admin) */}
-          <Route path="/admin/products" element={<AdminProducts />} />
-          <Route path="/admin/products/new" element={<ProductCatalogForm />} />
-          <Route
-            path="/admin/products/:id/edit"
-            element={<ProductCatalogForm />}
-          />
-          <Route
-            path="/admin/products/dashboard"
-            element={<ProductCatalogDashboard />}
-          />
+            {/* Product Catalog (Customer) */}
+            <Route path="/catalog" element={<CatalogPage />} />
 
-          <Route
-            path="*"
-            element={<div style={{ padding: 16 }}>404: Not found</div>}
-          />
+            {/*Product Catalog (Admin) */}
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route
+              path="/admin/products/new"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/:id/edit"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/dashboard"
+              element={<ProductCatalogDashboard />}
+            />
 
+            <Route
+              path="*"
+              element={<div style={{ padding: 16 }}>404: Not found</div>}
+            />
 
-          <Route path="*" element={<Navigate to="/auth/login" replace />} />
+            <Route path="*" element={<Navigate to="/auth/login" replace />} />
 
-          {/*customer and buyer management*/}
-          <Route path="/visit/book" element={<BookVisit />} />
-          <Route path="/visit/success" element={<BookVisitSuccess />} />
-          <Route path="/visits/bookings" element={<CustomerDashboard />} />
+            {/*customer and buyer management*/}
+            <Route path="/visit/book" element={<BookVisit />} />
+            <Route path="/visit/success" element={<BookVisitSuccess />} />
+            <Route path="/visits/bookings" element={<CustomerDashboard />} />
 
-          {/*customer profile*/}
-          <Route path="/profile" element={<CustomerProfile />} />
-          <Route path="/profile/edit" element={<EditProfile />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/viewcontactus" element={<Viewcontactus />} />
-            
+            {/*customer profile*/}
+            <Route path="/profile" element={<CustomerProfile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/viewcontactus" element={<Viewcontactus />} />
+
             {/* Quality Control (matches backend /api/quality) */}
             <Route path="/quality" element={<QualityList />} />
             <Route path="/quality/new" element={<QualityCreate />} />
             <Route path="/quality/:id" element={<QualityDetail />} />
             <Route path="/quality/:id/edit" element={<QualityEdit />} />
-              
-              
-              {/* Orders */}
+
+            {/* Orders */}
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/:id" element={<OrderDetail />} />
 
@@ -300,12 +311,13 @@ export default function App() {
             <Route path="/cart" element={<Cart />} />
 
             {/* Final catch-all */}
-            <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
-              
-        </Routes>
+            <Route
+              path="*"
+              element={<div style={{ padding: 16 }}>404: Not found</div>}
+            />
+          </Routes>
         </Layout>
       </AuthProvider>
     </BrowserRouter>
   );
 }
-

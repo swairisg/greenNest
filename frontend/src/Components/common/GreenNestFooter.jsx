@@ -71,10 +71,10 @@ export default function GreenNestFooter() {
           <Link to="/about" style={linkStyle}>
             About Us
           </Link>
-          <Link to="/contact" style={linkStyle}>
+          <Link to="/contactus" style={linkStyle}>
             Contact Us
           </Link>
-          <Link to="/schedule" style={linkStyle}>
+          <Link to="/visit/book" style={linkStyle}>
             Book a Schedule
           </Link>
         </div>
@@ -183,7 +183,7 @@ export default function GreenNestFooter() {
               fontSize: 13,
             }}
           >
-            @GreenNest (static)
+            GreenNest
           </div>
         </div>
       </div>

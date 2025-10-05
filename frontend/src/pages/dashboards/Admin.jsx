@@ -92,13 +92,13 @@ export default function Admin() {
         </div>
         <nav className="gn-admin-nav">
           <Link to="/admin" className="active">Dashboard</Link>
-          <Link to="/admin/ops">Greenhouse Ops</Link>
+          <Link to="/farmer">Greenhouse Ops</Link>
           <Link to="/hr">HR & Tasks</Link>
           <Link to="/inventory">Inventory & Supply</Link>
           <Link to="/admin/Products/dashboard">Products & Pricing</Link>
-          <Link to="/finance">Sales & Finance</Link>
+          
           <Link to="/visits/bookings">Customers & Buyers</Link>
-          <Link to="/orderMangement">Order Management</Link>
+          <Link to="/orders">Order Management</Link>
         </nav>
         <div className="gn-admin-sidefooter">
           <small>© {new Date().getFullYear()} GreenNest</small>

@@ -60,7 +60,7 @@ export default function GreenNestHeader() {
 
         {/* Desktop nav */}
         <nav className="gn-nav">
-          <NavLink to="/" style={linkStyle}>Home</NavLink>
+          <NavLink to="/home" style={linkStyle}>Home</NavLink>
           <NavLink to="/catalog" style={linkStyle}>Products</NavLink>
           <NavLink to="/cart" style={linkStyle}>Cart</NavLink>
           <NavLink to="/profile" style={linkStyle}>Profile</NavLink>
