@@ -5,7 +5,8 @@ import "./farmer.css";
 import Hero from "../../assests/farmer-hero.jpg";          
 import TileCultivation from "../../assests/tile-cultivation.jpg"; 
 import TileClimate from "../../assests/tile-climate.jpg";         
-import TileHarvest from "../../assests/tile-harvest.jpg";        
+import TileHarvest from "../../assests/tile-harvest.jpg"; 
+       
 
 
 export default function Farmer() {
@@ -71,7 +72,7 @@ export default function Farmer() {
 
         <nav className="fd-actions">
           <Link className="fd-link" to="/farmer/tasks">Assigned Tasks</Link>
-          <Link className="fd-link" to="/profile">Profile</Link>
+          <Link className="fd-link" to="/employee/profile">Profile</Link>
           <button className="fd-btn danger" onClick={handleLogout}>Logout</button>
         </nav>
       </header>

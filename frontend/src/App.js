@@ -18,6 +18,15 @@ import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+import ViewSchedule from "./Components/harvestManagement/ViewHarvestSchedule/ViewSchedule";
+import UpdateSchedule from "./Components/harvestManagement/UpdateHarvestSchedule/UpdateSchedule";
+
+import AddYieldRecord from "./Components/harvestManagement/AddYieldRecord/AddYieldRecord";
+import ViewYield from "./Components/harvestManagement/ViewYieldRecord/ViewYield";
+import EditYieldRecord from "./Components/harvestManagement/EditYieldRecord/EditYieldRecord";
+import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
+
+import HarvestDashboard from "./Components/harvestManagement/harvestdashboard/HarvestDashboard";
 
 import CustomerProfile from "./pages/profile/CustomerProfile";
 import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
@@ -46,7 +55,9 @@ import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/Pe
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
+
 import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalogDashboard";
+import Landing from "./pages/public/Landing/Landing";
 
 import SectionHome from "./Components/plantCultivation/SectionHome";
 import SeedsPage from "./Components/plantCultivation/SeedsPage";
@@ -118,6 +129,20 @@ export default function App() {
             </Route>
           </Route>
 
+          <Route path="/addharvestschedules" element={<AddSchedule />} />
+          <Route
+            path="/viewharvestschedules/:id"
+            element={<UpdateSchedule />}
+          />
+          <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
+          <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
+
+          <Route element={<HarvestLayout />}>
+            <Route path="/harvestdashboard" element={<HarvestDashboard />} />
+            <Route path="/viewharvestschedules" element={<ViewSchedule />} />
+            <Route path="/ViewYieldRecords" element={<ViewYield />} />
+          </Route>
+
           <Route path="/admin" element={<Admin />} />
 
           <Route
@@ -154,8 +179,42 @@ export default function App() {
             element={<div style={{ padding: 16 }}>404: Not found</div>}
           />
 
-          {/*harvest schedule*/}
-          <Route path="/addharvestschedules" element={<AddSchedule />} />
+          <Route path="/admin" element={<Admin />} />
+
+          <Route
+            path="/PestDetectDashboard"
+            element={<PestDetectDashboard />}
+          />
+          <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+          <Route
+            path="/pests/farmer"
+            element={<PestDetectAdd role="farmer" />}
+          />
+          <Route
+            path="/pests/:id/update"
+            element={<PestDetectAdd role="specialist" />}
+          />
+
+          {/* Product Catalog (Customer) */}
+          <Route path="/catalog" element={<CatalogPage />} />
+
+          {/*Product Catalog (Admin) */}
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/new" element={<ProductCatalogForm />} />
+          <Route
+            path="/admin/products/:id/edit"
+            element={<ProductCatalogForm />}
+          />
+          <Route
+            path="/admin/products/dashboard"
+            element={<ProductCatalogDashboard />}
+          />
+
+          <Route
+            path="*"
+            element={<div style={{ padding: 16 }}>404: Not found</div>}
+          />
+
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
 
           {/*customer and buyer management*/}
@@ -168,6 +227,24 @@ export default function App() {
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/viewcontactus" element={<Viewcontactus />} />
+
+          <Route
+            path="/employee/profile"
+            element={
+              <RequireAuth>
+                {/* optionally a role-guard for internal roles */}
+                <EmployeeProfile />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/employee/profile/edit"
+            element={
+              <RequireAuth>
+                <EditEmployeeProfile />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
