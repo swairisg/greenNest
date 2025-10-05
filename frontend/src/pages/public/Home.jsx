@@ -28,7 +28,7 @@ export default function Home() {
 
         <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
           <Link className="gn-btn primary" to="/profile">View My Profile</Link>
-          <Link className="gn-btn ghost" to="/products">Shop Products</Link>
+          <Link className="gn-btn ghost" to="/catalog">Shop Products</Link>
         </div>
       </div>
     </div>

@@ -1,38 +1,38 @@
-// src/auth/AuthProvider.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { api } from "../api";
+import api from "../api";
 
-const AuthCtx = createContext(null);
+const AuthCtx = createContext();
 export const useAuthCtx = () => useContext(AuthCtx);
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("gn_user") || "null"); }
-    catch { return null; }
-  });
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+
+  // keep axios default header in sync
+  useEffect(() => {
+    if (token) api.defaults.headers.common.Authorization = `Bearer ${token}`;
+    else delete api.defaults.headers.common.Authorization;
+  }, [token]);
 
   const login = async (email, password) => {
-    const { data } = await api.post("/auth/login", { email, password });
-    const u = data?.data?.user;          // expects { name, phone, address, ... }
-    setUser(u);
-    localStorage.setItem("gn_user", JSON.stringify(u));
-    return u;
+    const res = await api.post("/auth/login", { email, password });
+    const { token: t, data } = res.data || {};
+    if (!t) throw new Error("No token from server");
+
+    localStorage.setItem("token", t);
+    setToken(t);
+    setUser(data?.user || null);
+    return data?.user;
   };
 
-  const logout = async () => {
-    try { await api.post("/auth/logout"); } finally {
-      setUser(null);
-      localStorage.removeItem("gn_user");
-    }
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+    setUser(null);
   };
-
-  // Optional: keep localStorage in sync if setUser is used elsewhere
-  useEffect(() => {
-    if (user) localStorage.setItem("gn_user", JSON.stringify(user));
-  }, [user]);
 
   return (
-    <AuthCtx.Provider value={{ user, setUser, login, logout }}>
+    <AuthCtx.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthCtx.Provider>
   );

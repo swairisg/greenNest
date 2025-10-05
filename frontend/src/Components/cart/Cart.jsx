@@ -53,7 +53,6 @@ export default function Cart() {
       setItems(getCart());
     }
   };
-
   const remove = (productId) => {
     removeFromCart(productId);
     setItems(getCart());
@@ -63,18 +62,17 @@ export default function Cart() {
     if (!items.length) return;
 
     // Try to pick a sensible userId; adjust based on your auth shape
-    const userId =
-      user?.id || user?._id || user?.userId || user?.uid || "guest";
+    const userId = localStorage.getItem("userId");
 
     // Build payload the backend expects
     const payload = {
       userId,
       items: items.map(i => ({
-           productId: i.productId,
-            name: i.name,           // REQUIRED by your orderItemSchema
-            qty: i.qty,
-            unitPrice: i.price,
-          })),
+    productId: i.productId,
+    name: i.name,           // REQUIRED by your orderItemSchema
+    qty: i.qty,
+    unitPrice: i.price,
+  })),
       // You can extend with shipping, notes, etc.
       // shipping: { method: "Standard" }
     };
