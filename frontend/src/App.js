@@ -49,6 +49,14 @@ import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
 import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+import QualityList from "./Components/qualityControl/QualityList";
+import QualityCreate from "./Components/qualityControl/QualityCreate";
+import QualityDetail from "./Components/qualityControl/QualityDetail";
+import QualityEdit from "./Components/qualityControl/QualityEdit";
+import Cart from "./Components/cart/Cart";
+
+import OrderList from "./Components/finance/Orders/OrderList";
+import OrderDetail from "./Components/finance/Orders/OrderDetail";
 
 export default function App() {
   return (
@@ -137,6 +145,7 @@ export default function App() {
           <Route path="/viewcontactus" element={<Viewcontactus />} />
 
         </Routes>
+      </main>*/}
       </AuthProvider>
     </BrowserRouter>
   );

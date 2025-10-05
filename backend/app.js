@@ -9,6 +9,13 @@ const mongoose = require("mongoose");
 
 const cors = require("cors");
 
+// temporary minimal users router to prevent crash
+const { Router } = require('express');
+const router = Router();
+router.get('/', (_req, res) => {
+  res.json({ message: 'Users route healthy' });
+});
+
 const app = express();
 
 // middleware
