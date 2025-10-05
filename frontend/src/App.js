@@ -46,7 +46,11 @@ import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/Pe
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
-import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalogDashboard";
+
+import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+import Landing from "./pages/public/Landing/Landing";
+
+
 
 import SectionHome from "./Components/plantCultivation/SectionHome";
 import SeedsPage from "./Components/plantCultivation/SeedsPage";
@@ -54,12 +58,14 @@ import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
 import GrowthPage from "./Components/plantCultivation/GrowthPage";
 
+
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Navigate to="/auth/login" replace />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/welcome" element={<Landing />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<Signup />} />
 

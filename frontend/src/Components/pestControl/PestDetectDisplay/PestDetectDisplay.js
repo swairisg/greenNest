@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./PestDetectDisplay.css";
@@ -8,56 +8,73 @@ import PestDetectFilter from "../PestDetectFilter/PestDetectFilter";
 
 const URL = `${API_BASE}/users`;
 
-const fetchHandler = async (params = {}) => {
-  const query = new URLSearchParams(params).toString();
-  const u = query ? `${URL}?${query}` : URL;
-  return await axios.get(u).then((res) => res.data);
+const fetchHandler = async () => {
+  const { data } = await axios.get(URL); // no params since backend doesn't filter
+  return data;
 };
 
+// helpers for safe/consistent comparisons
+const toStr = (v) => (v == null ? "" : String(v));
+const norm = (s) => toStr(s).trim().toLowerCase();
+
 export default function PestDetectDisplay() {
-  const [rows, setRows] = useState([]);
+  const [allRows, setAllRows] = useState([]); // master copy
+  const [rows, setRows] = useState([]);       // filtered view
   const [loading, setLoading] = useState(false);
 
   const [crop, setCrop] = useState("");
   const [severity, setSeverity] = useState("");
 
+  // Load once
   useEffect(() => {
-    setLoading(true);
-    fetchHandler()
-      .then((data) => setRows(data.users || []))
-      .finally(() => setLoading(false));
+    (async () => {
+      setLoading(true);
+      try {
+        const data = await fetchHandler();
+        const list = data?.users || [];
+        setAllRows(list);
+        setRows(list); // start unfiltered
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  const onSearch = async (e) => {
+  // Local filter (runs when crop/severity/allRows change)
+  const filtered = useMemo(() => {
+    const c = norm(crop);
+    const sev = norm(severity); // expecting "", "low", "moderate", "high"
+
+    return allRows.filter((u) => {
+      const matchesCrop = c ? norm(u?.crop).includes(c) : true;
+
+      // DB field is likely "severity_level" (string like "Low"/"Moderate"/"High")
+      const dbSev = norm(u?.severity_level || u?.severity);
+      const matchesSeverity = sev ? dbSev === sev : true;
+
+      return matchesCrop && matchesSeverity;
+    });
+  }, [allRows, crop, severity]);
+
+  // Apply filter on search submit (no server call)
+  const onSearch = (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const params = {};
-      if (crop) params.crop = crop;
-      if (severity) params.severity = severity;
-      const data = await fetchHandler(params);
-      setRows(data.users || []);
-    } finally {
-      setLoading(false);
-    }
+    setRows(filtered);
   };
 
-  const onClear = async () => {
+  // Clear to original list
+  const onClear = () => {
     setCrop("");
     setSeverity("");
-    setLoading(true);
-    try {
-      const data = await fetchHandler();
-      setRows(data.users || []);
-    } finally {
-      setLoading(false);
-    }
+    setRows(allRows);
   };
 
+  // Keep both lists in sync on delete
   const onDelete = async (id) => {
     if (!window.confirm("Delete this report?")) return;
     try {
       await axios.delete(`${URL}/${id}`);
+      setAllRows((prev) => prev.filter((u) => u._id !== id));
       setRows((prev) => prev.filter((u) => u._id !== id));
     } catch (e) {
       alert(e.response?.data?.message || e.message || "Delete failed");
