@@ -1,6 +1,6 @@
 const Automation = require("../../Model/climateCheck/AutomationSettings");
 
-// Create a new automation threshold
+//new automation
 const addThreshold = async (req, res) => {
   try {
     const { parameter, minValue, maxValue } = req.body;
@@ -12,7 +12,7 @@ const addThreshold = async (req, res) => {
   }
 };
 
-// Read all thresholds
+//read 
 const getThresholds = async (req, res) => {
   try {
     const thresholds = await Automation.find();
@@ -22,7 +22,7 @@ const getThresholds = async (req, res) => {
   }
 };
 
-// Update a threshold
+//update
 const updateThreshold = async (req, res) => {
   try {
     const { minValue, maxValue, isActive } = req.body;
@@ -43,7 +43,7 @@ const updateThreshold = async (req, res) => {
   }
 };
 
-// Delete a threshold
+//delete
 const deleteThreshold = async (req, res) => {
   try {
     const { id } = req.params;

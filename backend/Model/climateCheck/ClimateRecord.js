@@ -1,6 +1,5 @@
 require('dotenv').config(); 
 const mongoose = require('mongoose');
-//const { climateConnection } = require('../../config/database');
 const Schema = mongoose.Schema;
 
 const climateRecordSchema = new Schema({
@@ -20,7 +19,7 @@ const climateRecordSchema = new Schema({
     type: String,
     required: true,
   },
-  timestamp: {//when rec created
+  timestamp: {//when rec create
     type: Date,
     default: Date.now,
   },

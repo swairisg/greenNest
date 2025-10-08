@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DriverDataDisplay from "../../../Components/inventory/itemDataDisplay/DriverDataDisplay";
 
-const API_URL = "http://localhost:5000/api/drivers";
+const API_URL = "http://localhost:5001/api/drivers";
 
 function DriverManagement() {
   const [drivers, setDrivers] = useState([]);

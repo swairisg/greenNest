@@ -58,7 +58,7 @@ const getAllItems = async (req, res, next) => {
 //create item
 const createItem = async (req, res, next) => {
   try {
-    console.log("📦 CREATE ITEM REQUEST BODY:", JSON.stringify(req.body, null, 2));
+    console.log("CREATE ITEM REQUEST BODY:", JSON.stringify(req.body, null, 2));
     
     const {
       name,
@@ -113,7 +113,7 @@ const createItem = async (req, res, next) => {
       isActive: true
     };
 
-    console.log("💾 Saving item data:", itemData);
+    console.log("Saving item data:", itemData);
 
     const item = new Inventory(itemData);
     await item.save();
@@ -122,7 +122,7 @@ const createItem = async (req, res, next) => {
     const populatedItem = await Inventory.findById(item._id)
       .populate('supplierId', 'name companyName contactPerson email phone');
     
-    console.log("✅ Item created successfully:", populatedItem._id);
+    console.log("Item created successfully:", populatedItem._id);
     
     return res.status(201).json({ 
       success: true, 
@@ -130,7 +130,7 @@ const createItem = async (req, res, next) => {
       item: populatedItem
     });
   } catch (error) {
-    console.error("❌ Error creating item:", error);
+    console.error("Error creating item:", error);
     
     // validation errors
     if (error.name === 'ValidationError') {
@@ -305,11 +305,10 @@ const getLowStockItems = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  getAllItems,
-  createItem,
-  getItemById,
-  updateItem,
-  softDeleteItem,
-  getLowStockItems
-};
+
+ exports.getAllItems = getAllItems;
+  exports.createItem=createItem;
+  exports.getItemById=getItemById;
+  exports.updateItem =updateItem;
+  exports.softDeleteItem=softDeleteItem;
+  exports.getLowStockItems=getLowStockItems;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TransactionDataDisplay from "../../../Components/inventory/itemDataDisplay/TransactionDataDisplay";
 
-const API_URL = "http://localhost:5000/api/transactions";
+const API_URL = "http://localhost:5001/api/transactions";
 
 function TransactionManagement() {
   const [transactions, setTransactions] = useState([]);
@@ -57,7 +57,7 @@ function TransactionManagement() {
 
   const fetchInventoryItems = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/items");
+      const response = await axios.get("http://localhost:5001/api/items");
       setInventoryItems(response.data.items || []);
     } catch (err) {
       console.error("Error fetching inventory items:", err);
@@ -66,7 +66,7 @@ function TransactionManagement() {
 
   const fetchSuppliers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/suppliers");
+      const response = await axios.get("http://localhost:5001/api/suppliers");
       setSuppliers(response.data.suppliers || []);
     } catch (err) {
       console.error("Error fetching suppliers:", err);

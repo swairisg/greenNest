@@ -1,10 +1,8 @@
-
-require('dotenv').config(); 
 const express = require("express");
 const router = express.Router();
 
 //insert model
-const ClimateRecord = require('../../Model/climateCheck/ClimateRecord');// Corrected path
+const ClimateRecord = require('../../Model/climateCheck/ClimateRecord');//corrected path
 //insert controller
 const climateController = require('../../Controllers/climateCheck/ClimateController');
 
@@ -25,6 +23,4 @@ router.post("/", climateController.addClimateData);//create
 router.put("/:id", climateController.updateClimateData);//update
 router.delete("/:id", climateController.deleteClimateData);//delete
 
-
 module.exports = router;
-//

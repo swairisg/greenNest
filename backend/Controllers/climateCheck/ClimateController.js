@@ -1,7 +1,6 @@
-
-const ClimateRecord = require("../../models/ClimateMonitoring/ClimateRecord"); // Corrected path
-const axios = require("axios"); //for http requests
-const moment = require("moment-timezone"); //for timezone handling, moment library
+const ClimateRecord = require("../../Model/climateCheck/ClimateRecord");
+const axios = require("axios");
+const moment = require("moment-timezone");
 const climateAlertService = require('../../utils/climateAlertService');
 
 const generateSection = () => {//location generator 
@@ -64,9 +63,7 @@ const getClimateRecordById = async (req, res, next) => {
   }
 };
 
-// Get dashboard data
-
-//insert data
+// Insert data
 const addClimateData = async (req, res, next) => {
   try {
     const {
@@ -173,7 +170,7 @@ const getLatestData = async (req, res, next) => {
       });
     }
     
-    //return the exact format your React component expects
+    //return
     return res.status(200).json({ 
       success: true, 
       data: latestRecord  //react looks for response.data.data
@@ -187,6 +184,19 @@ const getLatestData = async (req, res, next) => {
     });
   }
 };
+{/*
+const getLatestClimateRecord = async (req, res, next) => {
+  try {
+    const latestRecord = await ClimateRecord.findOne().sort({ createdAt: -1 });
+    if (!latestRecord) {
+      return res.status(404).json({ success: false, message: "No climate data found" });
+    }
+    return res.status(200).json({ success: true, data: latestRecord });
+  } catch (err) {
+    console.error("Error fetching latest record:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};*/}
 
 const getDashboardData = async (req, res, next) => {
   try {
@@ -223,34 +233,27 @@ const getDashboardData = async (req, res, next) => {
   }
 };
 
-// Fetch external weather data and save to DB
+//fetch climate data from ApI
 const fetchAndStoreExternalData = async (req, res) => {
   try {
     const lat = process.env.DEFAULT_LAT || 6.9497;
     const lng = process.env.DEFAULT_LNG || 80.7891;
+
     const weatherParams = "airTemperature,humidity";
     const bioParams = "soilMoisture";
 
-    const weatherURL = `${process.env.STORMGLASS_WEATHER_URL}?lat=${lat}&lng=${lng}&params=${weatherParams}`;
-    const bioURL = `${process.env.STORMGLASS_BIO_URL}?lat=${lat}&lng=${lng}&params=${bioParams}`;
-    const apiKey = process.env.STORMGLASS_API_KEY;
-
-    if (!apiKey) {
-      return res.status(500).json({
-        success: false,
-        message: "API key not configured"
-      });
-    }
+    const URL = `${process.env.STORMGLASS_WEATHER_URL}?lat=${lat}&lng=${lng}&params=${weatherParams}`;
+    const URL2 = `${process.env.STORMGLASS_BIO_URL}?lat=${lat}&lng=${lng}&params=${bioParams}`;
 
     const [weatherResponse, bioResponse] = await Promise.all([
-      axios.get(weatherURL, {
-        headers: {
-          Authorization: apiKey,
-        },
+      axios.get(URL, { 
+        headers: { 
+          Authorization: process.env.STORMGLASS_API_KEY 
+        }, 
       }),
-      axios.get(bioURL, {
-        headers: {
-          Authorization: apiKey,
+      axios.get(URL2, {
+         headers: { 
+          Authorization: process.env.STORMGLASS_API_KEY 
         },
       }),
     ]);
@@ -277,10 +280,14 @@ const fetchAndStoreExternalData = async (req, res) => {
     
     return res.status(201).json({ success: true, data: savedData });
   } catch (err) {
-    console.error("Error fetching external data:", err.response?.data || err.message);
+    console.error(
+      "Error fetching external data:", 
+      err.response?.data || err.message);
     return res
       .status(500)
-      .json({ message: "Unable to fetch external data", error: err.message });
+      .json({ 
+        message: "Unable to fetch external data", 
+        error: err.message });
   }
 };
 
@@ -320,4 +327,3 @@ module.exports = {
   deleteOldRecords,
   fetchAndStoreExternalData,
 };
-// Schema for operation logs

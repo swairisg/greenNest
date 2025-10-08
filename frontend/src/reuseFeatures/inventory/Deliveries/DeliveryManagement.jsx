@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import DeliveryDataDisplay from "../../../Components/inventory/itemDataDisplay/DeliveryDataDisplay";
-const API_URL = "http://localhost:5000/api/deliveries";
+const API_URL = "http://localhost:5001/api/deliveries";
 
 function DeliveryManagement() {
   const [deliveries, setDeliveries] = useState([]);

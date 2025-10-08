@@ -49,7 +49,6 @@ const AlertHistorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Index for efficient querying
 AlertHistorySchema.index({ parameter: 1, createdAt: -1 });
 AlertHistorySchema.index({ isResolved: 1 });
 

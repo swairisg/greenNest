@@ -1,4 +1,5 @@
 const twilio = require("twilio");
+const climateAlertService = require("./climateAlertService");
 
 class WhatsAppService {
   constructor() {
@@ -9,7 +10,7 @@ class WhatsAppService {
       );
     } else {
       console.log(
-        "⚠️ Twilio credentials not found - WhatsApp service running in demo mode"
+        "Twilio credentials not found"
       );
       this.client = null;
     }
@@ -18,7 +19,7 @@ class WhatsAppService {
   // Send low stock alert
   async sendLowStockAlert(item, currentStock, minStockLevel) {
     try {
-      const message = `🔴 LOW STOCK ALERT\n\nItem: ${item.name}\nSKU: ${item.sku}\nCurrent Stock: ${currentStock}\nMinimum Required: ${minStockLevel}\n\nPlease reorder immediately.`;
+      const message = `LOW STOCK ALERT\n\nItem: ${item.name}\nSKU: ${item.sku}\nCurrent Stock: ${currentStock}\nMinimum Required: ${minStockLevel}\n\nPlease reorder immediately.`;
 
       if (this.client) {
         await this.client.messages.create({
@@ -26,12 +27,12 @@ class WhatsAppService {
           from: `whatsapp:${process.env.TWILIO_WHATSAPP_NUMBER}`,
           to: `whatsapp:${process.env.MANAGER_PHONE_NUMBER}`,
         });
-        console.log("✅ WhatsApp low stock alert sent");
+        console.log("WhatsApp low stock alert sent");
       } else {
-        console.log("📱 DEMO WhatsApp Message:", message);
+        console.log("DEMO WhatsApp Message:", message);
       }
     } catch (error) {
-      console.error("❌ WhatsApp error:", error);
+      console.error("WhatsApp error:", error);
     }
   }
 
@@ -46,9 +47,9 @@ class WhatsAppService {
         to: `whatsapp:${supplier.phone}`,
       });
 
-      console.log("✅ WhatsApp PO update sent");
+      console.log("WhatsApp PO update sent");
     } catch (error) {
-      console.error("❌ WhatsApp error:", error);
+      console.error(" WhatsApp error:", error);
     }
   }
 
@@ -60,21 +61,21 @@ class WhatsAppService {
           from: `whatsapp:${process.env.TWILIO_WHATSAPP_NUMBER}`,
           to: `whatsapp:${phoneNumber}`,
         });
-        console.log("✅ WhatsApp alert sent to:", phoneNumber);
+        console.log("WhatsApp alert sent to:", phoneNumber);
       } else {
-        console.log("📱 DEMO WhatsApp Alert to", phoneNumber, ":", message);
+        console.log("DEMO WhatsApp Alert to", phoneNumber, ":", message);
       }
 
       return { success: true, message: "Alert notification sent" };
     } catch (error) {
-      console.error("❌ WhatsApp alert error:", error);
+      console.error("WhatsApp alert error:", error);
       return { success: false, error: error.message };
     }
   }
   // Send delivery update
   async sendDeliveryUpdate(delivery, driver) {
     try {
-      const message = `🚚 DELIVERY UPDATE\n\nDelivery: ${delivery.deliveryNumber}\nDriver: ${driver.name}\nStatus: ${delivery.status}\nExpected Delivery: ${delivery.scheduledDeliveryTime}\n\nTrack your delivery in real-time.`;
+      const message = `DELIVERY UPDATE\n\nDelivery: ${delivery.deliveryNumber}\nDriver: ${driver.name}\nStatus: ${delivery.status}\nExpected Delivery: ${delivery.scheduledDeliveryTime}\n\nTrack your delivery in real-time.`;
 
       await this.client.messages.create({
         body: message,
@@ -82,9 +83,9 @@ class WhatsAppService {
         to: `whatsapp:${process.env.CUSTOMER_PHONE_NUMBER}`,
       });
 
-      console.log("✅ WhatsApp delivery update sent");
+      console.log("WhatsApp delivery update sent");
     } catch (error) {
-      console.error("❌ WhatsApp error:", error);
+      console.error("WhatsApp error:", error);
     }
   }
 }

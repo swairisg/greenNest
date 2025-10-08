@@ -17,7 +17,7 @@ function ReportGenerator() {
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/reports/dashboard/stats');
+      const response = await axios.get('http://localhost:5001/api/reports/dashboard/stats');
       setStats(response.data.data);
     } catch (err) {
       console.error('Error fetching stats:', err);
@@ -26,7 +26,7 @@ function ReportGenerator() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/reports/stock${categoryFilter ? `?category=${categoryFilter}` : ''}`);
+      const response = await axios.get(`http://localhost:5001/api/reports/stock${categoryFilter ? `?category=${categoryFilter}` : ''}`);
       setItems(response.data.data);
     } catch (err) {
       console.error('Error fetching items:', err);
@@ -38,7 +38,7 @@ function ReportGenerator() {
       setLoading(true);
       setError("");
       
-      const response = await axios.get(`http://localhost:5000/api/reports/export/csv${categoryFilter ? `?category=${categoryFilter}` : ''}`, {
+      const response = await axios.get(`http://localhost:5001/api/reports/export/csv${categoryFilter ? `?category=${categoryFilter}` : ''}`, {
         responseType: 'blob'
       });
 
@@ -64,7 +64,7 @@ function ReportGenerator() {
       setPdfLoading(true);
       setError("");
       
-      const response = await axios.get(`http://localhost:5000/api/reports/stock?format=pdf${categoryFilter ? `&category=${categoryFilter}` : ''}`, {
+      const response = await axios.get(`http://localhost:5001/api/reports/stock?format=pdf${categoryFilter ? `&category=${categoryFilter}` : ''}`, {
         responseType: 'blob'
       });
 

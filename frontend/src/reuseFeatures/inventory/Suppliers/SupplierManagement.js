@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SupplierDataDisplay from "../../../Components/inventory/itemDataDisplay/SupplierDataDisplay";
 
-const API_URL = "http://localhost:5000/api/suppliers";
+const API_URL = "http://localhost:5001/api/suppliers";
 
 function SupplierManagement() {
   const [suppliers, setSuppliers] = useState([]);

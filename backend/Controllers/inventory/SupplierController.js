@@ -2,8 +2,8 @@ const Supplier = require("../../Model/inventory/SupplierModel");
 
 const createSupplier = async (req, res, next) => {
   try {
-    console.log("✅ Supplier model loaded successfully");
-    console.log("📦 Request body:", req.body);
+    console.log("Supplier model loaded successfully");
+    console.log("Request body:", req.body);
     
     const supplier = new Supplier(req.body);
     console.log("🔧 Supplier instance created");

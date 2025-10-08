@@ -14,8 +14,8 @@ import {
   X,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/items";
-const SUPPLIERS_API_URL = "http://localhost:5000/api/suppliers";
+const API_URL = "http://localhost:5001/api/items";
+const SUPPLIERS_API_URL = "http://localhost:5001/api/suppliers";
 
 function InventoryManagement() {
   const [items, setItems] = useState([]);

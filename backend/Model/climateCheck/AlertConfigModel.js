@@ -30,19 +30,18 @@ const AlertConfigSchema = new mongoose.Schema(
       enum: ['email', 'whatsapp', 'sms', 'in_app'] 
     }],
     recipients: [{ 
-      type: String  // email or phone numbers
+      type: String
     }],
     alertMessage: String,
     cooldownMinutes: { 
       type: Number, 
-      default: 30  // Prevent spam alerts
+      default: 30
     },
     lastTriggered: Date
   },
   { timestamps: true }
 );
 
-//compound index for efficient querying
 AlertConfigSchema.index({ parameter: 1, isActive: 1 });
 
 module.exports = mongoose.model("AlertConfig", AlertConfigSchema);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import OrderDataDisplay from "../../../Components/inventory/itemDataDisplay/OrderDataDisplay";
 
-const API_URL = "http://localhost:5000/api/orders";
+const API_URL = "http://localhost:5001/api/orders";
 
 function OrderManagement() {
   const [orders, setOrders] = useState([]);

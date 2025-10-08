@@ -14,10 +14,13 @@ import CustomerProfile from "./pages/profile/CustomerProfile";
 import Admin from "./pages/dashboards/Admin";
 import HR from "./pages/dashboards/HR";
 import Finance from "./pages/dashboards/Finance";
-import Inventory from "./pages/dashboards/Inventory";
+//import Inventory from "./pages/dashboards/Inventory";
+import InventoryManagement from "./reuseFeatures/inventory/Inventory/InventoryManagement";
+
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
+import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
 
 import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
 import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
@@ -26,6 +29,7 @@ import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
 import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+import Inventory from "./Components/inventory/itemDataDisplay/InventoryDisplay";
 
 export default function App() {
   return (
@@ -55,8 +59,11 @@ export default function App() {
               <Route path="/finance" element={<Finance />} />
             </Route>
 
-            <Route element={<RequireRole roles={["inventory_manager"]} />}>
+            {/*<Route element={<RequireRole roles={["inventory_manager"]} />}>
               <Route path="/inventory" element={<Inventory />} />
+            </Route>*/}
+            <Route element={<RequireRole roles={["inventory_manager"]} />}>
+              <Route path="/inventory" element={<InventoryManagement/>}/>
             </Route>
 
             <Route element={<RequireRole roles={["product_manager"]} />}>
@@ -65,6 +72,7 @@ export default function App() {
 
             <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
               <Route path="/farmer" element={<Farmer />} />
+              <Route path="/climate" element={<ClimateMonitoring />} />
             </Route>
           </Route>
 
