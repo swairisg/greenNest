@@ -1,7 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+//const harvestRouter = require("./Routes/harvestManagement/harvest");
+const orderRoutes = require("./Routes/finance/orderRoute");
+
 const cors = require("cors");
+
+// temporary minimal users router to prevent crash
+const { Router } = require("express");
+const router = Router();
+router.get("/", (_req, res) => {
+  res.json({ message: "Users route healthy" });
+});
 
 const app = express();
 
@@ -14,8 +24,35 @@ app.use(
 );
 app.use(express.json());
 
-// ---------- Import Routes ----------
+//harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
+app.use("/HarvestSchedules", harvestRouter);
+
+const YieldRouter = require("./Routes/harvestManagement/Yield");
+app.use("/yieldRecords", YieldRouter);
+
+const hrRoutes = require("./Routes/tasksHR");
+app.use("/hr", hrRoutes);
+
+const plantCultRoutes = require("./Routes/plantCultivation");
+app.use("/plant-cultivation", plantCultRoutes);
+
+//customer
+const publicVisitRoutes = require("./Routes/customers/visitBooking");
+const authRouter = require("./Routes/auth");
+app.use("/public", publicVisitRoutes);
+
+app.use("/public", publicVisitRoutes);
+app.use(express.json());
+app.use("/api/auth", authRouter);
+
+const visitBookingRoutes = require("./Routes/customers/visitBooking");
+app.use("/api", visitBookingRoutes);
+
+const contactRoutes = require("./Routes/customers/contactUs/contactus");
+app.use(contactRoutes);
+
+// routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
 const productRoutes = require("./Routes/productCatalogue/ProductRoute");
 const authRoutes = require("./Routes/auth");
@@ -115,6 +152,11 @@ app.use((req, res) => {
   });
 });
 
+const qualityRoutes = require("./Routes/qualityControl/qualityControlRoute");
+app.use("/api/quality", qualityRoutes);
+
+app.use("/api/finance/orders", orderRoutes);
+
 // ---------- Connect to MongoDB and Start Server ----------
 const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGO_URI;
@@ -124,10 +166,17 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
+const EmployeeProfile = require("./Model/tasksHR/EmployeeProfile");
 mongoose
   .connect(MONGO_URI)
-  .then(() => {
-    console.log("✅ Connected to MongoDB");
+  .then(async () => {
+    console.log("Connected to MongoDB");
+    console.log("DB:", mongoose.connection.name);
+
+    // Ensure indexes are in place (safe to call on every boot)
+    await User.syncIndexes();
+    await EmployeeProfile.syncIndexes();
+
     app.listen(PORT, () => {
       console.log(`🚀 Server listening on http://localhost:${PORT}`);
     });

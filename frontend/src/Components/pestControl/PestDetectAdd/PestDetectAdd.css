@@ -15,14 +15,19 @@
 
 *{box-sizing:border-box}
 html,body,#root{height:100%}
-body{margin:0;font-family:Inter,Urbanist,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";color:var(--text);background:#fff}
+body{
+  margin:0;
+  font-family:Inter,Urbanist,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";
+  color:var(--text);
+  background:#fff
+}
 
 .pd-container{max-width:960px;margin:24px auto;padding:0 16px}
-
 .pd-title{margin:0 0 12px 0;font-size:1.6rem;font-weight:800}
 
 .pd-form{
-  display:grid;gap:16px;
+  display:grid;
+  gap:16px;
   background:var(--card);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
@@ -33,7 +38,10 @@ body{margin:0;font-family:Inter,Urbanist,system-ui,-apple-system,Segoe UI,Roboto
 }
 
 .pd-fieldset{
-  margin:0;padding:14px;border:1px solid var(--card-bdr);border-radius:14px
+  margin:0;
+  padding:14px;
+  border:1px solid var(--card-bdr);
+  border-radius:14px
 }
 .pd-legend{padding:0 8px;font-weight:800;color:var(--muted)}
 
@@ -60,10 +68,9 @@ body{margin:0;font-family:Inter,Urbanist,system-ui,-apple-system,Segoe UI,Roboto
   box-shadow:0 0 0 3px rgba(34,197,94,.18)
 }
 
+/* Disabled fieldset visual */
 .pd-fieldset:disabled,
-.pd-fieldset[disabled]{
-  opacity:.85
-}
+.pd-fieldset[disabled]{opacity:.85}
 .pd-fieldset:disabled .pd-input,
 .pd-fieldset:disabled .pd-select,
 .pd-fieldset:disabled .pd-textarea{
@@ -71,11 +78,18 @@ body{margin:0;font-family:Inter,Urbanist,system-ui,-apple-system,Segoe UI,Roboto
   cursor:not-allowed
 }
 
+/* ===== Buttons ===== */
 .pd-btn{
   justify-self:start;
-  appearance:none;border:0;border-radius:999px;padding:10px 16px;
-  font-weight:700;cursor:pointer;line-height:1;
-  background:var(--btn);color:#fff;
+  appearance:none;
+  border:0;
+  border-radius:999px;
+  padding:10px 16px;
+  font-weight:700;
+  cursor:pointer;
+  line-height:1;
+  background:var(--btn);
+  color:#fff;
   transition:transform .06s ease,background-color .2s ease,box-shadow .2s ease;
   box-shadow:0 2px 0 rgba(0,0,0,.08)
 }
@@ -87,7 +101,10 @@ body{margin:0;font-family:Inter,Urbanist,system-ui,-apple-system,Segoe UI,Roboto
 
 .pd-loading,
 .pd-error{
-  margin-top:12px;padding:12px;border-radius:12px;text-align:center
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  text-align:center
 }
 .pd-loading{background:rgba(255,255,255,.6);border:1px dashed #e5e7eb;color:#475569}
 .pd-error{background:#fee2e2;border:1px solid #fecaca;color:#7f1d1d}
@@ -95,4 +112,45 @@ body{margin:0;font-family:Inter,Urbanist,system-ui,-apple-system,Segoe UI,Roboto
 @media (max-width:720px){
   .pd-row{grid-template-columns:1fr}
   .pd-btn{width:100%}
+}
+
+
+/* red helper text under fields */
+.pd-help.is-error{
+  color:var(--danger);
+  font-size:12px;
+  line-height:1.35;
+  margin:4px 0 0 0;
+}
+
+/* red borders + soft glow on invalid controls */
+.pd-input.is-invalid,
+.pd-select.is-invalid,
+.pd-textarea.is-invalid{
+  border-color:var(--danger) !important;
+  box-shadow:0 0 0 3px rgba(220,38,38,.12);
+  outline:none;
+}
+
+/* keep consistent focus when invalid + focused */
+.pd-input.is-invalid:focus,
+.pd-select.is-invalid:focus,
+.pd-textarea.is-invalid:focus{
+  border-color:var(--danger);
+  box-shadow:0 0 0 3px rgba(220,38,38,.18);
+}
+
+/* provide extra spacing when an error follows a row */
+.pd-row + .pd-help.is-error{margin-top:6px}
+
+/* optional global alert (use with role="alert") */
+.pd-alert{
+  background:#fff7f7;
+  border-left:4px solid #fecaca;
+  border:1px solid #ffe0e0;
+  color:#7a1b1b;
+  padding:10px 12px;
+  border-radius:12px;
+  box-shadow:0 6px 16px rgba(0,0,0,.04);
+  margin-bottom:12px;
 }

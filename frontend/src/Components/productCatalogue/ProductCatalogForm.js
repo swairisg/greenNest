@@ -1,4 +1,3 @@
-// src/Components/productCatalogue/ProductCatalogForm.js
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { ProductsAPI, uploadToCloudinary } from "../../api";
@@ -16,7 +15,6 @@ const EMPTY = {
   description: "",
 };
 
-// === Schema-enforced enums (from your Mongoose model) ====================
 const ENUMS = {
   types: [
     "Flagship Section – Premium Strawberries",
@@ -30,11 +28,9 @@ const ENUMS = {
   tags: ["Organic", "Seasonal", "Limited Edition", "Premium", "Eco-Friendly", "New Arrival"],
 };
 
-// fallbacks if /products/filters is empty; but we will still validate against ENUMS
 const FALLBACK_CATEGORIES = ENUMS.categories;
 const FALLBACK_TYPES = ENUMS.types;
 
-// ============== helpers / validators (mirror your schema) ================
 function toStringArray(arr = []) {
   return (arr || [])
     .map((x) => {
@@ -56,8 +52,7 @@ const IMG_URL_RE = /^(https?:\/\/)[^\s]+?\.(png|jpg|jpeg|gif|webp)(\?.*)?$/i;
 const MONEY_RE = /^\d+(\.\d{1,2})?$/;
 
 const isFiniteNum = (v) => Number.isFinite(Number(v));
-const isNonNegInteger = (v) =>
-  String(v).trim() !== "" && Number.isInteger(Number(v)) && Number(v) >= 0;
+const isNonNegInteger = (v) => String(v).trim() !== "" && Number.isInteger(Number(v)) && Number(v) >= 0;
 
 const LIMITS = {
   nameMin: 2,
@@ -68,7 +63,7 @@ const LIMITS = {
   priceMax: 10000,
   stockMin: 0,
   stockMax: 100000,
-  imgMax: 10, // UI cap
+  imgMax: 10,
 };
 
 function uniqueNormalized(arr = []) {
@@ -129,10 +124,8 @@ function validate(form) {
   const stockRaw = String(form.stockQuantity).trim();
   const stock = Number(form.stockQuantity);
   if (stockRaw === "") errors.stockQuantity = "Stock quantity is required";
-  else if (!isNonNegInteger(stock))
-    errors.stockQuantity = "Stock quantity must be an integer";
-  else if (stock < LIMITS.stockMin)
-    errors.stockQuantity = "Stock quantity cannot be negative";
+  else if (!isNonNegInteger(stock)) errors.stockQuantity = "Stock quantity must be an integer";
+  else if (stock < LIMITS.stockMin) errors.stockQuantity = "Stock quantity cannot be negative";
   else if (stock > LIMITS.stockMax)
     errors.stockQuantity = `Stock quantity cannot exceed ${LIMITS.stockMax}`;
 
@@ -146,8 +139,7 @@ function validate(form) {
   } else {
     const bad = images.find((u) => !IMG_URL_RE.test(u));
     if (bad) errors.images = "Images must be valid URLs to PNG/JPG/JPEG/GIF/WEBP";
-    if (images.length > LIMITS.imgMax)
-      errors.images = `Too many images (max ${LIMITS.imgMax})`;
+    if (images.length > LIMITS.imgMax) errors.images = `Too many images (max ${LIMITS.imgMax})`;
   }
 
   return {
@@ -184,6 +176,13 @@ function mapServerErrors(resData) {
   return out;
 }
 
+// --- NEW: validate one field on blur (inline feedback)
+function validateOne(name, value, form) {
+  const draft = { ...form, [name]: value };
+  const { errors } = validate(draft);
+  return errors[name];
+}
+
 export default function ProductCatalogForm() {
   const { id } = useParams(); // "new" or actual _id
   const isEdit = Boolean(id && id !== "new");
@@ -196,22 +195,19 @@ export default function ProductCatalogForm() {
   const [err, setErr] = useState("");
   const [fieldErr, setFieldErr] = useState({});
 
-  // chip inputs
   const [tagText, setTagText] = useState("");
-  // file uploads
   const [uploading, setUploading] = useState(false);
   const [uploadErr, setUploadErr] = useState("");
 
   const set = (patch) => setForm((f) => ({ ...f, ...patch }));
 
-  // Load filter options + (if editing) the product
+  // Load filters and (if edit) product
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
         setLoading(true);
 
-        // Load filters (normalize + fallback). We still hard-validate against ENUMS.*.
         const raw = await ProductsAPI.filters().catch(() => ({}));
         const cats = toStringArray(raw?.categories);
         const tys = toStringArray(raw?.types);
@@ -260,7 +256,7 @@ export default function ProductCatalogForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isEdit]);
 
-  // Coarse validity to toggle button (fast UX)
+  // Coarse validity (keep for visual/UX if you need)
   const coarseValid = useMemo(() => {
     if (!form.productName?.trim()) return false;
     if (!form.category?.trim()) return false;
@@ -274,6 +270,27 @@ export default function ProductCatalogForm() {
     return true;
   }, [form]);
 
+  // Scroll to first field with error (nice UX)
+  const scrollToFirstError = (errsObj) => {
+    const order = [
+      "productName",
+      "category",
+      "type",
+      "basePrice",
+      "stockQuantity",
+      "description",
+      "tags",
+      "images",
+    ];
+    for (const k of order) {
+      if (errsObj[k]) {
+        const el = document.querySelector(`[data-field="${k}"]`);
+        if (el?.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        break;
+      }
+    }
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setErr("");
@@ -283,6 +300,7 @@ export default function ProductCatalogForm() {
     if (!valid) {
       setFieldErr(errors);
       setErr("Please fix the highlighted fields.");
+      scrollToFirstError(errors);
       return;
     }
 
@@ -320,19 +338,23 @@ export default function ProductCatalogForm() {
         setErr(`404 Not Found — ${method} ${url}`);
       } else if (status === 405) {
         setErr(`405 Method Not Allowed — ${method} ${url} (backend route exists but method differs)`);
-      } else if (status >= 500) {
+      } else if (status >= 500 && status !== 400) {
         setErr(`Server error ${status} — ${data?.message || "Check backend logs"}`);
       } else {
+        // 400 from backend with { errors: { field: "msg" } }
         const mapped = mapServerErrors(data);
-        if (Object.keys(mapped).length) setFieldErr(mapped);
-        setErr([data?.message, data?.error].filter(Boolean).join(" — ") || `Failed to save product (${status})`);
+        if (Object.keys(mapped).length) {
+          setFieldErr(mapped);
+          scrollToFirstError(mapped);
+        }
+        setErr(data?.message || `Failed to save product (${status})`);
       }
     } finally {
       setSaving(false);
     }
   };
 
-  // ----- Cloudinary file uploads (multi) ---------------------------------
+  // Cloudinary file uploads
   const onPickFiles = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
@@ -352,12 +374,10 @@ export default function ProductCatalogForm() {
       setUploadErr(err?.response?.data?.error?.message || err.message || "Upload failed");
     } finally {
       setUploading(false);
-      e.target.value = ""; // reset so same file can be selected again
+      e.target.value = "";
     }
   };
 
-  // ----- Tags helpers ----------------------------------------------------
- // const [tagText, setTagText] = useState("");
   const addTag = () => {
     const raw = tagText.trim();
     if (!raw) return;
@@ -381,17 +401,26 @@ export default function ProductCatalogForm() {
   if (loading) {
     return (
       <div className="gn-container">
-        <div className="gn-card" style={{ padding: 24 }}>Loading…</div>
+        <div className="gn-card" style={{ padding: 24 }}>
+          Loading…
+        </div>
       </div>
     );
   }
 
   const FE = ({ name }) =>
     fieldErr?.[name] ? (
-      <div className="gn-field-error" role="alert" style={{ color: "#d33", fontSize: 12, marginTop: 4 }}>
+      <div className="gn-field-error" role="alert">
         {fieldErr[name]}
       </div>
     ) : null;
+
+  // --- handlers that validate onBlur ---
+  const handleBlur = (name) => (e) => {
+    const val = e.target.value;
+    const msg = validateOne(name, val, form);
+    setFieldErr((f) => ({ ...f, [name]: msg }));
+  };
 
   return (
     <div className="gn-container">
@@ -402,46 +431,49 @@ export default function ProductCatalogForm() {
         </div>
         <div className="flex" style={{ gap: 8 }}>
           <Link to="/admin/products" className="gn-btn">Back</Link>
-          <button className="gn-btn primary" onClick={onSubmit} disabled={!coarseValid || saving || uploading}>
+          {/* ALLOW CLICK EVEN IF INVALID, only block while saving/uploading */}
+          <button className="gn-btn primary" onClick={onSubmit} disabled={saving || uploading}>
             {saving ? "Saving…" : isEdit ? "Save Changes" : "Create Product"}
           </button>
         </div>
       </div>
 
-      {err ? (
-        <div className="gn-card" style={{ padding: 12, borderLeft: "4px solid #f66" }}>
-          {err}
-        </div>
-      ) : null}
+      {err ? <div className="gn-card error-summary">{err}</div> : null}
 
       <form className="gn-card" style={{ padding: 16 }} onSubmit={onSubmit} noValidate>
         <div className="gn-row">
           <div style={{ gridColumn: "span 6" }}>
             <label className="gn-label">Product Name *</label>
             <input
+              data-field="productName"
               className={`gn-input ${fieldErr.productName ? "has-error" : ""}`}
               value={form.productName}
               onChange={(e) => {
                 set({ productName: e.target.value });
-                if (fieldErr.productName) setFieldErr((f) => ({ ...f, productName: undefined }));
+                if (fieldErr.productName)
+                  setFieldErr((f) => ({ ...f, productName: undefined }));
               }}
+              onBlur={handleBlur("productName")}
               placeholder="e.g., Fresh Strawberries 250g"
               required
+              aria-invalid={!!fieldErr.productName}
             />
             <FE name="productName" />
           </div>
 
-          {/* Category (schema enum) */}
           <div style={{ gridColumn: "span 3" }}>
             <label className="gn-label">Category *</label>
             <select
+              data-field="category"
               className={`gn-select ${fieldErr.category ? "has-error" : ""}`}
               value={form.category || ""}
               onChange={(e) => {
                 set({ category: e.target.value });
                 if (fieldErr.category) setFieldErr((f) => ({ ...f, category: undefined }));
               }}
+              onBlur={handleBlur("category")}
               required
+              aria-invalid={!!fieldErr.category}
             >
               <option value="">Select…</option>
               {ENUMS.categories.map((c) => (
@@ -451,17 +483,19 @@ export default function ProductCatalogForm() {
             <FE name="category" />
           </div>
 
-          {/* Type (schema enum) */}
           <div style={{ gridColumn: "span 3" }}>
             <label className="gn-label">Type *</label>
             <select
+              data-field="type"
               className={`gn-select ${fieldErr.type ? "has-error" : ""}`}
               value={form.type || ""}
               onChange={(e) => {
                 set({ type: e.target.value });
                 if (fieldErr.type) setFieldErr((f) => ({ ...f, type: undefined }));
               }}
+              onBlur={handleBlur("type")}
               required
+              aria-invalid={!!fieldErr.type}
             >
               <option value="">Select…</option>
               {ENUMS.types.map((t) => (
@@ -474,6 +508,7 @@ export default function ProductCatalogForm() {
           <div style={{ gridColumn: "span 3" }}>
             <label className="gn-label">Base Price (LKR) *</label>
             <input
+              data-field="basePrice"
               type="number"
               min={LIMITS.priceMin}
               max={LIMITS.priceMax}
@@ -482,10 +517,13 @@ export default function ProductCatalogForm() {
               value={form.basePrice}
               onChange={(e) => {
                 set({ basePrice: e.target.value });
-                if (fieldErr.basePrice) setFieldErr((f) => ({ ...f, basePrice: undefined }));
+                if (fieldErr.basePrice)
+                  setFieldErr((f) => ({ ...f, basePrice: undefined }));
               }}
+              onBlur={handleBlur("basePrice")}
               placeholder="0.00"
               required
+              aria-invalid={!!fieldErr.basePrice}
             />
             <FE name="basePrice" />
           </div>
@@ -493,6 +531,7 @@ export default function ProductCatalogForm() {
           <div style={{ gridColumn: "span 3" }}>
             <label className="gn-label">Stock Quantity *</label>
             <input
+              data-field="stockQuantity"
               type="number"
               min={LIMITS.stockMin}
               max={LIMITS.stockMax}
@@ -501,10 +540,13 @@ export default function ProductCatalogForm() {
               value={form.stockQuantity}
               onChange={(e) => {
                 set({ stockQuantity: e.target.value });
-                if (fieldErr.stockQuantity) setFieldErr((f) => ({ ...f, stockQuantity: undefined }));
+                if (fieldErr.stockQuantity)
+                  setFieldErr((f) => ({ ...f, stockQuantity: undefined }));
               }}
+              onBlur={handleBlur("stockQuantity")}
               placeholder="0"
               required
+              aria-invalid={!!fieldErr.stockQuantity}
             />
             <FE name="stockQuantity" />
           </div>
@@ -524,28 +566,43 @@ export default function ProductCatalogForm() {
           <div style={{ gridColumn: "span 12" }}>
             <label className="gn-label">Description *</label>
             <textarea
+              data-field="description"
               className={`gn-input ${fieldErr.description ? "has-error" : ""}`}
               rows={4}
               value={form.description}
               onChange={(e) => {
                 set({ description: e.target.value });
-                if (fieldErr.description) setFieldErr((f) => ({ ...f, description: undefined }));
+                if (fieldErr.description)
+                  setFieldErr((f) => ({ ...f, description: undefined }));
               }}
+              onBlur={handleBlur("description")}
               placeholder="Short description, freshness notes, origin, etc."
               required
+              aria-invalid={!!fieldErr.description}
             />
             <FE name="description" />
           </div>
 
-          {/* Tags (schema enum) */}
           <div style={{ gridColumn: "span 12" }}>
             <label className="gn-label">Tags (choose from allowed)</label>
             <div className="flex" style={{ gap: 8 }}>
               <input
+                data-field="tags"
                 list="allowed-tags"
                 className={`gn-input ${fieldErr.tags ? "has-error" : ""}`}
                 value={tagText}
                 onChange={(e) => setTagText(e.target.value)}
+                onBlur={() => {
+                  // If user typed something invalid and leaves, show hint (but don't mutate tags yet)
+                  if (tagText && !ENUMS.tags.includes(tagText.trim())) {
+                    setFieldErr((fe) => ({
+                      ...fe,
+                      tags: `Invalid tag. Allowed: ${ENUMS.tags.join(", ")}`,
+                    }));
+                  } else if (!tagText) {
+                    setFieldErr((fe) => ({ ...fe, tags: undefined }));
+                  }
+                }}
                 placeholder={`One of: ${ENUMS.tags.join(", ")}`}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -553,13 +610,16 @@ export default function ProductCatalogForm() {
                     addTag();
                   }
                 }}
+                aria-invalid={!!fieldErr.tags}
               />
               <datalist id="allowed-tags">
                 {ENUMS.tags.map((t) => (
                   <option key={t} value={t} />
                 ))}
               </datalist>
-              <button type="button" className="gn-btn" onClick={addTag}>Add</button>
+              <button type="button" className="gn-btn" onClick={addTag}>
+                Add
+              </button>
             </div>
             <FE name="tags" />
             <div className="flex mt-8" style={{ gap: 8, flexWrap: "wrap" }}>
@@ -579,15 +639,16 @@ export default function ProductCatalogForm() {
             </div>
           </div>
 
-          {/* Images (Cloudinary uploads) */}
           <div style={{ gridColumn: "span 12" }}>
             <label className="gn-label">Images *</label>
             <div className="flex" style={{ gap: 8, alignItems: "center" }}>
               <input
+                data-field="images"
                 type="file"
                 accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
                 multiple
                 onChange={onPickFiles}
+                aria-invalid={!!fieldErr.images}
               />
               {uploading ? <span className="gn-sub">Uploading…</span> : null}
             </div>
@@ -622,10 +683,10 @@ export default function ProductCatalogForm() {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex mt-24" style={{ justifyContent: "flex-end", gap: 8 }}>
           <Link to="/admin/products" className="gn-btn">Cancel</Link>
-          <button className="gn-btn primary" disabled={!coarseValid || saving || uploading}>
+          {/* ALLOW CLICK EVEN IF INVALID, only block while saving/uploading */}
+          <button className="gn-btn primary" disabled={saving || uploading}>
             {saving ? "Saving…" : isEdit ? "Save Changes" : "Create Product"}
           </button>
         </div>

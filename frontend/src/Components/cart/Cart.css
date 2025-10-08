@@ -1,0 +1,30 @@
+/* Cart.css */
+.cart { max-width: 1000px; margin: 0 auto; padding: 16px; }
+.cart h2 { margin: 0 0 12px; }
+
+.cart-table { width: 100%; border-collapse: collapse; }
+.cart-table th, .cart-table td { padding: 10px; border-bottom: 1px solid #eee; }
+.cart-table thead th { font-weight: 600; text-align: center; }
+.cart-table thead th:first-child { text-align: left; }
+
+.qty-input {
+  width: 64px; text-align: center; padding: 6px 8px;
+  border: 1px solid #ddd; border-radius: 8px;
+}
+.qty-btn {
+  border: 1px solid #ddd; border-radius: 8px;
+  padding: 4px 10px; background: #fff; cursor: pointer;
+}
+.qty-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.remove-btn {
+  background: transparent; border: 1px solid #e74c3c;
+  color: #e74c3c; padding: 6px 10px; border-radius: 8px; cursor: pointer;
+}
+.remove-btn:hover { background: #fff5f5; }
+
+.sc-btn { border: 1px solid #ddd; border-radius: 8px; padding: 8px 14px; background: #fff; cursor: pointer; }
+.sc-btn-primary { background: #1eaa5a; color: #fff; border-color: #1eaa5a; }
+.sc-btn-ghost { background: #fff; color: #333; }
+
+hr { border: none; border-top: 1px solid #eee; }

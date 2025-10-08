@@ -1,5 +1,6 @@
 const Product = require("../../Model/productCatalogue/ProductModel");
 
+
 // Get all products (with filtering, sorting, and search)
 const getAllProducts = async (req, res, next) => {
   try {

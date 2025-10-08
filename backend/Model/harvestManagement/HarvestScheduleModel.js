@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const { Schema, Types } = mongoose;
+const { Schema } = mongoose;
 
 const harvestScheduleSchema = new Schema(
   {
     cropType: {
-        type: String,
-        required: [true, 'Crop type is required'],
+      type: String,
+      required: [true, "Crop type is required"],
     },
 
     greenhouseSection: {
@@ -15,35 +15,44 @@ const harvestScheduleSchema = new Schema(
       index: true,
     },
 
-    //validation for plantedDate to not allow future dates
+    // Normalize to UTC midnight and forbid future dates
     plantedDate: {
       type: Date,
       required: true,
       set: (v) => {
-      if (!v) return v;
-      const d = new Date(v);
-      d.setHours(0,0,0,0);
-      return d;
+        if (!v) return v;
+
+        // If we get "YYYY-MM-DD", build a UTC date from the parts (no TZ drift)
+        if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
+          const [y, m, d] = v.split("-").map(Number);
+          return new Date(Date.UTC(y, m - 1, d)); // UTC midnight
+        }
+
+        // Otherwise parse and coerce to UTC midnight using local Y/M/D fields
+        const d = new Date(v);
+        if (Number.isNaN(d.getTime())) return v;
+        return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      },
+      validate: {
+        validator(value) {
+          if (!value) return false;
+          // today at UTC midnight
+          const todayUTC = new Date();
+          todayUTC.setUTCHours(0, 0, 0, 0);
+          return value.getTime() <= todayUTC.getTime();
+        },
+        message: "Planted date cannot be in the future.",
+      },
+      index: true,
     },
-    validate: {
-      validator: function(value) {
-        if (!value) return false;
-        const today = new Date();
-        today.setHours(0,0,0,0);
-        return value <= today;
-    },
-    message: "Planted date cannot be in the future."
-  }
-},
-    
+
     status: {
       type: String,
-      enum: ["planted", "upcoming","over-due","due-soon", "harvested"],
+      enum: ["planted", "upcoming", "over-due", "due-soon", "harvested"],
       default: "planted",
       index: true,
-    },    
-    
-    
+    },
+
     notes: {
       type: String,
       trim: true,
@@ -51,7 +60,5 @@ const harvestScheduleSchema = new Schema(
   },
   { timestamps: true }
 );
-
-
 
 module.exports = mongoose.model("HarvestSchedule", harvestScheduleSchema);
