@@ -19,13 +19,15 @@ import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 
-import PestDetectDisplay from './Components/pestControl/PestDetectDisplay/PestDetectDisplay';
-import PestDetectAdd from './Components/pestControl/PestDetectAdd/PestDetectAdd';
-import PestDetectDashboard from './Components/pestControl/PestDetectDashboard/PestDetectDashboard';
+import PestDetectDisplay from "./Components/pestControl/PestDetectDisplay/PestDetectDisplay";
+import PestDetectAdd from "./Components/pestControl/PestDetectAdd/PestDetectAdd";
+import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/PestDetectDashboard";
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
-import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
+import ProductCatalogDashboard from "./Components/productCatalogue/ProductCatalogDashboard";
+
+import InventoryManagement from "./Components/inventory/InventoryManagement";
 
 export default function App() {
   return (
@@ -56,7 +58,7 @@ export default function App() {
             </Route>
 
             <Route element={<RequireRole roles={["inventory_manager"]} />}>
-              <Route path="/inventory" element={<Inventory />} />
+              <Route path="/inventory" element={<InventoryManagement />} />
             </Route>
 
             <Route element={<RequireRole roles={["product_manager"]} />}>
@@ -68,23 +70,41 @@ export default function App() {
             </Route>
           </Route>
 
-      <Route path="/admin" element={<Admin />} />
-   
-      <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
-      <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
-      <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
-      <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
+          <Route path="/admin" element={<Admin />} />
 
-      {/* 🛒 Product Catalog (Customer) */}
-      <Route path="/catalog" element={<CatalogPage />} />
+          <Route
+            path="/PestDetectDashboard"
+            element={<PestDetectDashboard />}
+          />
+          <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+          <Route
+            path="/pests/farmer"
+            element={<PestDetectAdd role="farmer" />}
+          />
+          <Route
+            path="/pests/:id/update"
+            element={<PestDetectAdd role="specialist" />}
+          />
 
-      {/* 🔐 Product Catalog (Admin) */}
-      <Route path="/admin/products" element={<AdminProducts />} />
-      <Route path="/admin/products/new" element={<ProductCatalogForm />} />
-      <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
-       <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
-      
-      <Route path="*" element={<div style={{ padding: 16 }}>404: Not found</div>} />
+          {/* 🛒 Product Catalog (Customer) */}
+          <Route path="/catalog" element={<CatalogPage />} />
+
+          {/* 🔐 Product Catalog (Admin) */}
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/new" element={<ProductCatalogForm />} />
+          <Route
+            path="/admin/products/:id/edit"
+            element={<ProductCatalogForm />}
+          />
+          <Route
+            path="/admin/products/dashboard"
+            element={<ProductCatalogDashboard />}
+          />
+
+          <Route
+            path="*"
+            element={<div style={{ padding: 16 }}>404: Not found</div>}
+          />
 
           <Route path="/addharvestschedules" element={<AddSchedule />} />
           <Route path="*" element={<Navigate to="/auth/login" replace />} />

@@ -122,13 +122,10 @@ class ExcelReportService {
     return { filename, filepath };
   }
 
-  // Generate transaction report in Excel
   async generateTransactionReport(transactions, filters = {}) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Transactions');
     
-    // Title and headers similar to stock report...
-    // (Implementation would follow similar pattern)
     
     const filename = `transaction_report_${Date.now()}.xlsx`;
     const filepath = path.join(this.reportsDir, filename);

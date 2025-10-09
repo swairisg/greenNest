@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 //insert model
-const ClimateRecord = require('../../models/ClimateMonitoring/ClimateRecord');// Corrected path
+const ClimateRecord = require('../../Model/climateCheck/ClimateRecord');// Corrected path
 //insert controller
-const climateController = require('../../controllers/ClimateMonitoring/ClimateController');
+const climateController = require('../../Controllers/climateCheck/ClimateController');
 
 // Basic test route for API
 router.get("/test", (req, res) => {

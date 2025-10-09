@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Inventory = require('../../Model/inventory/InventoryModel');
 
-//active alerts (low stock items)
+/// Get active alerts (low stock items)
 router.get('/active', async (req, res) => {
   try {
     const lowStockItems = await Inventory.find({

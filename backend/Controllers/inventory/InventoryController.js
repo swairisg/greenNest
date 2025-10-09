@@ -71,7 +71,7 @@ const createItem = async (req, res, next) => {
       currentStock
     } = req.body;
 
-    // detailed error messages
+    // Enhanced validation with detailed error messages
     const missingFields = [];
     if (!name) missingFields.push('name');
     if (!category) missingFields.push('category');
@@ -85,7 +85,7 @@ const createItem = async (req, res, next) => {
       });
     }
 
-    //sheck if supplier exists
+    // Check if supplier exists
     const supplier = await Supplier.findById(supplierId);
     if (!supplier) {
       return res.status(400).json({
@@ -94,12 +94,12 @@ const createItem = async (req, res, next) => {
       });
     }
 
-    //generate SKU
+    // Generate SKU
     const timestamp = Date.now();
     const randomSuffix = Math.floor(Math.random() * 1000);
     const sku = `SKU-${timestamp}-${randomSuffix}`;
 
-    //create item with all fields
+    // Create item with all fields
     const itemData = {
       name: name.trim(),
       category: category.trim(),
@@ -118,7 +118,7 @@ const createItem = async (req, res, next) => {
     const item = new Inventory(itemData);
     await item.save();
     
-    //populate supplier info in response
+    // Populate supplier info in response
     const populatedItem = await Inventory.findById(item._id)
       .populate('supplierId', 'name companyName contactPerson email phone');
     
@@ -132,7 +132,7 @@ const createItem = async (req, res, next) => {
   } catch (error) {
     console.error("❌ Error creating item:", error);
     
-    // validation errors
+    // Handle validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({
@@ -142,7 +142,7 @@ const createItem = async (req, res, next) => {
       });
     }
     
-    //duplicatr  SKU error 
+    // Duplicate SKU error (shouldn't happen with timestamp-based SKU)
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,

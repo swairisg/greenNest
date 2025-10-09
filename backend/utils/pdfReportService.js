@@ -1,7 +1,6 @@
 const PDFDocument = require('pdfkit');
 
 class PDFReportService {
-  // Generate stock report PDF
   async generateStockReport(items, filters = {}) {
     return new Promise((resolve, reject) => {
       try {
@@ -12,6 +11,10 @@ class PDFReportService {
         doc.on('end', () => {
           const pdfData = Buffer.concat(buffers);
           resolve(pdfData);
+        });
+
+        doc.on('error', (error) => {
+          reject(error);
         });
 
         let yPosition = this.addHeader(doc, 'STOCK LEVEL REPORT');
@@ -28,19 +31,17 @@ class PDFReportService {
     });
   }
 
+  
   addHeader(doc, title) {
-    // Company Header
     doc.fontSize(16)
        .font('Helvetica-Bold')
        .fillColor('#059669')
        .text('GREENNEST AGRICULTURAL MANAGEMENT', 50, 50)
        .fillColor('#000000');
 
-    // Report Title
     doc.fontSize(14)
        .text(title, 50, 80);
 
-    // Date
     doc.fontSize(10)
        .font('Helvetica')
        .text(`Generated on: ${new Date().toLocaleString()}`, 50, 110);
@@ -74,8 +75,8 @@ class PDFReportService {
     const totalItems = items.length;
     const lowStockItems = items.filter(item => item.currentStock <= item.minStockLevel).length;
     const outOfStockItems = items.filter(item => item.currentStock === 0).length;
-    const totalStockValue = items.reduce((sum, item) => sum + item.currentStock, 0);
-    const categories = [...new Set(items.map(item => item.category))];
+    const totalStockValue = items.reduce((sum, item) => sum + (item.currentStock || 0), 0);
+    const categories = [...new Set(items.map(item => item.category).filter(Boolean))];
 
     doc.fontSize(11).font('Helvetica-Bold').text('SUMMARY', 50, yPosition);
     yPosition += 20;
@@ -96,7 +97,6 @@ class PDFReportService {
   }
 
   addStockTable(doc, items, yPosition) {
-    // Table Header
     const tableTop = yPosition;
     
     doc.fontSize(9).font('Helvetica-Bold');
@@ -112,14 +112,11 @@ class PDFReportService {
     doc.moveTo(50, yPosition).lineTo(550, yPosition).stroke();
     yPosition += 10;
     
-    // Table Rows
     doc.font('Helvetica').fontSize(8);
     items.forEach((item) => {
-      // Check for page break
       if (yPosition > 700) {
         doc.addPage();
         yPosition = 50;
-        // Re-add table headers on new page
         doc.fontSize(9).font('Helvetica-Bold');
         doc.text('Item Name', 50, yPosition);
         doc.text('SKU', 150, yPosition);
@@ -137,11 +134,11 @@ class PDFReportService {
       const statusColor = status === 'OUT OF STOCK' ? '#ff0000' : 
                          status === 'LOW STOCK' ? '#ff6b00' : '#00aa00';
 
-      doc.text(item.name.substring(0, 20), 50, yPosition);
-      doc.text(item.sku, 150, yPosition);
-      doc.text(item.category, 220, yPosition);
-      doc.text(item.currentStock.toString(), 290, yPosition);
-      doc.text(`${item.minStockLevel}/${item.maxStockLevel}`, 330, yPosition);
+      doc.text((item.name || '').substring(0, 20), 50, yPosition);
+      doc.text(item.sku || '', 150, yPosition);
+      doc.text(item.category || '', 220, yPosition);
+      doc.text((item.currentStock || 0).toString(), 290, yPosition);
+      doc.text(`${item.minStockLevel || 0}/${item.maxStockLevel || 0}`, 330, yPosition);
       doc.text(item.supplierId?.name || item.supplierId?.companyName || 'N/A', 390, yPosition);
       doc.fillColor(statusColor).text(status, 500, yPosition).fillColor('#000000');
       

@@ -1,5 +1,5 @@
 const Order = require("../../Model/inventory/OrderModel");
-const Transaction = require("../../Model/inventory/TransactionModel");
+//const Transaction = require("../../Model/inventory/TransactionModel");
 const Inventory = require("../../Model/inventory/InventoryModel");
 
 //po = purchase order
@@ -29,22 +29,26 @@ const getAllPOs = async (req, res, next) => {
 
 const createPurchaseOrder = async (req, res, next) => {
   try {
-    console.log("📦 Creating purchase order with data:", req.body);
+    console.log("Creating purchase order with data:", req.body);
     
-    // Validate required fields
-    if (!req.body.supplierId || !req.body.items || req.body.items.length === 0) {
+    const { supplierId, items } = req.body;
+
+    if (!supplierId || !items || items.length === 0) {
       return res.status(400).json({ 
-        message: "Supplier ID and items are required" 
+        message: "Supplier and items are required" 
       });
     }
 
+    req.body.supplierId = supplierId; // <-- corrected
     req.body.poNumber = "PO-" + Date.now();
+
     const order = new Order(req.body);
     await order.save();
 
-    console.log("✅ Purchase order created:", order.poNumber);
+    await order.populate("supplierId items.itemId"); // populate before returning
 
-    // WhatsApp integration if status = Sent
+    console.log("Purchase order created:", order.poNumber);
+
     if (order.status === "Sent") {
       console.log(`WhatsApp: New PO ${order.poNumber} sent to supplier.`);
     }
@@ -52,11 +56,38 @@ const createPurchaseOrder = async (req, res, next) => {
     return res.status(201).json({ order });
   } catch (error) {
     console.error("Error creating purchase order:", error);
-    return res.status(500).json({ message: "Failed to create purchase order",
+    return res.status(500).json({ 
+      message: "Failed to create purchase order",
       error: error.message
     });
   }
 };
+
+const updatePO = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updateData = { ...req.body };
+
+    if (updateData.poNumber === undefined) delete updateData.poNumber;
+
+    const updatedOrder = await Order.findByIdAndUpdate(id, updateData, { new: true, runValidators: true })
+      .populate("supplierId items.itemId");
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    return res.status(200).json({ order: updatedOrder });
+  } catch (error) {
+    if (error.code === 11000 && error.keyPattern?.poNumber) {
+      return res.status(400).json({ message: "poNumber must be unique" });
+    }
+
+    console.error("Error updating purchase order:", error);
+    return res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
 
 const getPOById = async (req, res, next) => {
   try {
@@ -117,6 +148,7 @@ const softDeletePO = async (req, res, next) => {
 
 exports.getAllPOs = getAllPOs;
 exports.createPurchaseOrder = createPurchaseOrder;
+exports.updatePO = updatePO;
 exports.getPOById = getPOById;
 exports.updatePOStatus = updatePOStatus;
 exports.softDeletePO = softDeletePO;

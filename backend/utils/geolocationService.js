@@ -3,23 +3,20 @@ const Delivery = require('../models/InventoryAndSupplychain/DeliveryModel');
 class GeolocationService {
   constructor() {
     this.trackingIntervals = new Map();
-    this.simulatedDrivers = new Map(); // Store simulated driver positions
+    this.simulatedDrivers = new Map(); 
   }
 
-  // Start real-time tracking for a delivery
   async startTracking(deliveryId, driverId) {
-    console.log(`📍 Starting real-time tracking for delivery ${deliveryId}`);
+    console.log(` Starting real-time tracking for delivery ${deliveryId}`);
     
-    // Initialize simulated position
     await this.initializeDriverPosition(driverId);
     
-    // Simulate real-time GPS updates (every 30 seconds)
     const interval = setInterval(async () => {
       try {
         const location = await this.simulateMovement(driverId);
         await this.updateDeliveryLocation(deliveryId, location);
         
-        console.log(`📍 Delivery ${deliveryId} location: ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`);
+        console.log(`Delivery ${deliveryId} location: ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`);
       } catch (error) {
         console.error('Tracking error:', error);
       }
@@ -28,17 +25,15 @@ class GeolocationService {
     this.trackingIntervals.set(deliveryId, interval);
   }
 
-  // Stop tracking
   stopTracking(deliveryId) {
     const interval = this.trackingIntervals.get(deliveryId);
     if (interval) {
       clearInterval(interval);
       this.trackingIntervals.delete(deliveryId);
-      console.log(`📍 Stopped tracking for delivery ${deliveryId}`);
+      console.log(`Stopped tracking for delivery ${deliveryId}`);
     }
   }
 
-  // Initialize driver position with random Colombo coordinates
   async initializeDriverPosition(driverId) {
     const basePosition = {
       lat: 6.9271 + (Math.random() - 0.5) * 0.1, // Colombo area with variation
@@ -49,12 +44,10 @@ class GeolocationService {
     return basePosition;
   }
 
-  // Simulate driver movement
   async simulateMovement(driverId) {
     const currentPosition = this.simulatedDrivers.get(driverId) || 
                            await this.initializeDriverPosition(driverId);
     
-    // Small random movement
     const newPosition = {
       lat: currentPosition.lat + (Math.random() - 0.5) * 0.001,
       lng: currentPosition.lng + (Math.random() - 0.5) * 0.001,
@@ -67,13 +60,11 @@ class GeolocationService {
     return newPosition;
   }
 
-  // Get current location
   async getCurrentLocation(driverId) {
     return this.simulatedDrivers.get(driverId) || 
            await this.initializeDriverPosition(driverId);
   }
 
-  // Update delivery location in database
   async updateDeliveryLocation(deliveryId, location) {
     try {
       await Delivery.findByIdAndUpdate(deliveryId, {
@@ -84,15 +75,13 @@ class GeolocationService {
     }
   }
 
-  // Calculate ETA based on current location and destination
   async calculateETA(deliveryId) {
     try {
       const delivery = await Delivery.findById(deliveryId);
       if (!delivery || !delivery.geolocation) {
-        return 45; // Default ETA in minutes
+        return 45; 
       }
 
-      // Simulate ETA calculation based on distance and traffic
       const baseETA = 30; // minutes
       const trafficFactor = 1 + Math.random() * 0.5; // 1.0 to 1.5
       const progressFactor = delivery.status === 'In Transit' ? 0.3 : 1.0;
@@ -104,7 +93,7 @@ class GeolocationService {
     }
   }
 
-  // Get distance between two coordinates (Haversine formula)
+  //distance between two coordinates
   calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Earth's radius in km
     const dLat = this.toRad(lat2 - lat1);
@@ -122,7 +111,7 @@ class GeolocationService {
     return degrees * (Math.PI / 180);
   }
 
-  // Get all active trackings
+  //active trackings
   getActiveTrackings() {
     return Array.from(this.trackingIntervals.keys());
   }

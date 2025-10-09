@@ -1,4 +1,4 @@
-const ClimateRecord = require("../../models/ClimateMonitoring/ClimateRecord"); // Corrected path
+const ClimateRecord = require("../../Model/climateCheck/ClimateRecord"); // Corrected path
 const axios = require("axios"); //for http requests
 const moment = require("moment-timezone"); //for timezone handling, moment library
 const climateAlertService = require('../../utils/climateAlertService');

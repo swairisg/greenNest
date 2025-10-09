@@ -2,19 +2,19 @@ const Supplier = require("../../Model/inventory/SupplierModel");
 
 const createSupplier = async (req, res, next) => {
   try {
-    console.log("✅ Supplier model loaded successfully");
-    console.log("📦 Request body:", req.body);
+    console.log("Supplier model loaded successfully");
+    console.log("Request body:", req.body);
     
     const supplier = new Supplier(req.body);
-    console.log("🔧 Supplier instance created");
+    console.log("Supplier instance created");
     
     await supplier.save();
-    console.log("💾 Supplier saved to database");
+    console.log("Supplier saved to database");
     
     return res.status(201).json({ supplier });
   } catch (error) {
-    console.error("❌ Error creating supplier:", error);
-    console.error("🔍 Error details:", {
+    console.error("Error creating supplier:", error);
+    console.error("Error details:", {
       name: error.name,
       message: error.message,
       code: error.code

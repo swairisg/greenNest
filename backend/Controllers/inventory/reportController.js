@@ -1,10 +1,11 @@
 const Inventory = require('../../Model/inventory/InventoryModel');
+const PDFReportService = require('../../utils/pdfReportService');
 
 class ReportController {
-  //generate stock report
+  
   async generateStockReport(req, res) {
     try {
-      console.log('📊 Generating stock report with query:', req.query);
+      console.log('Generating stock report with query:', req.query);
       
       const { format, category, lowStockOnly } = req.query;
       
@@ -19,20 +20,25 @@ class ReportController {
         .sort({ category: 1, name: 1 })
         .lean();
 
-      console.log(`📦 Found ${items.length} items for report`);
+      console.log(`Found ${items.length} items for report`);
 
       if (format === 'pdf') {
-        //
-        return res.json({
-          success: true,
-          data: items,
-          summary: this.generateSummary(items),
-          filters: { category, lowStockOnly },
-          message: 'PDF generation not yet implemented'
-        });
+        try {
+          const pdfBuffer = await PDFReportService.generateStockReport(items, { category, lowStockOnly });
+          
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', `attachment; filename="stock-report-${Date.now()}.pdf"`);
+          return res.send(pdfBuffer);
+        } catch (pdfError) {
+          console.error('PDF generation error:', pdfError);
+          return res.status(500).json({
+            success: false,
+            message: 'Error generating PDF report',
+            error: pdfError.message
+          });
+        }
       }
 
-      // json response
       res.json({
         success: true,
         data: items,
@@ -41,7 +47,7 @@ class ReportController {
       });
 
     } catch (error) {
-      console.error('❌ Stock report error:', error);
+      console.error('Stock report error:', error);
       res.status(500).json({
         success: false,
         message: 'Error generating stock report',
@@ -50,35 +56,54 @@ class ReportController {
     }
   }
 
-  //export to CSV
   async exportToCSV(req, res) {
-    try {
-      const { category } = req.query;
-      
-      let filter = { isActive: true };
-      if (category) filter.category = category;
+  try {
+    console.log('Starting CSV export with query:', req.query);
+    
+    const { category } = req.query;
+    
+    let filter = { isActive: true };
+    if (category) filter.category = category;
 
-      const items = await Inventory.find(filter)
-        .populate('supplierId', 'name companyName')
-        .lean();
+    console.log('Filter:', filter);
 
-      const csvContent = this.generateCSV(items);
-      
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename="inventory-${category || 'all'}-${Date.now()}.csv"`);
-      res.send(csvContent);
+    const items = await Inventory.find(filter)
+      .populate('supplierId', 'name companyName')
+      .lean();
 
-    } catch (error) {
-      console.error('❌ CSV export error:', error);
-      res.status(500).json({
+    console.log(`Found ${items.length} items for CSV export`);
+
+    if (items.length === 0) {
+      console.log('No items found for CSV export');
+      return res.status(404).json({
         success: false,
-        message: 'Error exporting CSV',
-        error: error.message
+        message: 'No items found to export'
       });
     }
-  }
 
-  // dashboard statistics
+    console.log('First item sample:', JSON.stringify(items[0], null, 2));
+
+    const csvContent = this.generateCSV(items);
+    
+    console.log('CSV content generated successfully, length:', csvContent.length);
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="inventory-${category || 'all'}-${Date.now()}.csv"`);
+    res.send(csvContent);
+
+    console.log('CSV export completed successfully');
+
+  } catch (error) {
+    console.error('CSV export error:', error);
+    console.error('Error stack:', error.stack);
+    res.status(500).json({
+      success: false,
+      message: 'Error exporting CSV',
+      error: error.message
+    });
+  }
+}
+
   async getDashboardStats(req, res) {
     try {
       const totalItems = await Inventory.countDocuments({ isActive: true });
@@ -129,7 +154,7 @@ class ReportController {
       res.json(result);
 
     } catch (error) {
-      console.error('❌ Dashboard stats error:', error);
+      console.error(' Dashboard stats error:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching dashboard statistics',
@@ -138,7 +163,7 @@ class ReportController {
     }
   }
 
-  // method to generate summary
+
   generateSummary(items) {
     const totalItems = items.length;
     const lowStockItems = items.filter(item => item.currentStock <= item.minStockLevel).length;
@@ -157,24 +182,47 @@ class ReportController {
     };
   }
 
-  // method to generate CSV
   generateCSV(items) {
-    const headers = ['Name', 'SKU', 'Category', 'Current Stock', 'Min Stock', 'Max Stock', 'Unit', 'Supplier', 'Status', 'Last Updated'];
+  console.log(' Starting CSV generation for', items.length, 'items');
+  
+  try {
+    // Simple headers
+    const headers = ['Name', 'Category', 'Current Stock', 'Min Stock', 'Status'];
     
-    const rows = items.map(item => [
-      `"${item.name}"`,
-      item.sku,
-      item.category,
-      item.currentStock,
-      item.minStockLevel,
-      item.maxStockLevel,
-      item.unitOfMeasure || 'units',
-      `"${item.supplierId?.name || item.supplierId?.companyName || 'N/A'}"`,
-      item.currentStock === 0 ? 'Out of Stock' : item.currentStock <= item.minStockLevel ? 'Low Stock' : 'Normal',
-      new Date(item.updatedAt).toLocaleDateString()
-    ]);
+    // Create rows with safe defaults
+    const rows = items.map((item, index) => {
+      try {
+        const name = item.name || `Item-${index}`;
+        const category = item.category || 'Unknown';
+        const currentStock = item.currentStock || 0;
+        const minStock = item.minStockLevel || 0;
+        
+        let status = 'Normal';
+        if (currentStock === 0) {
+          status = 'Out of Stock';
+        } else if (currentStock <= minStock) {
+          status = 'Low Stock';
+        }
+        
+        return [name, category, currentStock, minStock, status];
+      } catch (rowError) {
+        console.error(` Error in row ${index}:`, rowError);
+        return ['Error', 'Error', 0, 0, 'Error'];
+      }
+    });
 
-    return [headers, ...rows].map(row => row.join(',')).join('\n');
+    // Combine everything
+    const csvArray = [headers, ...rows];
+    const csvString = csvArray.map(row => row.join(',')).join('\n');
+    
+    console.log(' CSV generation completed');
+    return csvString;
+    
+  } catch (error) {
+    console.error(' CSV generation failed:', error);
+    // Return minimal error CSV
+    return 'Name,Category,Current Stock,Min Stock,Status\n"CSV Generation Failed","Error",0,0,"Error"';
+  }
   }
 }
 

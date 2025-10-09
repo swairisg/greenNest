@@ -4,6 +4,7 @@ import "./styles/theme.css";
 import "./styles/app.css";   // if this file doesn't exist, remove this line
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

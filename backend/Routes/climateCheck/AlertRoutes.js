@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../../controllers/ClimateMonitoring/AlertController");
+const controller = require("../../Controllers/climateCheck/AlertController");
 
 router.post("/configs", controller.createAlertConfig);
 router.get("/configs", controller.getAllAlertConfigs);

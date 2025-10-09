@@ -1,35 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Download, FileText, BarChart3, AlertCircle, FileDown, PieChart } from "lucide-react";
 
-function ReportGenerator() {
+function ReportGenerator({ items = [] }) {
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [error, setError] = useState("");
   const [stats, setStats] = useState(null);
-  const [items, setItems] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('');
 
   useEffect(() => {
     fetchDashboardStats();
-    fetchItems();
   }, []);
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/reports/dashboard/stats');
-      setStats(response.data.data);
+      const response = await axios.get('http://localhost:5001/api/reports/dashboard/stats');
+      if (response.data.success) {
+        setStats(response.data.data);
+      }
     } catch (err) {
       console.error('Error fetching stats:', err);
-    }
-  };
-
-  const fetchItems = async () => {
-    try {
-      const response = await axios.get(`http://localhost:5000/api/reports/stock${categoryFilter ? `?category=${categoryFilter}` : ''}`);
-      setItems(response.data.data);
-    } catch (err) {
-      console.error('Error fetching items:', err);
+      setError('Failed to load dashboard statistics');
     }
   };
 
@@ -37,10 +29,13 @@ function ReportGenerator() {
     try {
       setLoading(true);
       setError("");
-      
-      const response = await axios.get(`http://localhost:5000/api/reports/export/csv${categoryFilter ? `?category=${categoryFilter}` : ''}`, {
-        responseType: 'blob'
-      });
+
+      const response = await axios.get(
+        `http://localhost:5001/api/reports/export/csv${categoryFilter ? `?category=${categoryFilter}` : ''}`, 
+        {
+          responseType: 'blob'
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -64,9 +59,12 @@ function ReportGenerator() {
       setPdfLoading(true);
       setError("");
       
-      const response = await axios.get(`http://localhost:5000/api/reports/stock?format=pdf${categoryFilter ? `&category=${categoryFilter}` : ''}`, {
-        responseType: 'blob'
-      });
+      const response = await axios.get(
+        `http://localhost:5001/api/reports/stock?format=pdf${categoryFilter ? `&category=${categoryFilter}` : ''}`, 
+        {
+          responseType: 'blob'
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -89,17 +87,12 @@ function ReportGenerator() {
     setCategoryFilter(e.target.value);
   };
 
-  const applyFilter = () => {
-    fetchItems();
-  };
-
   const clearFilter = () => {
     setCategoryFilter('');
-    fetchItems();
   };
 
   if (!stats) {
-    return <div className="text-center py-8">Loading reports...</div>;
+    return <div className="text-center py-8 text-gray-300">Loading reports...</div>;
   }
 
   return (
@@ -111,7 +104,6 @@ function ReportGenerator() {
         </div>
       )}
 
-      {/* Filter Section */}
       <div className="bg-white p-4 rounded-lg">
         <h3 className="text-lg font-semibold text-gray-600 mb-3">Report Filters</h3>
         <div className="flex flex-wrap gap-4 items-end">
@@ -129,27 +121,20 @@ function ReportGenerator() {
             </select>
           </div>
           <button
-            onClick={applyFilter}
-            className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition-colors"
-          >
-            Apply Filter
-          </button>
-          <button
             onClick={clearFilter}
-            className="bg-gray-100 border border-gray-500 hover:bg-gray-600 hover:text-gray-100  text-gray font-medium py-2 px-4 rounded transition-colors"
+            className="bg-gray-100 border border-gray-500 hover:bg-gray-600 hover:text-gray-100 text-gray font-medium py-2 px-4 rounded transition-colors"
           >
             Clear
           </button>
         </div>
       </div>
 
-      {/* Dashboard Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-blue-500/20 border border-blue-500 p-4 rounded-lg">
           <div className="flex items-center">
             <BarChart3 className="text-blue-500 mr-3" size={24} />
             <div>
-              <div className="text-2xl font-bold text-white ">{stats.overview.totalItems}</div>
+              <div className="text-2xl font-bold text-white">{stats.overview.totalItems}</div>
               <div className="text-blue-500 text-sm">Total Items</div>
             </div>
           </div>
@@ -186,7 +171,6 @@ function ReportGenerator() {
         </div>
       </div>
 
-      {/* Export Section */}
       <div className="bg-gray-700 p-6 rounded-lg">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
           <FileDown size={20} className="mr-2" />
@@ -221,7 +205,6 @@ function ReportGenerator() {
         </div>
       </div>
 
-      {/* Category Breakdown */}
       <div className="bg-gray-700 p-4 rounded-lg">
         <h3 className="text-lg font-semibold text-white mb-3">Stock by Category</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -239,57 +222,6 @@ function ReportGenerator() {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Items Preview */}
-      <div className="bg-gray-700 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold text-white mb-3">
-          Inventory Items {categoryFilter && `- ${categoryFilter}`}
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-gray-300">
-            <thead>
-              <tr className="border-b border-gray-600">
-                <th className="text-left py-3">Item Name</th>
-                <th className="text-left py-3">Category</th>
-                <th className="text-left py-3">Current Stock</th>
-                <th className="text-left py-3">Min/Max</th>
-                <th className="text-left py-3">Status</th>
-                <th className="text-left py-3">Supplier</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.slice(0, 10).map((item) => (
-                <tr key={item._id} className="border-b border-gray-600 hover:bg-gray-600/50">
-                  <td className="py-3">{item.name}</td>
-                  <td className="py-3">{item.category}</td>
-                  <td className="py-3">{item.currentStock}</td>
-                  <td className="py-3">{item.minStockLevel}/{item.maxStockLevel}</td>
-                  <td className="py-3">
-                    <span className={`px-2 py-1 rounded text-xs ${
-                      item.currentStock === 0 
-                        ? 'bg-red-500/20 text-red-400' 
-                        : item.currentStock <= item.minStockLevel 
-                        ? 'bg-orange-500/20 text-orange-400' 
-                        : 'bg-green-500/20 text-green-400'
-                    }`}>
-                      {item.currentStock === 0 ? 'Out of Stock' : 
-                       item.currentStock <= item.minStockLevel ? 'Low Stock' : 'Normal'}
-                    </span>
-                  </td>
-                  <td className="py-3">
-                    {item.supplierId?.name || item.supplierId?.companyName || 'N/A'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {items.length > 10 && (
-            <p className="text-gray-400 text-xs mt-3">
-              Showing 10 of {items.length} items. Export full report to see all items.
-            </p>
-          )}
         </div>
       </div>
     </div>

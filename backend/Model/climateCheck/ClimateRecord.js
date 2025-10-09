@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { climateConnection } = require('../../config/database');
+//const { climateConnection } = require('../../config/database');
 const Schema = mongoose.Schema;
 
 const climateRecordSchema = new Schema({
@@ -34,4 +34,4 @@ const climateRecordSchema = new Schema({
   timestamps: true// Automatically manage createdAt and updatedAt fields
 });
 
-module.exports = climateConnection.model('ClimateRecord', climateRecordSchema);
+module.exports = mongoose.model('ClimateRecord', climateRecordSchema);

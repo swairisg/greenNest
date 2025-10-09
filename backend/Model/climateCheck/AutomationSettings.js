@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { climateConnection } = require('../../config/database');
+//const { climateConnection } = require('../../config/database');
 
 const automationSchema = new mongoose.Schema(
   {
@@ -11,4 +11,4 @@ const automationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = climateConnection.model("Automation", automationSchema);
+module.exports = mongoose.model("Automation", automationSchema);

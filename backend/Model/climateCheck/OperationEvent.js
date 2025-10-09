@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { climateConnection } = require('../../config/database');
+//const { climateConnection } = require('../../config/database');
 
 const operationSchema = new mongoose.Schema(
   {
@@ -16,4 +16,4 @@ const operationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = climateConnection.model("OperationEvent", operationSchema);
+module.exports = mongoose.model("OperationEvent", operationSchema);
