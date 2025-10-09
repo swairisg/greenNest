@@ -70,8 +70,6 @@ import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
 import ProductCatalogForm from "./Components/productCatalogue/ProductCatalogForm";
 import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
 
-import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
-
 export default function App() {
   return (
     <BrowserRouter>
