@@ -6,17 +6,17 @@ const HarvestCalculator = ({ records }) => {
   const [numberOfTrees, setNumberOfTrees] = useState("");
   const [calculationResult, setCalculationResult] = useState(null);
 
-  // Get unique crop types from records for dropdown
+  // Get unique crop types from records for dropdown/using hashmap
   const availableCrops = useMemo(() => {
-    const crops = [...new Set(records.map(record => record.cropType).filter(Boolean))];
+    const crops = [...new Set(records.map(record => record.cropType).filter(Boolean))];//remove undefined values
     return crops.sort();
   }, [records]);
 
   // Calculate average yield per tree for each crop
   const cropYieldData = useMemo(() => {
-    const yieldMap = {};
+    const yieldMap = {};//creating empty object to group data by crop
     
-    records.forEach(record => {
+    records.forEach(record => { //loop
       if (!record.cropType || !record.quantity || !record.treesPicked) return;
       
       const cropType = record.cropType;
@@ -29,7 +29,8 @@ const HarvestCalculator = ({ records }) => {
           records: []
         };
       }
-      
+
+      //keep adding records into a group
       yieldMap[cropType].totalYield += yieldPerTree;
       yieldMap[cropType].count += 1;
       yieldMap[cropType].records.push({
@@ -40,7 +41,7 @@ const HarvestCalculator = ({ records }) => {
       });
     });
     
-    // Calculate averages
+    //average yeild per tree/total records
     const result = {};
     Object.keys(yieldMap).forEach(crop => {
       result[crop] = {
@@ -53,6 +54,7 @@ const HarvestCalculator = ({ records }) => {
     return result;
   }, [records]);
 
+  //validate inputs
   const calculateHarvest = () => {
     if (!selectedCrop || !numberOfTrees || numberOfTrees <= 0) {
       alert("Please select a crop and enter a valid number of trees");
@@ -65,6 +67,7 @@ const HarvestCalculator = ({ records }) => {
       return;
     }
 
+    //estimate harvest
     const estimatedHarvest = cropData.averageYieldPerTree * parseInt(numberOfTrees);
     
     setCalculationResult({
