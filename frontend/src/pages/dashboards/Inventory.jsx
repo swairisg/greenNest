@@ -1,4 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import '../../index.css';
+
 export default function Inventory() {
-  return <div style={{maxWidth:820,margin:"40px auto"}}><h2>Inventory Dashboard</h2></div>;
+  return (
+    <Link to="/inventory" className="gn-card-link">
+      <div className="gn-card" role="button">Inventory</div>
+    </Link>
+  );
 }

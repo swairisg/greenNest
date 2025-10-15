@@ -71,6 +71,31 @@ app.use("/api/quality", qualityRoutes);
 
 app.use("/api/finance/orders", orderRoutes);
 
+//inventory and supplychain routes
+const inventoryRoutes = require("./Routes/inventory/InventoryRoute");
+app.use("/api/items", inventoryRoutes);
+
+const supplierRoutes = require("./Routes/inventory/SupplierRoute");
+app.use("/api/suppliers", supplierRoutes);
+
+//const transactionRoutes = require("./Routes/inventory/TransactionRoute");
+const orderRoute2 = require("./Routes/inventory/OrderRoute");
+app.use("/api/orders", orderRoute2);
+
+const deliveryRoutes = require("./Routes/inventory/DeliveryRoute");
+app.use("/api/deliveries", deliveryRoutes);
+
+const driverRoutes = require("./Routes/inventory/DriverRoute");
+app.use("/api/drivers", driverRoutes);
+
+const InventoryAlerts = require("./Routes/inventory/Alerts");
+app.use("/api/inventory-alerts", InventoryAlerts);
+
+const reportRoutes = require("./Routes/inventory/ReportRoute");
+app.use("/api/reports", reportRoutes);
+
+
+
 // connect DB then start server
 const PORT = Number(process.env.PORT) || 5001;
 const MONGO_URI = process.env.MONGO_URI;
