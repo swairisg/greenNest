@@ -1,5 +1,5 @@
 const twilio = require("twilio");
-//const climateAlertService = require('./climateAlertService');
+const climateAlertService = require('./climateAlertService');
 
 class WhatsAppService {
   constructor() {

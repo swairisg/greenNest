@@ -94,7 +94,39 @@ app.use("/api/inventory-alerts", InventoryAlerts);
 const reportRoutes = require("./Routes/inventory/ReportRoute");
 app.use("/api/reports", reportRoutes);
 
+//==========climate routes============
+// Climate routes
+const climateRoutes = require("./Routes/climateCheck/ClimateRoutes");
+app.use("/api/climate", climateRoutes);
+//const operationRoutes = require("./Routes/climateCheck/operationRoutes");
+const automationRoutes = require("./Routes/climateCheck/automationRoutes");
+app.use("/api/automation", automationRoutes);
+const climateAlerts = require("./Routes/climateCheck/AlertRoutes");
+const climateAlertService = require('./utils/climateAlertService');
+app.use("/api/climate-alerts", climateAlerts);
+const whatsappService = require('./utils/WhatsAppService');
+// External data
+const { fetchAndStoreExternalData } = require("./Controllers/climateCheck/ClimateController");
+app.post("/api/fetch-external", fetchAndStoreExternalData);
 
+// ---------- Root route ----------
+app.get("/", (req, res) => {
+  res.json({
+    message: "Climate Monitoring API Server is running!",
+    endpoints: {
+      climate: "/api/climate",
+      automation: "/api/automation",
+      records: "/records",
+      inventory: "/api/items",
+      suppliers: "/api/suppliers",
+      transactions: "/api/transactions",
+      orders: "/api/orders",
+      fetchExternal: "/api/fetch-external",
+    },
+    status: "OK",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // connect DB then start server
 const PORT = Number(process.env.PORT) || 5001;

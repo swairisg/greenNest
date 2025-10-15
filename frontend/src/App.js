@@ -85,6 +85,10 @@ import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
 import GrowthPage from "./Components/plantCultivation/GrowthPage";
 
+
+import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
+
+
 function Layout({ children }) {
   const location = useLocation();
 
@@ -186,8 +190,13 @@ export default function App() {
                   path="/farmer/cultivation/growth"
                   element={<GrowthPage />}
                 />
+
               </Route>
+            
             </Route>
+
+            <Route path="/climate" element={<ClimateMonitoring />} />
+
 
             <Route path="/addharvestschedules" element={<AddSchedule />} />
             <Route

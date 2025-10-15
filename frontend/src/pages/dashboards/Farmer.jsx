@@ -5,7 +5,8 @@ import "./farmer.css";
 import Hero from "../../assests/farmer-hero.jpg";          
 import TileCultivation from "../../assests/tile-cultivation.jpg"; 
 import TileClimate from "../../assests/tile-climate.jpg";         
-import TileHarvest from "../../assests/tile-harvest.jpg";        
+import TileHarvest from "../../assests/tile-harvest.jpg";     
+//import climate from "../../Components/climateCheck/ClimateMonitoring"   
 
 
 export default function Farmer() {
