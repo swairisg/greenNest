@@ -23,7 +23,7 @@ import Home from "./pages/public/Home";
 import Admin from "./pages/dashboards/Admin";
 //import HR from "./pages/dashboards/HR";
 import Finance from "./pages/dashboards/Finance";
-import Inventory from "./pages/dashboards/Inventory";
+import InventoryManagement from "./Components/inventory/InventoryManagement";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 
@@ -159,8 +159,8 @@ export default function App() {
               </Route>
 
               <Route element={<RequireRole roles={["inventory_manager"]} />}>
-                <Route path="/inventory" element={<Inventory />} />
-              </Route>
+                <Route path="/inventory" element={<InventoryManagement />} />
+            </Route>
 
               <Route element={<RequireRole roles={["product_manager"]} />}>
                 <Route path="/products" element={<Product />} />
