@@ -1,0 +1,105 @@
+/* High-contrast glass version for better readability */
+
+.gn-fab {
+  position: fixed; right: 20px; bottom: 20px;
+  width: 56px; height: 56px; border-radius: 999px; border: 0; cursor: pointer;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(10px); font-size: 22px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+
+/* More opaque panel + dark default text */
+.gn-panel {
+  position: fixed; right: 20px; bottom: 90px;
+  width: 360px; height: 520px; display: flex; flex-direction: column;
+  background: rgba(255,255,255,.18); backdrop-filter: blur(14px) saturate(130%);
+  border: 1px solid rgba(255,255,255,.35); border-radius: 16px;
+  box-shadow: 0 18px 48px rgba(0,0,0,.35); color: #0b2c10; overflow: hidden;
+  z-index: 9999; text-shadow: 0 0 1px rgba(255,255,255,.25);
+}
+
+/* Brighter header with white text */
+.gn-head {
+  padding: 12px 14px; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, rgba(76,175,80,.85), rgba(46,125,50,.6));
+  border-bottom: 1px solid rgba(255,255,255,.35);
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+
+.gn-body { flex: 1; overflow-y: auto; padding: 10px; }
+
+.row { display: flex; margin: 8px 0; }
+.row.user { justify-content: flex-end; }
+
+/* Assistant bubble: near-white glass with dark text */
+.bubble {
+  max-width: 78%; padding: 10px 12px; border-radius: 12px;
+  background: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.6);
+  color: #0b2c10; white-space: pre-wrap;
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+/* User bubble: green pill with white text */
+.row.user .bubble {
+  background: rgba(102,187,106,.95); border-color: rgba(102,187,106,1);
+  color: #ffffff; text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+
+.typing { opacity: .9; font-style: italic; }
+
+/* Quick reply chips: white glass + dark text */
+.gn-quick {
+  display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 10px;
+  border-top: 1px solid rgba(255,255,255,.35);
+  background: linear-gradient(0deg, rgba(76,175,80,.12), rgba(255,255,255,0));
+}
+.gn-quick button {
+  border: 0; border-radius: 999px; padding: 8px 12px;
+  background: rgba(255,255,255,.95); color: #0b2c10; cursor: pointer; font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+/* Input: bright background + dark text for clarity */
+.gn-form { display: flex; gap: 8px; padding: 10px; border-top: 1px solid rgba(255,255,255,.35); }
+.gn-form input {
+  flex: 1; padding: 10px; border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.15); background: rgba(255,255,255,.98); color: #0b2c10;
+}
+.gn-form input::placeholder { color: rgba(11,44,16,.55); }
+.gn-form button {
+  padding: 10px 14px; border-radius: 10px; border: 0; cursor: pointer;
+  background: #66bb6a; color: #0b2c10; font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+.products { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* Product cards: brighter for readability */
+.gnp-card {
+  background: rgba(255,255,255,.95);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 12px; overflow: hidden; color: #0b2c10;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+}
+.gnp-card img { width: 100%; height: 100px; object-fit: cover; }
+.gnp-card .info { padding: 8px; }
+.gnp-card .name { font-weight: 600; }
+.gnp-card .price { opacity: .9; margin-top: 2px; }
+.noimg {
+  height: 100px; display: flex; align-items: center; justify-content: center; opacity: .8;
+}
+
+/* Link-style button */
+.btn-link {
+  display: inline-block; padding: 8px 12px; border-radius: 10px;
+  background: #a5d6a7; color: #0b2c10; font-weight: 800; text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+
+/* Optional: dark-mode tweaks */
+@media (prefers-color-scheme: dark) {
+  .gn-panel { background: rgba(20,28,22,.55); color: #e9f3ec; }
+  .bubble { background: rgba(255,255,255,.12); color: #e9f3ec; border-color: rgba(255,255,255,.18); }
+  .row.user .bubble { background: rgba(76,175,80,.9); color:#fff; }
+  .gn-quick button { background: rgba(255,255,255,.12); color:#e9f3ec; border:1px solid rgba(255,255,255,.2); }
+  .gn-form input { background: rgba(255,255,255,.12); color:#e9f3ec; border-color: rgba(255,255,255,.2); }
+}

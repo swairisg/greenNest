@@ -89,6 +89,7 @@ import GrowthPage from "./Components/plantCultivation/GrowthPage";
 import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
 
 
+
 function Layout({ children }) {
   const location = useLocation();
 
@@ -117,6 +118,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Layout>
+  
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/welcome" element={<Landing />} />
@@ -305,6 +307,7 @@ export default function App() {
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/contactus" element={<ContactUs />} />
             <Route path="/viewcontactus" element={<Viewcontactus />} />
+
 
             {/* Quality Control (matches backend /api/quality) */}
             <Route path="/quality" element={<QualityList />} />
