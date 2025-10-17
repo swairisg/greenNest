@@ -5,6 +5,7 @@ import api from "../../api";
 import { useHRChrome } from "./HRLayout";
 import "./Employees.css"; // reuse list/table/button styles
 import "./Tasks.css";     // keep visuals parallel to TasksNew form
+import "../../PlainReset.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
@@ -510,6 +511,7 @@ export default function HRTasks() {
   /* -------------------- UI -------------------- */
 
   return (
+    
     <div className="hrlist-wrap">
       <div className="hrlist-card">
         <div className="hrlist-head">

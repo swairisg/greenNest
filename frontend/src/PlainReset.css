@@ -1,0 +1,65 @@
+/* -------- Generic opt-out wrapper (kept) -------- */
+/* Load this AFTER Tailwind so it can override preflight */
+.no-tw,
+.no-tw * {
+  all: revert;          /* restore browser defaults */
+}
+
+/* keep your app font if you want; remove this line for truly “native” fonts */
+.no-tw { font-family: inherit; }
+
+/* small UX niceties (optional) */
+.no-tw button { cursor: pointer; }
+.no-tw label  { cursor: pointer; }
+
+/* -------- SweetAlert2 fixes -------- */
+/* IMPORTANT: Do NOT revert .swal2-styled buttons, so the theme can style them. */
+/* Revert only the form controls Tailwind flattens. */
+.swal2-container input[type="radio"],
+.swal2-container input[type="checkbox"],
+.swal2-container select,
+.swal2-container label {
+  all: revert;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* If you previously had rules like these, REMOVE them:
+   .swal2-container .swal2-actions button { all: revert; }
+   .swal2-container .swal2-styled         { all: revert; }
+*/
+/* Keep radios/selects reverted (from before) */
+.swal2-container input[type="radio"],
+.swal2-container input[type="checkbox"],
+.swal2-container select,
+.swal2-container label {
+  all: revert;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Ensure SweetAlert buttons have a visible base state */
+.swal2-container .swal2-styled {
+  /* These match SweetAlert2 defaults */
+  padding: .625em 1.1em;
+  border: 0;
+  border-radius: .25em;
+  font-weight: 500;
+  background-image: none;          /* neutralize Tailwind preflight */
+  color: #fff;
+}
+
+.swal2-container .swal2-styled.swal2-confirm {
+  background-color: #7066e0;       /* default confirm color */
+}
+
+.swal2-container .swal2-styled.swal2-cancel {
+  background-color: #6e7881;       /* default cancel color */
+}
+
+.swal2-container .swal2-deny    { background-color: #dc2626 !important; } 
+
+.swal2-container .swal2-actions button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
