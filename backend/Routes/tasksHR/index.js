@@ -27,6 +27,7 @@ router.post("/tasks", tasks.create);
 router.get("/tasks/:id", tasks.get);
 router.patch("/tasks/:id", tasks.update);
 router.post("/tasks/:id/comment", tasks.comment);
+router.delete("/tasks/:id", tasks.remove);
 
 // Attendance
 router.post("/attendance/check-in", attendance.checkIn);
