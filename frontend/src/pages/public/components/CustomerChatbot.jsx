@@ -29,7 +29,7 @@ export default function CustomerChatbot() {
       type: "text",
       role: "assistant",
       text:
-        "Hi! I can help with products, prices, visit booking, contact info, or greenhouse basics.",
+        "Hi! I can help with products, prices, visit booking, contact info, our location, or greenhouse basics.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -61,11 +61,10 @@ export default function CustomerChatbot() {
       const data = await res.json();
 
       const newMsgs = [];
-      (data.messages || []).forEach((m) => newMsgs.push({ ...m, role: "assistant" }));
+      (data.messages || []).forEach((m) =>
+        newMsgs.push({ ...m, role: "assistant" })
+      );
       setMsgs((m) => [...m, ...newMsgs]);
-
-      // Optional quick replies from server (not rendered as buttons by default)
-      // You could render them as chips if you want.
     } catch (err) {
       setMsgs((m) => [
         ...m,
@@ -81,8 +80,8 @@ export default function CustomerChatbot() {
     }
   }
 
-  // Quick chips
   const quickPrompts = [
+    "Our location",
     "View products",
     "Product prices",
     "Book a visit",
@@ -126,7 +125,12 @@ export default function CustomerChatbot() {
                           {m.label}
                         </Link>
                       ) : (
-                        <a href={m.href} className="btn-link">
+                        <a
+                          href={m.href}
+                          className="btn-link"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           {m.label}
                         </a>
                       )}
@@ -167,7 +171,7 @@ export default function CustomerChatbot() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about products, prices, visits, or contact…"
+              placeholder="Ask about products, prices, visits, contact, or our location…"
               aria-label="Ask GreenNest"
             />
             <button type="submit" disabled={sending}>
