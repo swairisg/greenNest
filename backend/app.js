@@ -54,6 +54,11 @@ app.use("/api", visitBookingRoutes);
 const contactRoutes = require("./Routes/customers/contactUs/contactus");
 app.use(contactRoutes);
 
+// --- Customers API ---
+const customersRouter = require("./Routes/customers/customerRoute");
+app.use("/api/customers", customersRouter); // final URLs: /api/customers, /api/customers/:id
+
+
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
 app.use("/users", pestRoutes);
