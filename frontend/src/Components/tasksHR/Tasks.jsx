@@ -6,6 +6,10 @@ import { useHRChrome } from "./HRLayout";
 import "./Employees.css"; // reuse list/table/button styles
 import "./Tasks.css";     // keep visuals parallel to TasksNew form
 import "../../PlainReset.css";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
@@ -269,88 +273,101 @@ export default function HRTasks() {
     return `<table style="width:100%; border-collapse:collapse; font-size:12px;">${head}<tbody>${body}</tbody></table>`;
   };
 
-  const handleExportPDF = async () => {
-    try {
-      setExporting(true);
-      const batch = 500;
-      let cur = 1,
-        all = [],
-        totalFound = 0;
-      while (true) {
-        const resp = await api.get("/hr/tasks", {
-          params: buildParams({ page: cur, pageSize: batch }),
-        });
-        const chunk = resp.data?.data || [];
-        totalFound = resp.data?.total || 0;
-        all = all.concat(chunk);
-        const pages = Math.max(1, Math.ceil(totalFound / batch));
-        if (cur >= pages) break;
-        cur++;
-      }
+ const handleExportPDF = async () => {
+  try {
+    setExporting(true);
 
-      const w = window.open("", "_blank", "noopener,noreferrer,width=1200,height=800");
-      if (!w) {
-        MySwal.fire({
-          icon: "error",
-          title: "Popup blocked",
-          text: "Please allow popups to export PDF.",
-        });
-        return;
-      }
-
-      const title = "Tasks Report";
-      const date = new Date().toLocaleString();
-      const html = `
-        <html>
-          <head>
-            <title>${title}</title>
-            <style>
-              body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; padding: 24px; color:#111827; }
-              h1 { margin: 0 0 6px; font-size: 20px; color:#065f46; }
-              .sub { color:#6b7280; margin-bottom:16px; }
-              table { width:100%; border-collapse: collapse; }
-              th, td { font-size: 12px; }
-              @media print { .noprint { display: none; } }
-            </style>
-          </head>
-          <body>
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <div>
-                <h1>${title}</h1>
-                <div class="sub">${date}</div>
-              </div>
-              <button class="noprint" onclick="window.print()" style="padding:8px 12px;border-radius:10px;border:1px solid #065f46;background:#10b981;color:#fff;cursor:pointer">
-                Print / Save PDF
-              </button>
-            </div>
-            ${renderTasksTableHTML(all)}
-          </body>
-        </html>
-      `;
-      w.document.open();
-      w.document.write(html);
-      w.document.close();
-
-      MySwal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "success",
-        title: `PDF ready (${all.length} rows)`,
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
+    // get ALL rows under current filters
+    const batch = 500;
+    let cur = 1, all = [], totalFound = 0;
+    while (true) {
+      const resp = await api.get("/hr/tasks", {
+        params: buildParams({ page: cur, pageSize: batch }),
       });
-    } catch (e) {
-      console.error(e);
-      MySwal.fire({
-        icon: "error",
-        title: "Export failed",
-        text: e?.response?.data?.message || e.message,
-      });
-    } finally {
-      setExporting(false);
+      const chunk = resp.data?.data || [];
+      totalFound = resp.data?.total || 0;
+      all = all.concat(chunk);
+      const pages = Math.max(1, Math.ceil(totalFound / batch));
+      if (cur >= pages) break;
+      cur++;
     }
-  };
+
+    // Build data rows
+    const body = all.map(t => ([
+      t.title || "",
+      t.department || t.assignee?.department || "",
+      t.assignee?.fullName || "",
+      t.priority || "",
+      (t.status || "").replace("_"," "),
+      t.dueDate ? new Date(t.dueDate).toLocaleDateString() : "",
+      t.createdAt ? new Date(t.createdAt).toLocaleDateString() : "",
+    ]));
+
+    // Create + render table
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const marginX = 36;
+    const marginY = 40;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text("Tasks Report", marginX, marginY);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.text(new Date().toLocaleString(), marginX, marginY + 14);
+
+    autoTable(doc, {
+      startY: marginY + 28,
+      head: [[ "Title","Department","Assignee","Priority","Status","Due","Created" ]],
+      body,
+      styles: { fontSize: 8, cellPadding: 4, valign: "middle" },
+      headStyles: { fillColor: [6,95,70], textColor: 255 },
+      columnStyles: {
+        0: { cellWidth: 170 },
+        1: { cellWidth: 90 },
+        2: { cellWidth: 120 },
+        3: { cellWidth: 60 },
+        4: { cellWidth: 70 },
+        5: { cellWidth: 70 },
+        6: { cellWidth: 70 },
+      },
+      margin: { left: marginX, right: marginX },
+      didDrawPage: (data) => {
+        const str = `Page ${doc.internal.getNumberOfPages()}`;
+        doc.setFontSize(8);
+        doc.text(
+          str,
+          doc.internal.pageSize.getWidth() - marginX,
+          doc.internal.pageSize.getHeight() - 14,
+          { align: "right" }
+        );
+      },
+    });
+
+    // Download
+    const filename = `tasks_${new Date().toISOString().slice(0,10)}.pdf`;
+    doc.save(filename);
+
+    MySwal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: `PDF downloaded (${all.length} rows)`,
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+    });
+  } catch (e) {
+    console.error(e);
+    MySwal.fire({
+      icon: "error",
+      title: "Export failed",
+      text: e?.response?.data?.message || e.message,
+    });
+  } finally {
+    setExporting(false);
+  }
+};
+
 
   /* -------------------- Manage (Edit / Done / Delete) -------------------- */
 
