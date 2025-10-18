@@ -92,6 +92,7 @@ import VisitBookingsTable from "./Components/customers/CustomerDashboard/compone
 import CustomerLayout from "./Components/customers/CustomerLayout";
 
 
+
 function Layout({ children }) {
   const location = useLocation();
 
@@ -120,6 +121,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Layout>
+  
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/welcome" element={<Landing />} />
@@ -314,6 +316,7 @@ export default function App() {
             <Route path="/contactus" element={<ContactUs />} />
             <Route path="/viewcontactus" element={<Viewcontactus />} />            
             
+
 
 
             {/* Quality Control (matches backend /api/quality) */}

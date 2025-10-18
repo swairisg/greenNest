@@ -26,6 +26,11 @@ app.use(
 );
 app.use(express.json());
 
+//chatbot
+const customerChatRoutes = require("./Routes/customers/chatbot/customerChat");
+app.use("/api/customer-chat", customerChatRoutes);
+
+
 //harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules", harvestRouter);
@@ -38,6 +43,8 @@ app.use("/hr", hrRoutes);
 
 const plantCultRoutes = require("./Routes/plantCultivation");
 app.use("/plant-cultivation", plantCultRoutes);
+
+
 
 //customer
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
