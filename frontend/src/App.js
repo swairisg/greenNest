@@ -88,6 +88,8 @@ import GrowthPage from "./Components/plantCultivation/GrowthPage";
 
 
 import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
+import VisitBookingsTable from "./Components/customers/CustomerDashboard/components/VisitBookingsTable";
+import CustomerLayout from "./Components/customers/CustomerLayout";
 
 
 function Layout({ children }) {
@@ -198,7 +200,7 @@ export default function App() {
 
             <Route path="/climate" element={<ClimateMonitoring />} />
 
-
+             {/*harvest part*/}
             <Route path="/addharvestschedules" element={<AddSchedule />} />
             <Route
               path="/viewharvestschedules/:id"
@@ -299,15 +301,19 @@ export default function App() {
             {/*customer and buyer management*/}
             <Route path="/visit/book" element={<BookVisit />} />
             <Route path="/visit/success" element={<BookVisitSuccess />} />
-            <Route path="/visits/bookings" element={<CustomerDashboard />} />
+
+            <Route element={<CustomerLayout />}>
+            <Route path="/admin/customerdashboard" element={<CustomerDashboard />} />
+            <Route path="/visits/bookings" element={<VisitBookingsTable />} />
+             <Route path="/admin/customers" element={<CustomersManage />} />
+            </Route> 
 
             {/*customer profile*/}
             <Route path="/profile" element={<CustomerProfile />} />
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/viewcontactus" element={<Viewcontactus />} />
+            <Route path="/viewcontactus" element={<Viewcontactus />} />            
             
-             <Route path="/admin/customers" element={<CustomersManage />} />
 
 
             {/* Quality Control (matches backend /api/quality) */}

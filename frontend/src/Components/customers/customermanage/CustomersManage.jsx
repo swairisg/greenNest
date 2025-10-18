@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -16,7 +16,9 @@ const URL = `${API_BASE}/api/customers`;
 const fmtDate = (d) => {
   if (!d) return "—";
   const dt = new Date(d);
-  return isNaN(dt.getTime()) ? "—" : dt.toLocaleDateString("en-GB", { year: "numeric", month: "short", day: "numeric" });
+  return isNaN(dt.getTime())
+    ? "—"
+    : dt.toLocaleDateString("en-GB", { year: "numeric", month: "short", day: "numeric" });
 };
 
 export default function CustomersManage() {
@@ -37,11 +39,10 @@ export default function CustomersManage() {
     return () => clearTimeout(id);
   }, [q]);
 
-  const fetchCustomers = () => {
+  const fetchCustomers = useCallback(() => {
     setLoading(true);
     setErr("");
 
-    // server-side filters (status + q) — name/address we’ll do client-side
     const params = {};
     if (debouncedQ) params.q = debouncedQ;
     if (status !== "all") params.status = status;
@@ -54,14 +55,12 @@ export default function CustomersManage() {
         setErr(e?.response?.data?.message || "Failed to load customers");
       })
       .finally(() => setLoading(false));
-  };
+  }, [debouncedQ, status]);
 
   useEffect(() => {
     fetchCustomers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedQ, status]);
+  }, [fetchCustomers]);
 
-  // client-side filters: name + address
   const filteredRows = useMemo(() => {
     const nf = nameFilter.trim().toLowerCase();
     const af = addressFilter.trim().toLowerCase();
@@ -94,9 +93,14 @@ export default function CustomersManage() {
 
     try {
       await axios.delete(`${URL}/${row._id}`, { withCredentials: true });
-      // remove locally -> total auto-updates
       setList((prev) => prev.filter((x) => x._id !== row._id));
-      MySwal.fire({ icon: "success", title: "Deleted", text: `${row.name || row.email} removed`, timer: 1400, showConfirmButton: false });
+      MySwal.fire({
+        icon: "success",
+        title: "Deleted",
+        text: `${row.name || row.email} removed`,
+        timer: 1400,
+        showConfirmButton: false,
+      });
     } catch (e) {
       MySwal.fire({ icon: "error", title: "Delete failed", text: e?.response?.data?.message || "Server error" });
     }
@@ -125,7 +129,7 @@ export default function CustomersManage() {
       body: rows,
       startY: 20,
       styles: { fontSize: 9 },
-      headStyles: { fillColor: [16, 185, 129] }, // emerald-500
+      headStyles: { fillColor: [34, 197, 94] }, 
     });
 
     doc.save("customers.pdf");
@@ -135,7 +139,6 @@ export default function CustomersManage() {
 
   return (
     <div className="customr-page customr-green">
-      {/* Header */}
       <div className="customr-header">
         <h1 className="customr-title">User Management</h1>
         <p className="customr-subtitle">
@@ -143,7 +146,6 @@ export default function CustomersManage() {
         </p>
       </div>
 
-      {/* Toolbar */}
       <div className="customr-toolbar">
         <div className="customr-totalchip customr-chip-primary">
           <span className="customr-totalchip-label">Total users</span>
@@ -176,15 +178,20 @@ export default function CustomersManage() {
 
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="customr-select" title="Status">
           {STATUS.map((s) => (
-            <option key={s} value={s}>{s}</option>
+            <option key={s} value={s}>
+              {s}
+            </option>
           ))}
         </select>
 
-        <button onClick={fetchCustomers} className="customr-btn customr-btn-outline">Refresh</button>
-        <button onClick={downloadPDF} className="customr-btn customr-btn-primary">Download PDF</button>
+        <button onClick={fetchCustomers} className="customr-btn customr-btn-outline">
+          Refresh
+        </button>
+        <button onClick={downloadPDF} className="customr-btn customr-btn-primary">
+          Download PDF
+        </button>
       </div>
 
-      {/* Table */}
       <div className="customr-tablewrap customr-card">
         <table className="customr-table">
           <thead className="customr-thead">
@@ -203,49 +210,70 @@ export default function CustomersManage() {
 
           <tbody>
             {loading && (
-              <tr><td colSpan={9} className="customr-empty">Loading…</td></tr>
-            )}
-            {!loading && err && (
-              <tr><td colSpan={9} className="customr-error">{err}</td></tr>
-            )}
-            {!loading && !err && filteredRows.length === 0 && (
-              <tr><td colSpan={9} className="customr-empty">No users</td></tr>
-            )}
-
-            {!loading && !err && filteredRows.map((r) => (
-              <tr key={r._id}>
-                <td>
-                  <div className="customr-cell-title">{r.name || "—"}</div>
-                  <div className="customr-cell-sub">#{r._id.slice(-6)}</div>
-                </td>
-                <td>{r.email}</td>
-                <td>{r.phone || "—"}</td>
-                <td>
-                  <span className={`customr-badge customr-badge--${(r.status || "default").toLowerCase()}`}>
-                    {r.status}
-                  </span>
-                </td>
-                <td><span className="customr-tag">{r.primaryRole || (r.roles?.[0] ?? "—")}</span></td>
-                <td><span className="customr-tag customr-tag--muted">{r.source || "—"}</span></td>
-                <td>{fmtDate(r.createdAt)}</td>
-                <td>
-                  {r.isEmailVerified ? (
-                    <span className="customr-verify customr-verify--yes">✔ Verified</span>
-                  ) : (
-                    <span className="customr-verify customr-verify--no">✖ Not verified</span>
-                  )}
-                </td>
-                <td className="customr-td-actions">
-                  <button onClick={() => onDelete(r)} className="customr-btn customr-btn-danger">Delete</button>
+              <tr>
+                <td colSpan={9} className="customr-empty">
+                  Loading…
                 </td>
               </tr>
-            ))}
+            )}
+            {!loading && err && (
+              <tr>
+                <td colSpan={9} className="customr-error">
+                  {err}
+                </td>
+              </tr>
+            )}
+            {!loading && !err && filteredRows.length === 0 && (
+              <tr>
+                <td colSpan={9} className="customr-empty">
+                  No users
+                </td>
+              </tr>
+            )}
+
+            {!loading &&
+              !err &&
+              filteredRows.map((r) => (
+                <tr key={r._id}>
+                  <td>
+                    <div className="customr-cell-title">{r.name || "—"}</div>
+                    <div className="customr-cell-sub">#{r._id.slice(-6)}</div>
+                  </td>
+                  <td>{r.email}</td>
+                  <td>{r.phone || "—"}</td>
+                  <td>
+                    <span className={`customr-badge customr-badge--${(r.status || "default").toLowerCase()}`}>
+                      {r.status}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="customr-tag">{r.primaryRole || (r.roles?.[0] ?? "—")}</span>
+                  </td>
+                  <td>
+                    <span className="customr-tag customr-tag--muted">{r.source || "—"}</span>
+                  </td>
+                  <td>{fmtDate(r.createdAt)}</td>
+                  <td>
+                    {r.isEmailVerified ? (
+                      <span className="customr-verify customr-verify--yes">✔ Verified</span>
+                    ) : (
+                      <span className="customr-verify customr-verify--no">✖ Not verified</span>
+                    )}
+                  </td>
+                  <td className="customr-td-actions">
+                    <button onClick={() => onDelete(r)} className="customr-btn customr-btn-danger">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
 
-      {/* footer / rows meta */}
-      <div className="customr-rowsmeta">Showing <b>{filteredRows.length}</b> users</div>
+      <div className="customr-rowsmeta">
+        Showing <b>{filteredRows.length}</b> users
+      </div>
     </div>
   );
 }

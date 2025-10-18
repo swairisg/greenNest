@@ -56,7 +56,7 @@ app.use(contactRoutes);
 
 // --- Customers API ---
 const customersRouter = require("./Routes/customers/customerRoute");
-app.use("/api/customers", customersRouter); // final URLs: /api/customers, /api/customers/:id
+app.use("/api/customers", customersRouter); 
 
 
 // routes
