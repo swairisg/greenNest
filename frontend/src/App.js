@@ -54,6 +54,7 @@ import HRTasks from "./Components/tasksHR/Tasks";
 import HRTasksNew from "./Components/tasksHR/TasksNew";
 import HRAttendance from "./Components/tasksHR/Attendance";
 import HRPayroll from "./Components/tasksHR/Payroll";
+import PayrunView from "./Components/tasksHR/PayrunView";
 import HRPerformance from "./Components/tasksHR/Performance";
 import HRReports from "./Components/tasksHR/Reports";
 import HRSettings from "./Components/tasksHR/Settings";
@@ -85,9 +86,7 @@ import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
 import GrowthPage from "./Components/plantCultivation/GrowthPage";
 
-
 import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
-
 
 function Layout({ children }) {
   const location = useLocation();
@@ -141,16 +140,25 @@ export default function App() {
                 <Route path="/admin" element={<Admin />} />
               </Route>
 
-              {/* HR */}
               <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
                 <Route path="/hr" element={<HRLayout />}>
-                  <Route index element={<HROverview />} />
+                  {/* Default page when visiting /hr */}
+                  <Route index element={<HREmployees />} />
+
+                  {/* Keep overview accessible here */}
+                  <Route path="overview" element={<HROverview />} />
+
                   <Route path="employees" element={<HREmployees />} />
                   <Route path="employees/new" element={<HREmployeesNew />} />
+
                   <Route path="tasks" element={<HRTasks />} />
                   <Route path="tasks/new" element={<HRTasksNew />} />
+
                   <Route path="attendance" element={<HRAttendance />} />
+
                   <Route path="payroll" element={<HRPayroll />} />
+                  <Route path="payroll/:id" element={<PayrunView />} />
+
                   <Route path="performance" element={<HRPerformance />} />
                   <Route path="reports" element={<HRReports />} />
                   <Route path="settings" element={<HRSettings />} />
@@ -164,7 +172,7 @@ export default function App() {
 
               <Route element={<RequireRole roles={["inventory_manager"]} />}>
                 <Route path="/inventory" element={<InventoryManagement />} />
-            </Route>
+              </Route>
 
               <Route element={<RequireRole roles={["product_manager"]} />}>
                 <Route path="/products" element={<Product />} />
@@ -190,13 +198,10 @@ export default function App() {
                   path="/farmer/cultivation/growth"
                   element={<GrowthPage />}
                 />
-
               </Route>
-            
             </Route>
 
             <Route path="/climate" element={<ClimateMonitoring />} />
-
 
             <Route path="/addharvestschedules" element={<AddSchedule />} />
             <Route
