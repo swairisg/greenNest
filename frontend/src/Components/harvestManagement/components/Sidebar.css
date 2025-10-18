@@ -48,17 +48,19 @@
   display:flex;
   align-items:center;
   width:100%;
-  padding:12px 20px;
+  padding:14px 18px;     /* was 1px 1px — this caused the “compressed” look */
+  min-height:48px;       /* keep a comfy row height */
 
   background:#16a34a;
   border:none;
-  text-decoration:none;         /* remove Link underline */
-  color:#ffffff;                /* default nav text */
+  text-decoration:none;
+  color:#ffffff;
 
   cursor:pointer;
   transition:background .2s ease, color .2s ease, transform .12s ease;
   outline: none;
 }
+
 
 /* Hover/active/focus states */
 .harvest_nav-item:hover{

@@ -1,4 +1,3 @@
-// backend/Routes/customers/chatbot/customerChat.js
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
@@ -9,7 +8,6 @@ const fetch =
 // Products
 const Product = require("../../../Model/productCatalogue/ProductModel");
 
-// Yield (optional, auto-handled if present)
 const YieldModel = (() => {
   try {
     return require("../../../Model/harvestManagement/YieldModel");
@@ -21,14 +19,14 @@ const YieldModel = (() => {
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = "gemini-1.5-flash";
 
-// ---- GreenNest links ----
+
 const LINKS = {
   catalog: "/catalog",
   visit: "/visit/book",
   contact: "/contactus",
   about: "/Aboutus",
   home: "/home",
-  map: "https://maps.app.goo.gl/75b9XoNatophwFRP9", // Nuwara Eliya
+  map: "https://maps.app.goo.gl/75b9XoNatophwFRP9", 
 };
 
 // ------------ Intent detection ------------
@@ -49,9 +47,9 @@ function detectIntent(q = "") {
   return "general";
 }
 
-/* =========================
-   DB → live facts snapshot
-   ========================= */
+
+   /*DB */
+  
 async function getOperationalFacts() {
   const facts = {
     totalProducts: 0,
@@ -64,7 +62,7 @@ async function getOperationalFacts() {
     yield: { hasData: false, avgPerWeek: null, last30DaysTotal: null, unit: "kg" },
   };
 
-  // --- Products snapshot ---
+  // Products snapshot
   try {
     const matchVisible = { isVisible: true, isArchived: false, stockQuantity: { $gte: 0 } };
 
@@ -116,7 +114,7 @@ async function getOperationalFacts() {
     console.warn("[facts] product snapshot failed:", e?.message);
   }
 
-  // --- Yield snapshot (auto-detect fields, with fallbacks & numeric casts) ---
+  // Yield snapshot (auto-detect fields, with fallbacks & numeric casts) 
   if (YieldModel) {
     try {
       const schema = YieldModel.schema;
@@ -197,9 +195,8 @@ async function getOperationalFacts() {
   return facts;
 }
 
-/* =========================
-   Gemini calls
-   ========================= */
+/*  Gemini calls*/
+
 function compactFacts(facts = {}) { try { return JSON.stringify(facts); } catch { return "{}"; } }
 
 async function askGemini(message) {
@@ -253,9 +250,7 @@ async function askGeminiWithFacts(message, facts) {
   return "I don’t have the exact figure in my notes, but I can share typical ranges and current availability if you’d like. You can open the catalog, contact us, or book a visit for a detailed walkthrough.";
 }
 
-/* =========================
-   Mongo keyword filter
-   ========================= */
+  /* Mongo keyword filter*/
 function buildKeywordFilter(q = "") {
   const rules = [
     { rx: /strawber/i, or: [{ productName: /strawber/i }, { tags: /strawber/i }] },
@@ -302,15 +297,12 @@ const prods = (items) => ({
 // Format helper for numbers
 const fmt = (n) => Number(n).toLocaleString("en-LK", { maximumFractionDigits: 2 });
 
-/* =========================
-   Main endpoint
-   ========================= */
+  /* Main endpoint*/
 router.post("/", async (req, res) => {
   try {
     const { message = "" } = req.body || {};
     const intent = detectIntent(message);
 
-    // location → Google Maps
     if (intent === "location") {
       return res.json({
         intent,

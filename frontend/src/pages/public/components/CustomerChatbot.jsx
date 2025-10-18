@@ -4,16 +4,16 @@ import "./customerChat.css";
 
 function ProductCard({ item }) {
   return (
-    <div className="gnp-card">
+    <div className="chat-card">
       {item.image ? (
         <img src={item.image} alt={item.name} />
       ) : (
-        <div className="noimg">No image</div>
+        <div className="chat-noimg">No image</div>
       )}
-      <div className="info">
-        <div className="name">{item.name}</div>
+      <div className="chat-info">
+        <div className="chat-name">{item.name}</div>
         {"price" in item && (
-          <div className="price">
+          <div className="chat-price">
             LKR {Number(item.price).toLocaleString("en-LK")}
           </div>
         )}
@@ -89,10 +89,12 @@ export default function CustomerChatbot() {
     "What is a greenhouse?",
   ];
 
+  const roleClass = (role) => (role === "user" ? "chat-user" : "chat-assistant");
+
   return (
     <>
       <button
-        className="gn-fab"
+        className="chat-fab"
         onClick={() => setOpen((v) => !v)}
         aria-label="Open customer chat"
         title="Need help?"
@@ -101,33 +103,33 @@ export default function CustomerChatbot() {
       </button>
 
       {open && (
-        <div className="gn-panel">
-          <div className="gn-head">
+        <div className="chat-panel">
+          <div className="chat-head">
             <span>GreenNest Help</span>
           </div>
 
-          <div className="gn-body" ref={listRef}>
+          <div className="chat-body" ref={listRef}>
             {msgs.map((m, i) => {
               if (m.type === "text") {
                 return (
-                  <div key={i} className={`row ${m.role}`}>
-                    <div className="bubble">{m.text}</div>
+                  <div key={i} className={`chat-row ${roleClass(m.role)}`}>
+                    <div className="chat-bubble">{m.text}</div>
                   </div>
                 );
               }
               if (m.type === "link") {
                 const internal = m.href?.startsWith("/");
                 return (
-                  <div key={i} className="row assistant">
-                    <div className="bubble">
+                  <div key={i} className="chat-row chat-assistant">
+                    <div className="chat-bubble">
                       {internal ? (
-                        <Link to={m.href} className="btn-link">
+                        <Link to={m.href} className="chat-btn-link">
                           {m.label}
                         </Link>
                       ) : (
                         <a
                           href={m.href}
-                          className="btn-link"
+                          className="chat-btn-link"
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -140,8 +142,8 @@ export default function CustomerChatbot() {
               }
               if (m.type === "products") {
                 return (
-                  <div key={i} className="row assistant">
-                    <div className="products">
+                  <div key={i} className="chat-row chat-assistant">
+                    <div className="chat-products">
                       {(m.items || []).map((it) => (
                         <ProductCard key={it.id} item={it} />
                       ))}
@@ -153,28 +155,29 @@ export default function CustomerChatbot() {
             })}
 
             {sending && (
-              <div className="row assistant">
-                <div className="bubble typing">Typing…</div>
+              <div className="chat-row chat-assistant">
+                <div className="chat-bubble chat-typing">Typing…</div>
               </div>
             )}
           </div>
 
-          <div className="gn-quick">
+          <div className="chat-quick">
             {quickPrompts.map((q) => (
-              <button key={q} onClick={() => setInput(q)}>
+              <button key={q} onClick={() => setInput(q)} className="chat-quick-btn">
                 {q}
               </button>
             ))}
           </div>
 
-          <form className="gn-form" onSubmit={send}>
+          <form className="chat-form" onSubmit={send}>
             <input
+              className="chat-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about products, prices, visits, contact, or our location…"
               aria-label="Ask GreenNest"
             />
-            <button type="submit" disabled={sending}>
+            <button className="chat-submit" type="submit" disabled={sending}>
               {sending ? "…" : "Ask"}
             </button>
           </form>
