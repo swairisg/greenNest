@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
-import Sidebar from "../harvestManagement/components/Sidebar";
-import "./HarvestLayout.css";
+import Sidebar from "../customers/CustomerDashboard/components/SideBar/Sidebar";
+import "./CustomerLayout.css";
 
-export default function HarvestLayout() {
+export default function CustomerLayout() {
   const [sideBarVanish, setSideBarVanish] = useState(1);
   return (
     <div className="harvest_layout-frame">
@@ -17,14 +17,14 @@ export default function HarvestLayout() {
         <div className="flex flex-items">
         {sideBarVanish === 1 && (
           <button
-            className="harvest_layout-menu-btn"
+            className="harvest_layout-menu-btn "
             onClick={() => setSideBarVanish(0)}
           >
             <FaBars />
           </button>
         )}
-        <h1 className="harvest_layout-title">Harvest Management</h1>
-      </div>
+        <h1 className="harvest_layout-title ">Customer Management</h1>
+        </div>
         <Outlet />
       </main>
     </div>
