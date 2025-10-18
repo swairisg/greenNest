@@ -1,10 +1,11 @@
 /* ===== Customer Profile — Minimal Green/White ===== */
-.cp_profile {
-  --cp-primary: #32CD32;      /* green */
-  --cp-primary-700: #32CD32;
-  --cp-bg: #ffffff;           /* page + card stay white/minimal */
+.cp_profile,
+.profile_root {
+  --cp-primary: #32cd32;         /* green */
+  --cp-primary-700: #32cd32;     /* keep same; adjust if you want a darker hover */
+  --cp-bg: #ffffff;              /* page + card stay white/minimal */
   --cp-muted: #6b7a75;
-  --cp-border: #4F7942(0,0,0,.06);
+  --cp-border: rgba(0, 0, 0, 0.06);
   --cp-ring: #ffffff;
 
   min-height: 100dvh;
@@ -14,8 +15,15 @@
   padding: 20px;
 }
 
-.cp_profile .gn-container { width: 100%; }
-.cp_profile .gn-card {
+.cp_profile .gn-container,
+.profile_root .gn-container,
+.profile_container {
+  width: 100%;
+}
+
+.cp_profile .gn-card,
+.profile_root .gn-card,
+.profile_card {
   width: 100%;
   max-width: 420px;
   margin-inline: auto;
@@ -26,22 +34,30 @@
 }
 
 /* Header */
-.cp_header {
+.cp_header,
+.profile_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 6px;
 }
-.cp_title {
+.cp_title,
+.profile_title {
   margin: 0;
   font-size: 18px;
   font-weight: 800;
   color: #0f1c19;
 }
 
+/* Loading */
+.profile_loading {
+  color: var(--cp-muted);
+}
+
 /* Identity block — simple, minimal */
-.cp_identity {
+.cp_identity,
+.profile_identity {
   display: grid;
   grid-template-columns: 90px 1fr;
   gap: 14px;
@@ -53,7 +69,8 @@
   margin: 8px 0 10px;
 }
 
-.cp_avatar {
+.cp_avatar,
+.profile_avatar {
   width: 90px;
   height: 90px;
   border-radius: 999px;
@@ -66,25 +83,37 @@
   border: 6px solid var(--cp-ring);
   overflow: hidden;
 }
-.cp_avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cp_avatar img,
+.profile_avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-.cp_userName {
+.cp_userName,
+.profile_userName {
   margin: 2px 0 2px;
   font-size: 18px;
   font-weight: 800;
   color: #0f1c19;
 }
-.cp_userMeta { color: var(--cp-muted); font-size: 13px; }
+.cp_userMeta,
+.profile_userMeta {
+  color: var(--cp-muted);
+  font-size: 13px;
+}
 
 /* Fields */
-.cp_fields {
+.cp_fields,
+.profile_fields {
   margin-top: 6px;
   background: #fff;
   border: 1px solid var(--cp-border);
   border-radius: 12px;
   overflow: hidden;
 }
-.cp_field {
+.cp_field,
+.profile_field {
   display: grid;
   grid-template-columns: 120px 1fr;
   gap: 10px;
@@ -92,15 +121,20 @@
   align-items: center;
   border-top: 1px solid var(--cp-border);
 }
-.cp_field:first-child { border-top: 0; }
+.cp_field:first-child,
+.profile_field:first-child {
+  border-top: 0;
+}
 
-.cp_label {
+.cp_label,
+.profile_label {
   color: var(--cp-muted);
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
 }
-.cp_value {
+.cp_value,
+.profile_value {
   color: #0f1c19;
   font-weight: 600;
   font-size: 14.5px;
@@ -108,15 +142,17 @@
 }
 
 /* Actions */
-.cp_actions {
+.cp_actions,
+.profile_actions {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
   margin-top: 14px;
 }
 
-/* Minimal buttons */
-.cp_btn {
+/* Minimal buttons (shared) */
+.cp_btn,
+.profile_btn {
   appearance: none;
   border-radius: 10px;
   padding: 11px 14px;
@@ -126,43 +162,68 @@
   border: 1px solid transparent;
   background: #fff;
   color: var(--cp-primary);
-  border-color:#4F7942(30,142,112,.25);
+  border-color: rgba(50, 205, 50, 0.25); /* fixed invalid color */
 }
-.cp_btn:hover { border-color: var(--cp-primary); }
+.cp_btn:hover,
+.profile_btn:hover {
+  border-color: var(--cp-primary);
+}
 
 /* Primary = filled green */
-.cp_btn--primary {
+.cp_btn--primary,
+.profile_btn--primary {
   background: var(--cp-primary);
   color: #fff;
   border-color: var(--cp-primary);
 }
-.cp_btn--primary:hover { background: var(--cp-primary-700); }
+.cp_btn--primary:hover,
+.profile_btn--primary:hover {
+  background: var(--cp-primary-700);
+}
 
-/* Ghost = white with green border (already set above) */
-.cp_btn--ghost {
+/* Ghost = white with green border */
+.cp_btn--ghost,
+.profile_btn--ghost {
   background: #fff;
   color: var(--cp-primary);
 }
 
-/* Match your existing Book Visit button to minimal style */
-.cp_actions .gn-btn.success {
+/* “Book Visit” (existing gn-btn) matched to minimal look */
+.cp_actions .gn-btn.success,
+.profile_actions .gn-btn.success {
   background: #fff;
   color: var(--cp-primary);
-  border: 1px solid#4F7942(30,142,112,.25);
+  border: 1px solid rgba(50, 205, 50, 0.25); /* fixed invalid color */
   border-radius: 10px;
   padding: 11px 14px;
   font-weight: 700;
 }
-.cp_actions .gn-btn.success:hover {
+.cp_actions .gn-btn.success:hover,
+.profile_actions .gn-btn.success:hover {
   border-color: var(--cp-primary);
 }
 
 /* Responsive tweaks */
 @media (min-width: 480px) {
-  .cp_profile .gn-card { padding: 20px; }
-  .cp_identity { grid-template-columns: 100px 1fr; }
-  .cp_avatar { width: 100px; height: 100px; font-size: 38px; }
+  .cp_profile .gn-card,
+  .profile_root .gn-card,
+  .profile_card {
+    padding: 20px;
+  }
+  .cp_identity,
+  .profile_identity {
+    grid-template-columns: 100px 1fr;
+  }
+  .cp_avatar,
+  .profile_avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 38px;
+  }
 }
 @media (min-width: 768px) {
-  .cp_actions { grid-template-columns: 1fr 1fr 1fr; }
+  .cp_actions,
+  .profile_actions {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }

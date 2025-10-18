@@ -54,6 +54,12 @@ app.use("/api", visitBookingRoutes);
 const contactRoutes = require("./Routes/customers/contactUs/contactus");
 app.use(contactRoutes);
 
+
+const profileOrders = require("./Routes/customers/profileOrder"); 
+app.use("/api/profileorders", profileOrders); 
+
+
+
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
 app.use("/users", pestRoutes);

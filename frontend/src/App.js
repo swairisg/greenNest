@@ -45,6 +45,7 @@ import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess"
 import CustomerDashboard from "./Components/customers/CustomerDashboard/CustomerDashboard";
 import ContactUs from "./Components/customers/ContactUs/ContactUs";
 import Viewcontactus from "./Components/customers/ContactUs/ViewContactUs/Viewcontactus";
+import ProfileOrdersPage from "./Components/customers/profileOrders/ProfileOrdersPage";
 
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
@@ -305,6 +306,8 @@ export default function App() {
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/contactus" element={<ContactUs />} />
             <Route path="/viewcontactus" element={<Viewcontactus />} />
+            <Route path="/profileorders/:userId" element={<ProfileOrdersPage />} />
+
 
             {/* Quality Control (matches backend /api/quality) */}
             <Route path="/quality" element={<QualityList />} />
