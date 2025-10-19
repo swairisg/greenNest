@@ -1,6 +1,12 @@
 // frontend/src/App.js
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
 import GreenNestFooter from "./Components/common/GreenNestFooter";
 import GreenNestHeader from "./Components/common/GreenNestHeader";
@@ -26,11 +32,9 @@ import UpdateSchedule from "./Components/harvestManagement/UpdateHarvestSchedule
 import AddYieldRecord from "./Components/harvestManagement/AddYieldRecord/AddYieldRecord";
 import ViewYield from "./Components/harvestManagement/ViewYieldRecord/ViewYield";
 import EditYieldRecord from "./Components/harvestManagement/EditYieldRecord/EditYieldRecord";
-import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
+//import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
 import HarvestDashboard from "./Components/harvestManagement/harvestdashboard/HarvestDashboard";
 import WeeklyForecastPage from "./Components/harvestManagement/yieldpredictor/WeeklyForecastPage";
-
-
 
 import CustomerProfile from "./pages/profile/CustomerProfile";
 import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
@@ -73,8 +77,6 @@ import AdminQualityList from "./Components/qualityControl/AdminQualityList";
 import AdminQualityDetail from "./Components/qualityControl/AdminQualityDetail"; // the page that renders details + AdminGradePanel
 import AdminQualityEdit from "./Components/qualityControl/AdminQualityEdit";
 
-
-
 import Cart from "./Components/cart/Cart";
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
@@ -99,7 +101,14 @@ function Layout({ children }) {
   const shouldHide = hideOnPaths.includes(location.pathname);
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#fff" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        background: "#fff",
+      }}
+    >
       {!shouldHide && <GreenNestHeader />}
       {children}
       {!shouldHide && <GreenNestFooter />}
@@ -112,7 +121,6 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Layout>
-  
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/welcome" element={<Landing />} />
@@ -173,7 +181,6 @@ export default function App() {
                 <Route path="/farmer" element={<Farmer />} />
                 <Route path="/farmer/cultivation" element={<SectionHome />} />
 
-              
                 <Route
                   path="/farmer/cultivation/land"
                   element={<LandPrepPage />}
@@ -201,48 +208,71 @@ export default function App() {
               </Route>
             </Route>
 
+            <Route path="/climate" element={<ClimateMonitoring />} />
 
-            
-
-          <Route path="/climate" element={<ClimateMonitoring />} />
-
-             {/*harvest part*/}
+            {/*harvest part*/}
 
             <Route path="/addharvestschedules" element={<AddSchedule />} />
-            <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
+            <Route
+              path="/viewharvestschedules/:id"
+              element={<UpdateSchedule />}
+            />
             <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
-{/*<Route
+            {/*<Route
               path="/yieldrecords/edit/:id"
               element={<EditYieldRecord />}
             />*/}
 
-            <Route path="/yieldrecords/edit/:id" element={<EditYieldRecord />} />
+            <Route
+              path="/yieldrecords/edit/:id"
+              element={<EditYieldRecord />}
+            />
             <Route element={<HarvestLayout />}>
               <Route path="/harvestdashboard" element={<HarvestDashboard />} />
               <Route path="/viewharvestschedules" element={<ViewSchedule />} />
               <Route path="/ViewYieldRecords" element={<ViewYield />} />
-              <Route path="/harvest/ai/forecast-weekly" element={<WeeklyForecastPage />} />
-
+              <Route
+                path="/harvest/ai/forecast-weekly"
+                element={<WeeklyForecastPage />}
+              />
             </Route>
 
             {/* Pest */}
-            <Route path="/PestDetectDashboard" element={<PestDetectDashboard />} />
+            <Route
+              path="/PestDetectDashboard"
+              element={<PestDetectDashboard />}
+            />
             <Route path="/pests/ai" element={<PestAIDetect />} />
             <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
-            <Route path="/pests/farmer" element={<PestDetectAdd role="farmer" />} />
-            <Route path="/pests/:id/update" element={<PestDetectAdd role="specialist" />} />
+            <Route
+              path="/pests/farmer"
+              element={<PestDetectAdd role="farmer" />}
+            />
+            <Route
+              path="/pests/:id/update"
+              element={<PestDetectAdd role="specialist" />}
+            />
 
             {/* Catalog */}
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/admin/products" element={<AdminProducts />} />
-            <Route path="/admin/products/new" element={<ProductCatalogForm />} />
-            <Route path="/admin/products/:id/edit" element={<ProductCatalogForm />} />
-            <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
+            <Route
+              path="/admin/products/new"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/:id/edit"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/dashboard"
+              element={<ProductCatalogDashboard />}
+            />
 
             {/* Quality */}
             <Route path="/admin" element={<Admin />} />
 
-              {/*<Route
+            {/*<Route
               path="/PestDetectDashboard"
               element={<PestDetectDashboard />}
             />
@@ -286,19 +316,19 @@ export default function App() {
             <Route path="/visit/success" element={<BookVisitSuccess />} />
 
             <Route element={<CustomerLayout />}>
-            <Route path="/admin/customerdashboard" element={<CustomerDashboard />} />
-            <Route path="/visits/bookings" element={<VisitBookingsTable />} />
-             <Route path="/admin/customers" element={<CustomersManage />} />
-            </Route> 
+              <Route
+                path="/admin/customerdashboard"
+                element={<CustomerDashboard />}
+              />
+              <Route path="/visits/bookings" element={<VisitBookingsTable />} />
+              <Route path="/admin/customers" element={<CustomersManage />} />
+            </Route>
 
             {/*customer profile*/}
             <Route path="/profile" element={<CustomerProfile />} />
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/viewcontactus" element={<Viewcontactus />} />            
-            
-
-
+            <Route path="/viewcontactus" element={<Viewcontactus />} />
 
             {/* Quality Control (matches backend /api/quality) */}
             <Route path="/quality" element={<QualityList />} />
@@ -308,7 +338,10 @@ export default function App() {
 
             <Route path="/admin/quality" element={<AdminQualityList />} />
             <Route path="/admin/quality/:id" element={<AdminQualityDetail />} />
-            <Route path="/admin/quality/:id/edit" element={<AdminQualityEdit />} />
+            <Route
+              path="/admin/quality/:id/edit"
+              element={<AdminQualityEdit />}
+            />
 
             {/* Orders */}
             <Route path="/orders" element={<OrderList />} />

@@ -9,7 +9,6 @@ const orderRoutes = require("./Routes/finance/orderRoute");
 //quality
 const { ensureAuth, requireRoles } = require("./middleware/auth");
 
-
 const cors = require("cors");
 const cron = require("node-cron");
 const phenology = require("./Controllers/plantCultivation/phenologyController");
@@ -47,7 +46,7 @@ app.use("/users", require("./Routes/pestControl/PestDetectRoute"));
 app.use("/products", require("./Routes/productCatalogue/ProductRoute"));
 
 // Quality Control
-app.use("/api/quality", require("./Routes/qualityControl/qualityControlRoute"));
+//app.use("/api/quality", require("./Routes/qualityControl/qualityControlRoute"));
 
 // Finance
 app.use("/api/finance/orders", require("./Routes/finance/orderRoute"));
@@ -65,11 +64,10 @@ app.use("/api/reports", require("./Routes/inventory/ReportRoute"));
 app.use("/api/climate", require("./Routes/climateCheck/ClimateRoutes"));
 app.use("/api/automation", require("./Routes/climateCheck/automationRoutes"));
 app.use("/api/climate-alerts", require("./Routes/climateCheck/AlertRoutes"));
-const { fetchAndStoreExternalData } = require("./Controllers/climateCheck/ClimateController");
+//const { fetchAndStoreExternalData } = require("./Controllers/climateCheck/ClimateController");
 //chatbot
 const customerChatRoutes = require("./Routes/customers/chatbot/customerChat");
 app.use("/api/customer-chat", customerChatRoutes);
-
 
 //harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
@@ -81,18 +79,11 @@ app.use("/yieldRecords", YieldRouter);
 const ForecastRouter = require("./Routes/harvestManagement/forecastRoutes");
 app.use("/api", ForecastRouter);
 
-  
-
-
-
 const hrRoutes = require("./Routes/tasksHR");
 app.use("/hr", hrRoutes);
 
 const plantCultRoutes = require("./Routes/plantCultivation");
 app.use("/plant-cultivation", plantCultRoutes);
-
-
-
 
 //customer
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
@@ -109,10 +100,9 @@ app.use("/api", visitBookingRoutes);
 const contactRoutes = require("./Routes/customers/contactUs/contactus");
 app.use(contactRoutes);
 
-// Customers API 
+// Customers API
 const customersRouter = require("./Routes/customers/customerRoute");
-app.use("/api/customers", customersRouter); 
-
+app.use("/api/customers", customersRouter);
 
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
@@ -126,20 +116,9 @@ app.get("/", (_req, res) => res.send("Hello from backend"));
 /* ---------- routes ---------- */
 app.use("/auth", require("./Routes/auth"));
 
-//const qualityRoutes = require("./Routes/qualityControl/qualityControlRoute");
-//app.use("/api/quality", qualityRoutes);
-
-
-
 //qualitycontrol farmer (snippet)
 const adminQualityRoutes = require("./Routes/qualityControl/qualityControlAdminroutes");
-app.use(
-  "/api/admin",
-  ensureAuth,
-  requireRoles(["admin"]),
-  adminQualityRoutes
-);
-
+app.use("/api/admin", ensureAuth, requireRoles(["admin"]), adminQualityRoutes);
 
 const farmerQualityRoutes = require("./Routes/qualityControl/qualityControlFarmerroutes");
 app.use(
@@ -148,12 +127,6 @@ app.use(
   requireRoles(["farmer", "admin"]), // allow admin to view if you want
   farmerQualityRoutes
 );
-
-
-
-
-
-
 
 app.use("/api/finance/orders", orderRoutes);
 
@@ -195,7 +168,6 @@ const {
   fetchAndStoreExternalData,
 } = require("./Controllers/climateCheck/ClimateController");
 app.post("/api/fetch-external", fetchAndStoreExternalData);
-
 
 // Root health
 app.get("/", (_req, res) => {
