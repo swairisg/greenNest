@@ -18,7 +18,10 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.6.0",
     "mongoose": "^8.18.3",
+    "multer": "^2.0.2",
+    "pdfkit": "^0.17.2",
     "twilio": "^5.10.3"
   },
   "devDependencies": {

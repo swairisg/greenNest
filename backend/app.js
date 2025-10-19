@@ -58,6 +58,10 @@ app.use(contactRoutes);
 const profileOrders = require("./Routes/customers/profileOrder"); 
 app.use("/api/profileorders", profileOrders); 
 
+const path = require("path");
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+
 
 
 // routes

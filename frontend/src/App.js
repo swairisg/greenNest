@@ -126,7 +126,7 @@ export default function App() {
 
             <Route element={<RequireRole roles={["customer"]} />}>
               <Route path="/home" element={<Home />} />
-              <Route path="/profile" element={<CustomerProfile />} />
+              <Route path="/profile/:id" element={<CustomerProfile />} />
               <Route path="/profile/edit" element={<EditProfile />} />
             </Route>
 
