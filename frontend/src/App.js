@@ -35,8 +35,10 @@ import AddYieldRecord from "./Components/harvestManagement/AddYieldRecord/AddYie
 import ViewYield from "./Components/harvestManagement/ViewYieldRecord/ViewYield";
 import EditYieldRecord from "./Components/harvestManagement/EditYieldRecord/EditYieldRecord";
 import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
-
 import HarvestDashboard from "./Components/harvestManagement/harvestdashboard/HarvestDashboard";
+import WeeklyForecastPage from "./Components/harvestManagement/yieldpredictor/WeeklyForecastPage";
+
+
 
 import CustomerProfile from "./pages/profile/CustomerProfile";
 import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
@@ -233,10 +235,19 @@ export default function App() {
               element={<EditYieldRecord />}
             />
 
+
+
+            
+
+
+            
+
             <Route element={<HarvestLayout />}>
               <Route path="/harvestdashboard" element={<HarvestDashboard />} />
               <Route path="/viewharvestschedules" element={<ViewSchedule />} />
               <Route path="/ViewYieldRecords" element={<ViewYield />} />
+              <Route path="/harvest/ai/forecast-weekly" element={<WeeklyForecastPage />} />
+
             </Route>
 
             <Route path="/admin" element={<Admin />} />
