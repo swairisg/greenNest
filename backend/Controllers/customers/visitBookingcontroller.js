@@ -1,7 +1,5 @@
-// backend/Controllers/customers/visitBookingcontroller.js
 const VisitBooking = require("../../Model/customers/VisitBookingModel");
 
-/* ---------- Helpers & validation ---------- */
 function isPastDate(d) {
   const dt = new Date(d);
   if (Number.isNaN(dt.getTime())) return true;
@@ -41,10 +39,7 @@ function validateBooking(payload) {
   return errs;
 }
 
-/* ---------- Status normalization ----------
-   Your model enum is ["new","approved"].
-   Accept legacy/alias inputs and map them to canonical values.
------------------------------------------------- */
+
 const aliasMap = {
   pending: "new",
   new: "new",
@@ -67,14 +62,11 @@ function normalizeStatusForDB(nextStatus) {
   return { error: `Invalid status '${nextStatus}'. Allowed: ${enums.join(", ")}` };
 }
 
-/* ---------- Controllers ---------- */
 
-// Public create (with honeypot `website`)
 exports.createBooking = async (req, res) => {
   try {
     const payload = req.body;
 
-    // Honeypot: if filled, silently accept to trap bots
     if (payload.website && String(payload.website).trim()) {
       return res.status(200).json({ ok: true });
     }
@@ -92,8 +84,7 @@ exports.createBooking = async (req, res) => {
       timeSlot: payload.timeSlot,
       visitorsCount: Number(payload.visitorsCount),
       purpose: payload.purpose || "",
-      agreeToTerms: true, // already validated
-      // status defaults to "new" per model
+      agreeToTerms: true, 
     });
 
     return res.status(201).json({ data: doc, message: "Booking submitted" });
@@ -103,7 +94,6 @@ exports.createBooking = async (req, res) => {
   }
 };
 
-// List (optionally by email)
 exports.listBookings = async (req, res) => {
   try {
     const filter = {};

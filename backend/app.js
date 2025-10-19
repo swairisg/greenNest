@@ -78,11 +78,19 @@ app.use("/HarvestSchedules", harvestRouter);
 const YieldRouter = require("./Routes/harvestManagement/Yield");
 app.use("/yieldRecords", YieldRouter);
 
+const ForecastRouter = require("./Routes/harvestManagement/forecastRoutes");
+app.use("/api", ForecastRouter);
+
+  
+
+
+
 const hrRoutes = require("./Routes/tasksHR");
 app.use("/hr", hrRoutes);
 
 const plantCultRoutes = require("./Routes/plantCultivation");
 app.use("/plant-cultivation", plantCultRoutes);
+
 
 
 
@@ -101,7 +109,7 @@ app.use("/api", visitBookingRoutes);
 const contactRoutes = require("./Routes/customers/contactUs/contactus");
 app.use(contactRoutes);
 
-// --- Customers API ---
+// Customers API 
 const customersRouter = require("./Routes/customers/customerRoute");
 app.use("/api/customers", customersRouter); 
 
