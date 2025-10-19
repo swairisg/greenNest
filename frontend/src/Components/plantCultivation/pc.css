@@ -141,6 +141,14 @@
   background:#065f46; color:#fff; border-radius: 10px; padding:8px 12px;
 }
 .pc-tile:hover .pc-tile-cta{ filter: brightness(1.05); }
+.pc-tile-actions{ display:flex; gap:8px; }
+.pc-tile-btn{
+  display:inline-block; font-weight:600; font-size:13px; padding:8px 12px;
+  border-radius:10px; border:1px solid #d1d5db; text-decoration:none; color:#111827; background:#fff;
+}
+.pc-tile-btn.primary{ background:#065f46; border-color:#065f46; color:#fff; }
+.pc-tile-btn.ghost{ background:#fff; }
+.pc-tile:hover .pc-tile-btn.primary{ filter:brightness(1.05); }
 
 
 

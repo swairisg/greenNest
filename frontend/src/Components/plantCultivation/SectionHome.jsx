@@ -9,31 +9,28 @@ export default function SectionHome() {
       title: "Seed Inventory",
       desc: "Track seed batches, suppliers, quantities, and expiries.",
       to: "/farmer/cultivation/seeds",
-      img: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1200&auto=format&fit=crop", // seeds
+      img: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1200&auto=format&fit=crop",
     },
     {
       key: "land",
       title: "Land Preparation",
       desc: "Log soil tests, clearing, bed prep, amendments, irrigation setup.",
       to: "/farmer/cultivation/land",
-      img: "https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?q=80&w=1200&auto=format&fit=crop", // field
+      img: "https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?q=80&w=1200&auto=format&fit=crop",
     },
     {
       key: "plans",
       title: "Planting Plans",
       desc: "Schedule crop plantings into sections and link seed batches.",
       to: "/farmer/cultivation/plans",
-       img: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1200&auto=format&fit=crop", // flower planting
-  
+      img: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1200&auto=format&fit=crop",
     },
     {
       key: "growth",
       title: "Growth Monitoring",
       desc: "Record growth logs, stages, heights, and issues per plan.",
       to: "/farmer/cultivation/growth",
-     img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?q=80&w=1200&auto=format&fit=crop", // strawberries
-
- 
+      img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?q=80&w=1200&auto=format&fit=crop",
     },
   ];
 
@@ -47,6 +44,16 @@ export default function SectionHome() {
           <p className="pc-hero-sub">
             Manage seeds, land preparation, planting plans, and daily growth logs — all in one place.
           </p>
+          
+          <div style={{ marginTop: 12, display: "flex", gap: 8, flexWrap: "wrap" }}>
+  <Link to="/farmer/cultivation/analytics" className="pc-tile-btn primary">
+    Tasks &amp; Analytics
+  </Link>
+  <Link to="/farmer/cultivation/phenology" className="pc-tile-btn primary">
+    Phenology &amp; Autopilot
+  </Link>
+</div>
+
         </div>
       </div>
 

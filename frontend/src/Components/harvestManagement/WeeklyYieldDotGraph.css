@@ -1,0 +1,74 @@
+/* Card container */
+.mydg-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+/* Header section */
+.mydg-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.mydg-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.mydg-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Metrics badges (R², RMSE, n) */
+.mydg-metrics {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mydg-badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #f9fafb;
+  color: #111827;
+}
+
+/* Error message */
+.mydg-error {
+  margin-top: 8px;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+/* Chart area */
+.mydg-chart {
+  margin-top: 6px;
+}
+
+/* Footer / forecast summary */
+.mydg-footer {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #111827;
+}
+.mydg-note b {
+  font-weight: 700;
+}
+.mydg-dim {
+  margin-left: 8px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .mydg-head { flex-direction: column; align-items: flex-start; }
+  .mydg-title { font-size: 15px; }
+  .mydg-metrics { gap: 6px; }
+}

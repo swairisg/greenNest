@@ -1,0 +1,50 @@
+.wf-page{
+  padding:16px;
+}
+
+.wf-title{
+  margin:0 0 12px 0;
+  font-size:20px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+.wf-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+
+.wf-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.wf-label{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.wf-input, .wf-select{
+  padding:8px 10px;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  background:#fff;
+  color:#111827;
+  outline:none;
+  min-width:160px;
+}
+.wf-input:focus, .wf-select:focus{
+  border-color:#9ca3af;
+  box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.wf-help{
+  padding:12px;
+  border:1px dashed #e5e7eb;
+  border-radius:12px;
+  color:#6b7280;
+}

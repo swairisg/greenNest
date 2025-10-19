@@ -1,0 +1,35 @@
+/* Task form wrapper (similar feel to hrnew-*, but scoped for tasks) */
+.task-wrap { padding: 24px; background: #f7fbf9; min-height: 100%; }
+.task-card {
+  max-width: 980px; margin: 0 auto; background: #fff; border: 1px solid #e8efe8;
+  border-radius: 16px; padding: 20px 20px 28px; box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+.task-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+.task-head h2 { margin:0; font-size:22px; color:#17381f; }
+
+.task-section { margin-top: 18px; }
+.task-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;
+}
+.task-grid .span2 { grid-column: span 2; }
+.task-textarea {
+  min-height: 120px; padding: 10px; border: 1px solid #d8e7d8; border-radius: 10px; font-size: 14px; background:#fbfffb;
+}
+
+.task-error {
+  background:#fff2f2; color:#8a1f1f; border:1px solid #f4d6d6;
+  border-radius:10px; padding:10px 12px; margin: 8px 0;
+}
+
+label { display:flex; flex-direction:column; font-size:12px; color:#375a46; gap:6px; }
+input, select, textarea {
+  border: 1px solid #d8e7d8; border-radius: 10px; padding: 10px 12px; font-size: 14px;
+  outline: none; background: #fbfffb;
+}
+input:focus, select:focus, textarea:focus { border-color:#1f8a38; box-shadow:0 0 0 3px rgba(31,138,56,.12); }
+
+@media (max-width: 720px) {
+  .task-grid { grid-template-columns: 1fr; }
+  .task-grid .span2 { grid-column: auto; }
+  .task-card { padding: 16px; }
+}

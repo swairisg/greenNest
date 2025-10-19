@@ -1,4 +1,4 @@
-// src/App.js
+// frontend/src/App.js
 import React from "react";
 import {
   BrowserRouter,
@@ -19,24 +19,22 @@ import RequireAuth from "./routes/guards/RequireAuth";
 import RequireRole from "./routes/guards/RequireRole";
 
 import Home from "./pages/public/Home";
-
 import Admin from "./pages/dashboards/Admin";
-//import HR from "./pages/dashboards/HR";
 import Finance from "./pages/dashboards/Finance";
 import InventoryManagement from "./Components/inventory/InventoryManagement";
 import Product from "./pages/dashboards/Product";
 import Farmer from "./pages/dashboards/Farmer";
 
+import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
 import AddSchedule from "./Components/harvestManagement/AddHarvestSchedule/AddSchedule";
 import ViewSchedule from "./Components/harvestManagement/ViewHarvestSchedule/ViewSchedule";
 import UpdateSchedule from "./Components/harvestManagement/UpdateHarvestSchedule/UpdateSchedule";
-
 import AddYieldRecord from "./Components/harvestManagement/AddYieldRecord/AddYieldRecord";
 import ViewYield from "./Components/harvestManagement/ViewYieldRecord/ViewYield";
 import EditYieldRecord from "./Components/harvestManagement/EditYieldRecord/EditYieldRecord";
-import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
-
+//import HarvestLayout from "./Components/harvestManagement/HarvestLayout";
 import HarvestDashboard from "./Components/harvestManagement/harvestdashboard/HarvestDashboard";
+import WeeklyForecastPage from "./Components/harvestManagement/yieldpredictor/WeeklyForecastPage";
 
 import CustomerProfile from "./pages/profile/CustomerProfile";
 import EditProfile from "./pages/profile/EditCustomerProfile/EditProfile";
@@ -46,6 +44,8 @@ import CustomerDashboard from "./Components/customers/CustomerDashboard/Customer
 import ContactUs from "./Components/customers/ContactUs/ContactUs";
 import Viewcontactus from "./Components/customers/ContactUs/ViewContactUs/Viewcontactus";
 import ProfileOrdersPage from "./Components/customers/profileOrders/ProfileOrdersPage";
+import CustomersManage from "./Components/customers/customermanage/CustomersManage";
+
 
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
@@ -55,6 +55,7 @@ import HRTasks from "./Components/tasksHR/Tasks";
 import HRTasksNew from "./Components/tasksHR/TasksNew";
 import HRAttendance from "./Components/tasksHR/Attendance";
 import HRPayroll from "./Components/tasksHR/Payroll";
+import PayrunView from "./Components/tasksHR/PayrunView";
 import HRPerformance from "./Components/tasksHR/Performance";
 import HRReports from "./Components/tasksHR/Reports";
 import HRSettings from "./Components/tasksHR/Settings";
@@ -62,6 +63,7 @@ import HRSettings from "./Components/tasksHR/Settings";
 import PestDetectDisplay from "./Components/pestControl/PestDetectDisplay/PestDetectDisplay";
 import PestDetectAdd from "./Components/pestControl/PestDetectAdd/PestDetectAdd";
 import PestDetectDashboard from "./Components/pestControl/PestDetectDashboard/PestDetectDashboard";
+import PestAIDetect from "./Components/pestControl/PestAIDetect/PestAIDetect";
 
 import CatalogPage from "./Components/productCatalogue/ProductCatalogCustomer";
 import AdminProducts from "./Components/productCatalogue/ProductCatalogAdmin";
@@ -73,11 +75,14 @@ import QualityCreate from "./Components/qualityControl/QualityCreate";
 import QualityDetail from "./Components/qualityControl/QualityDetail";
 import QualityEdit from "./Components/qualityControl/QualityEdit";
 
+import AdminQualityList from "./Components/qualityControl/AdminQualityList";
+import AdminQualityDetail from "./Components/qualityControl/AdminQualityDetail"; // the page that renders details + AdminGradePanel
+import AdminQualityEdit from "./Components/qualityControl/AdminQualityEdit";
+
 import Cart from "./Components/cart/Cart";
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
 
-//import ProductCatalogDashboard from './Components/productCatalogue/ProductCatalogDashboard';
 import Landing from "./pages/public/Landing/Landing";
 
 import SectionHome from "./Components/plantCultivation/SectionHome";
@@ -85,15 +90,15 @@ import SeedsPage from "./Components/plantCultivation/SeedsPage";
 import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
 import GrowthPage from "./Components/plantCultivation/GrowthPage";
-
+import CultivationTasksAndCharts from "./Components/plantCultivation/CultivationTasksAndCharts";
+import PhenologyHome from "./Components/plantCultivation/PhenologyHome";
 
 import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
-
+import VisitBookingsTable from "./Components/customers/CustomerDashboard/components/VisitBookingsTable";
+import CustomerLayout from "./Components/customers/CustomerLayout";
 
 function Layout({ children }) {
   const location = useLocation();
-
-  // Hide header/footer on auth pages
   const hideOnPaths = ["/auth/Login", "/auth/Signup", "/"];
   const shouldHide = hideOnPaths.includes(location.pathname);
 
@@ -130,51 +135,54 @@ export default function App() {
               <Route path="/profile/edit" element={<EditProfile />} />
             </Route>
 
-            <Route element={<RequireAuth />} />
-            <Route element={<RequireRole roles={["admin"]} />}>
-              <Route path="/admin" element={<Admin />} />
-            </Route>
-
-            {/* Protected areas */}
             <Route element={<RequireAuth />}>
               {/* Admin */}
               <Route element={<RequireRole roles={["admin"]} />}>
                 <Route path="/admin" element={<Admin />} />
               </Route>
 
-              {/* HR */}
               <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
                 <Route path="/hr" element={<HRLayout />}>
-                  <Route index element={<HROverview />} />
+                  {/* Default page when visiting /hr */}
+                  <Route index element={<HREmployees />} />
+
+                  {/* Keep overview accessible here */}
+                  <Route path="overview" element={<HROverview />} />
+
                   <Route path="employees" element={<HREmployees />} />
                   <Route path="employees/new" element={<HREmployeesNew />} />
+
                   <Route path="tasks" element={<HRTasks />} />
                   <Route path="tasks/new" element={<HRTasksNew />} />
+
                   <Route path="attendance" element={<HRAttendance />} />
+
                   <Route path="payroll" element={<HRPayroll />} />
+                  <Route path="payroll/:id" element={<PayrunView />} />
+
                   <Route path="performance" element={<HRPerformance />} />
                   <Route path="reports" element={<HRReports />} />
                   <Route path="settings" element={<HRSettings />} />
                 </Route>
               </Route>
 
-              {/* Finance / Inventory / Product / Farmer */}
+              {/* Finance / Inventory / Product */}
               <Route element={<RequireRole roles={["finance_manager"]} />}>
                 <Route path="/finance" element={<Finance />} />
               </Route>
-
               <Route element={<RequireRole roles={["inventory_manager"]} />}>
                 <Route path="/inventory" element={<InventoryManagement />} />
-            </Route>
+              </Route>
 
               <Route element={<RequireRole roles={["product_manager"]} />}>
                 <Route path="/products" element={<Product />} />
               </Route>
 
+              {/* Farmer / Specialist */}
               <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
                 <Route path="/farmer" element={<Farmer />} />
-
                 <Route path="/farmer/cultivation" element={<SectionHome />} />
+
                 <Route
                   path="/farmer/cultivation/land"
                   element={<LandPrepPage />}
@@ -191,13 +199,20 @@ export default function App() {
                   path="/farmer/cultivation/growth"
                   element={<GrowthPage />}
                 />
-
+                <Route
+                  path="/farmer/cultivation/analytics"
+                  element={<CultivationTasksAndCharts />}
+                />
+                <Route
+                  path="/farmer/cultivation/phenology"
+                  element={<PhenologyHome />}
+                />
               </Route>
-            
             </Route>
 
             <Route path="/climate" element={<ClimateMonitoring />} />
 
+            {/*harvest part*/}
 
             <Route path="/addharvestschedules" element={<AddSchedule />} />
             <Route
@@ -205,23 +220,31 @@ export default function App() {
               element={<UpdateSchedule />}
             />
             <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
+            {/*<Route
+              path="/yieldrecords/edit/:id"
+              element={<EditYieldRecord />}
+            />*/}
+
             <Route
               path="/yieldrecords/edit/:id"
               element={<EditYieldRecord />}
             />
-
             <Route element={<HarvestLayout />}>
               <Route path="/harvestdashboard" element={<HarvestDashboard />} />
               <Route path="/viewharvestschedules" element={<ViewSchedule />} />
               <Route path="/ViewYieldRecords" element={<ViewYield />} />
+              <Route
+                path="/harvest/ai/forecast-weekly"
+                element={<WeeklyForecastPage />}
+              />
             </Route>
 
-            <Route path="/admin" element={<Admin />} />
-
+            {/* Pest */}
             <Route
               path="/PestDetectDashboard"
               element={<PestDetectDashboard />}
             />
+            <Route path="/pests/ai" element={<PestAIDetect />} />
             <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
             <Route
               path="/pests/farmer"
@@ -232,10 +255,8 @@ export default function App() {
               element={<PestDetectAdd role="specialist" />}
             />
 
-            {/* Product Catalog (Customer) */}
+            {/* Catalog */}
             <Route path="/catalog" element={<CatalogPage />} />
-
-            {/*Product Catalog (Admin) */}
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route
               path="/admin/products/new"
@@ -250,14 +271,10 @@ export default function App() {
               element={<ProductCatalogDashboard />}
             />
 
-            <Route
-              path="*"
-              element={<div style={{ padding: 16 }}>404: Not found</div>}
-            />
-
+            {/* Quality */}
             <Route path="/admin" element={<Admin />} />
 
-            <Route
+            {/*<Route
               path="/PestDetectDashboard"
               element={<PestDetectDashboard />}
             />
@@ -269,12 +286,12 @@ export default function App() {
             <Route
               path="/pests/:id/update"
               element={<PestDetectAdd role="specialist" />}
-            />
+            /> */}
 
-            {/* Product Catalog (Customer) */}
+            {/* Product Catalog (Customer)
             <Route path="/catalog" element={<CatalogPage />} />
 
-            {/*Product Catalog (Admin) */}
+            Product Catalog (Admin) 
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route
               path="/admin/products/new"
@@ -287,7 +304,7 @@ export default function App() {
             <Route
               path="/admin/products/dashboard"
               element={<ProductCatalogDashboard />}
-            />
+            /> */}
 
             <Route
               path="*"
@@ -299,7 +316,15 @@ export default function App() {
             {/*customer and buyer management*/}
             <Route path="/visit/book" element={<BookVisit />} />
             <Route path="/visit/success" element={<BookVisitSuccess />} />
-            <Route path="/visits/bookings" element={<CustomerDashboard />} />
+
+            <Route element={<CustomerLayout />}>
+              <Route
+                path="/admin/customerdashboard"
+                element={<CustomerDashboard />}
+              />
+              <Route path="/visits/bookings" element={<VisitBookingsTable />} />
+              <Route path="/admin/customers" element={<CustomersManage />} />
+            </Route>
 
             {/*customer profile*/}
             <Route path="/profile" element={<CustomerProfile />} />
@@ -315,18 +340,20 @@ export default function App() {
             <Route path="/quality/:id" element={<QualityDetail />} />
             <Route path="/quality/:id/edit" element={<QualityEdit />} />
 
+            <Route path="/admin/quality" element={<AdminQualityList />} />
+            <Route path="/admin/quality/:id" element={<AdminQualityDetail />} />
+            <Route
+              path="/admin/quality/:id/edit"
+              element={<AdminQualityEdit />}
+            />
+
             {/* Orders */}
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/:id" element={<OrderDetail />} />
-
-            {/* Cart */}
             <Route path="/cart" element={<Cart />} />
 
-            {/* Final catch-all */}
-            <Route
-              path="*"
-              element={<div style={{ padding: 16 }}>404: Not found</div>}
-            />
+            {/* Final catches */}
+            <Route path="*" element={<Navigate to="/auth/login" replace />} />
           </Routes>
         </Layout>
       </AuthProvider>

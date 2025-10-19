@@ -1,46 +1,63 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { deleteQuality, listQuality } from "./api/qualityApi";
-import QualityTable from "./QualityTable";
+import FarmerQualityTable from "./FarmerQualityTable";
 
 export default function QualityList() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const alive = useRef(true);
 
-  async function load() {
+  async function load({ signal } = {}) {
     setLoading(true);
     try {
-      const data = await listQuality();
-      setItems(data);
+      // ✅ correct signature: (role, params, config)
+      const data = await listQuality("farmer", {}, { signal });
+      const rows = Array.isArray(data) ? data : data?.items || [];
+      if (alive.current) setItems(rows);
     } catch (e) {
-      console.error(e);
-      alert("Failed to fetch records");
+           // Ignore request cancellations (refresh/nav)
+            const canceled = e?.code === "ERR_CANCELED" || e?.message === "canceled";
+            if (!canceled) {
+              console.error("listQuality failed:", e);
+              const msg = e?.response?.data?.error || e?.message || "Failed to fetch records";
+              alert(msg);
+            }
     } finally {
-      setLoading(false);
+      if (alive.current) setLoading(false);
     }
   }
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    alive.current = true;
+    const ctrl = new AbortController();
+    load({ signal: ctrl.signal });
+    return () => {
+      alive.current = false;
+      ctrl.abort();
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     if (!term) return items;
-    return items.filter((r) =>
-      [r.batchId, r.productName, r.variety, r.grade]
-        .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(term))
-    );
+    return items.filter((r) => {
+      const gradeStr = r?.grade?.system || "-";
+      const fields = [r.batchId, r.productName, r.variety, gradeStr].filter(Boolean);
+      return fields.some((v) => String(v).toLowerCase().includes(term));
+    });
   }, [items, q]);
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this record?")) return;
     try {
-      await deleteQuality(id);
-      setItems((prev) => prev.filter((x) => x._id !== id));
+      await deleteQuality(id, "farmer");
+      setItems((prev) => prev.filter((x) => (x._id || x.id) !== id));
     } catch (e) {
-      console.error(e);
-      alert("Delete failed");
+      console.error("deleteQuality failed:", e);
+      const msg = e?.response?.data?.error || e?.message || "Delete failed";
+      alert(msg);
     }
   }
 
@@ -54,14 +71,18 @@ export default function QualityList() {
           style={{ flex: 1, minWidth: 220 }}
         />
         <Link className="btn" to="/quality/new">+ New Record</Link>
-        <button className="btn secondary" onClick={load} disabled={loading}>
+        <button className="btn secondary" onClick={() => load()} disabled={loading}>
           {loading ? "Loading…" : "Refresh"}
         </button>
       </div>
 
-      {loading ? <div className="card">Loading…</div> :
-        <QualityTable items={filtered} onDelete={handleDelete} />
-      }
+      {loading ? (
+        <div className="card">Loading…</div>
+      ) : filtered.length ? (
+        <FarmerQualityTable items={filtered} onDelete={handleDelete} />
+      ) : (
+        <div className="card">No records found.</div>
+      )}
     </section>
   );
 }

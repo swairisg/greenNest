@@ -8,6 +8,8 @@ const Sidebar = ({ vanishState , setVanishState = () => {} }) => {
     { path: '/harvestdashboard', name: 'Dashboard', icon: <FaTachometerAlt /> },
     { path: '/viewharvestschedules', name: 'Harvest Schedules', icon: <FaUsers /> },
     { path: '/ViewYieldRecords', name: 'Yield Records', icon: <FaBoxOpen /> },
+    { path: '/harvest/ai/forecast-weekly', name: 'Weekly Forecast', icon: <FaBoxOpen /> },
+
   ];
 
   return (

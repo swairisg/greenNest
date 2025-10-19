@@ -261,3 +261,10 @@
 @media (min-width: 768px) {
   /* grid for actions no longer used; sidebar handles layout */
 }
+.customr-badge--new { background:#eef6ff; color:#1e40af; border:1px solid #bfdbfe; }
+.customr-badge--approved { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+
+.customr-btn.customr-btn-success {
+  background:#22c55e; color:#ffffff; border:1px solid #16a34a;
+}
+.customr-btn.customr-btn-success:hover { filter:brightness(0.95); }
