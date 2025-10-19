@@ -241,6 +241,7 @@ function PestDetectDashboard() {
         <div className="pd-actions">
           <Link to="/pests/farmer" className="pd-btn pd-btn-primary">+ Report Pest</Link>
           <Link to="/PestDetectDisplay" className="pd-btn pd-btn--ghost">View All</Link>
+          <Link to="/pests/ai" className="pd-btn pd-btn--ghost">🔎Scan for Pests</Link>
         </div>
       </header>
 
