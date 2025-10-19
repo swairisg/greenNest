@@ -6,6 +6,10 @@ const mongoose = require("mongoose");
 //const harvestRouter = require("./Routes/harvestManagement/harvest");
 const orderRoutes = require("./Routes/finance/orderRoute");
 
+//quality
+const { ensureAuth, requireRoles } = require("./middleware/auth");
+
+
 const cors = require("cors");
 const cron = require("node-cron");
 const phenology = require("./Controllers/plantCultivation/phenologyController");
@@ -80,8 +84,34 @@ app.get("/", (_req, res) => res.send("Hello from backend"));
 /* ---------- routes ---------- */
 app.use("/auth", require("./Routes/auth"));
 
-const qualityRoutes = require("./Routes/qualityControl/qualityControlRoute");
-app.use("/api/quality", qualityRoutes);
+//const qualityRoutes = require("./Routes/qualityControl/qualityControlRoute");
+//app.use("/api/quality", qualityRoutes);
+
+
+
+//qualitycontrol farmer (snippet)
+const adminQualityRoutes = require("./Routes/qualityControl/qualityControlAdminroutes");
+app.use(
+  "/api/admin",
+  ensureAuth,
+  requireRoles(["admin"]),
+  adminQualityRoutes
+);
+
+
+const farmerQualityRoutes = require("./Routes/qualityControl/qualityControlFarmerroutes");
+app.use(
+  "/api/farmer",
+  ensureAuth,
+  requireRoles(["farmer", "admin"]), // allow admin to view if you want
+  farmerQualityRoutes
+);
+
+
+
+
+
+
 
 app.use("/api/finance/orders", orderRoutes);
 

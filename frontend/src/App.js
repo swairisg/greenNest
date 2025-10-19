@@ -74,6 +74,12 @@ import QualityCreate from "./Components/qualityControl/QualityCreate";
 import QualityDetail from "./Components/qualityControl/QualityDetail";
 import QualityEdit from "./Components/qualityControl/QualityEdit";
 
+import AdminQualityList from "./Components/qualityControl/AdminQualityList";
+import AdminQualityDetail from "./Components/qualityControl/AdminQualityDetail"; // the page that renders details + AdminGradePanel
+import AdminQualityEdit from "./Components/qualityControl/AdminQualityEdit";
+
+
+
 import Cart from "./Components/cart/Cart";
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
@@ -343,6 +349,10 @@ export default function App() {
             <Route path="/quality/new" element={<QualityCreate />} />
             <Route path="/quality/:id" element={<QualityDetail />} />
             <Route path="/quality/:id/edit" element={<QualityEdit />} />
+
+            <Route path="/admin/quality" element={<AdminQualityList />} />
+            <Route path="/admin/quality/:id" element={<AdminQualityDetail />} />
+            <Route path="/admin/quality/:id/edit" element={<AdminQualityEdit />} />
 
             {/* Orders */}
             <Route path="/orders" element={<OrderList />} />
