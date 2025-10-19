@@ -45,6 +45,7 @@ import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess"
 import CustomerDashboard from "./Components/customers/CustomerDashboard/CustomerDashboard";
 import ContactUs from "./Components/customers/ContactUs/ContactUs";
 import Viewcontactus from "./Components/customers/ContactUs/ViewContactUs/Viewcontactus";
+import CustomersManage from "./Components/customers/customermanage/CustomersManage";
 
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
@@ -89,6 +90,9 @@ import CultivationTasksAndCharts from "./Components/plantCultivation/Cultivation
 import PhenologyHome from "./Components/plantCultivation/PhenologyHome";
 
 import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
+import VisitBookingsTable from "./Components/customers/CustomerDashboard/components/VisitBookingsTable";
+import CustomerLayout from "./Components/customers/CustomerLayout";
+
 
 function Layout({ children }) {
   const location = useLocation();
@@ -118,6 +122,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Layout>
+  
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/welcome" element={<Landing />} />
@@ -216,6 +221,7 @@ export default function App() {
 
             <Route path="/climate" element={<ClimateMonitoring />} />
 
+             {/*harvest part*/}
             <Route path="/addharvestschedules" element={<AddSchedule />} />
             <Route
               path="/viewharvestschedules/:id"
@@ -316,13 +322,21 @@ export default function App() {
             {/*customer and buyer management*/}
             <Route path="/visit/book" element={<BookVisit />} />
             <Route path="/visit/success" element={<BookVisitSuccess />} />
-            <Route path="/visits/bookings" element={<CustomerDashboard />} />
+
+            <Route element={<CustomerLayout />}>
+            <Route path="/admin/customerdashboard" element={<CustomerDashboard />} />
+            <Route path="/visits/bookings" element={<VisitBookingsTable />} />
+             <Route path="/admin/customers" element={<CustomersManage />} />
+            </Route> 
 
             {/*customer profile*/}
             <Route path="/profile" element={<CustomerProfile />} />
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/viewcontactus" element={<Viewcontactus />} />
+            <Route path="/viewcontactus" element={<Viewcontactus />} />            
+            
+
+
 
             {/* Quality Control (matches backend /api/quality) */}
             <Route path="/quality" element={<QualityList />} />

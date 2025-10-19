@@ -52,6 +52,10 @@ import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { Link } from "react-router-dom";
 
+/* === Chatbot (customer) === */
+import CustomerChatbot from "./components/CustomerChatbot";
+import "./components/customerChat.css";
+
 /* === HERO / CAROUSEL IMAGES === */
 import home1 from "../../assests/Home/home1.jpg";
 import home2 from "../../assests/Home/home2.jpg";
@@ -184,7 +188,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ===== WHAT WE OFFER (light-green, NO icons) ===== */}
+      {/* ===== WHAT WE OFFER ===== */}
       <section className="home-offer-section">
         <div className="home-container">
           <h2 className="home-section-title">What we offer</h2>
@@ -211,7 +215,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ===== WHY CHOOSE GREENNEST (WITH ICONS) ===== */}
+      {/* ===== WHY CHOOSE GREENNEST ===== */}
       <section className="home-why-choose-section">
         <div className="home-container">
           <h2 className="home-why-title">Why Choose GreenNest?</h2>
@@ -220,7 +224,6 @@ const HomePage = () => {
             {/* Expertise */}
             <div className="home-feature-item">
               <div className="home-feature-icon">
-                {/* brain */}
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M7.5 4A3.5 3.5 0 0 0 4 7.5v2A3.5 3.5 0 0 0 7.5 13H9v-1.5A2.5 2.5 0 0 0 6.5 9 2.5 2.5 0 0 0 9 6.5V6A2 2 0 0 0 7.5 4ZM16.5 4A2 2 0 0 0 15 6v.5A2.5 2.5 0 0 0 17.5 9 2.5 2.5 0 0 0 15 11.5V13h1.5A3.5 3.5 0 0 0 20 9.5v-2A3.5 3.5 0 0 0 16.5 4ZM9 13v3a2 2 0 1 1-4 0v-1" />
                   <path d="M15 13v3a2 2 0 1 0 4 0v-1" />
@@ -238,7 +241,6 @@ const HomePage = () => {
             {/* Tailored */}
             <div className="home-feature-item">
               <div className="home-feature-icon">
-                {/* puzzle */}
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M8 3h3a2 2 0 1 1 2 2h3a2 2 0 0 1 2 2v3h-1a2 2 0 1 0 0 4h1v3a2 2 0 0 1-2 2h-3v-1a2 2 0 1 0-4 0v1H8a2 2 0 0 1-2-2v-3h1a2 2 0 1 0 0-4H6V7a2 2 0 0 1 2-2Z" />
                 </svg>
@@ -255,7 +257,6 @@ const HomePage = () => {
             {/* Operations */}
             <div className="home-feature-item">
               <div className="home-feature-icon">
-                {/* globe */}
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 3a9 9 0 1 0 0 18A9 9 0 0 0 12 3Zm0 0c-2.5 0-4.5 4-4.5 9s2 9 4.5 9 4.5-4 4.5-9-2-9-4.5-9Zm-7 9h14M5 8h14M5 16h14" />
                 </svg>
@@ -272,7 +273,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ===== STATS PILL (adds CROPS) ===== */}
+      {/* ===== STATS PILL ===== */}
       <section className="home-stats-section">
         <div className="home-container home-stats-wrap">
           <div className="home-stats-pill">
@@ -299,10 +300,11 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* === Customer Chatbot (floating) === */}
+      <CustomerChatbot />
     </div>
   );
 };
 
 export default HomePage;
-
-

@@ -28,6 +28,11 @@ app.use(
 );
 app.use(express.json());
 
+//chatbot
+const customerChatRoutes = require("./Routes/customers/chatbot/customerChat");
+app.use("/api/customer-chat", customerChatRoutes);
+
+
 //harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules", harvestRouter);
@@ -40,6 +45,8 @@ app.use("/hr", hrRoutes);
 
 const plantCultRoutes = require("./Routes/plantCultivation");
 app.use("/plant-cultivation", plantCultRoutes);
+
+
 
 //customer
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
@@ -55,6 +62,11 @@ app.use("/api", visitBookingRoutes);
 
 const contactRoutes = require("./Routes/customers/contactUs/contactus");
 app.use(contactRoutes);
+
+// --- Customers API ---
+const customersRouter = require("./Routes/customers/customerRoute");
+app.use("/api/customers", customersRouter); 
+
 
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");

@@ -5,7 +5,7 @@
   left:0; top:0;
   z-index:1000;
 
-  background:#22c55e;     /* main sidebar background */
+  background:#22c55e;     
   color:#ffffff;          /* default text on sidebar */
 
   transform:translateX(0);
@@ -13,23 +13,24 @@
   will-change:transform, opacity;
 }
 
-/* Hidden/vanished state (used by vanishState === 1) */
+/* Hidden/vanished state  */
 .harvest_sidebar.is-vanished{
   transform:translateX(-100%);
   opacity:0;
   pointer-events:none;
 }
 
+
 .harvest_sidebar-header{
   height:60px;
-  padding:20px;
+  padding:0px;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
 
-  background:#16a34a;          /* slightly darker green */
-  color:#be3838;                /* readable header text */
+  background:#16a34a;          
+  color:#be3838;                
   border-bottom:1px solid #3a9362;
 }
 .harvest_sidebar-header h3{
@@ -42,14 +43,13 @@
   padding: 0px;
 }
 
-/* Link/button items generated from menuItems */
-/* Link/button items generated from menuItems */
+
 .harvest_nav-item{
   display:flex;
   align-items:center;
   width:100%;
-  padding:14px 18px;     /* was 1px 1px — this caused the “compressed” look */
-  min-height:48px;       /* keep a comfy row height */
+  padding:14px 18px;     
+  min-height:48px;       
 
   background:#16a34a;
   border:none;
@@ -61,28 +61,24 @@
   outline: none;
 }
 
-
-/* Hover/active/focus states */
 .harvest_nav-item:hover{
-  background:#bbf7d0;           /* light green hover bg */
-  color:#0b2214;                /* dark readable text */
+  background:#bbf7d0;           
+  color:#0b2214;                
 }
 .harvest_nav-item:active{
-  transform: translateY(0);     /* subtle press */
+  transform: translateY(0);     
 }
 .harvest_nav-item:focus-visible{
   box-shadow:0 0 0 3px rgba(34,197,94,.35);
   border-radius:8px;
 }
 
-/* Active route — applied via className when path matches */
 .harvest_nav-item.active{
   background:#3a9362;
   color:#ffffff;
   border-right:3px solid #3a9362;
 }
 
-/* Icon + text */
 .harvest_nav-icon{
   min-width:20px;
   margin-right:12px;
@@ -94,7 +90,7 @@
 .harvest_nav-text{
   font-weight:600;
   white-space:nowrap;
-  color:inherit;                /* follow parent color */
+  color:inherit;                
 }
 
 .sidebar-overlay{
@@ -127,7 +123,7 @@
 @media (max-width:768px){
   .harvest_sidebar{
     width:280px;
-    transform:translateX(-100%); /* hidden by default on mobile */
+    transform:translateX(-100%); 
   }
   .harvest_sidebar.mobile-open{
     transform:translateX(0);
@@ -146,7 +142,6 @@
   .harvest_sidebar{ width:280px; }
 }
 
-/* ===== Print & Accessibility ===== */
 @media print{
   .harvest_sidebar{ display:none; }
 }
@@ -165,12 +160,11 @@
 }
 html body #root .harvest_sidebar.harvest_sidebar{
   background:#22c55e !important;
-  background-color:#22c55e !important; /* covers longhand overrides */
-  background-image:none !important;     /* in case a gradient/image was set */
+  background-color:#22c55e !important; 
+  background-image:none !important;     
   color:#ffffff !important;
 }
 
-/* header too (if it looks white) */
 html body #root .harvest_sidebar .harvest_sidebar-header{
   background:#16a34a !important;
   background-color:#16a34a !important;
