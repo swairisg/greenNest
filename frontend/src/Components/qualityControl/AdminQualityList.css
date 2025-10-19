@@ -1,0 +1,194 @@
+/* Scope everything to this component to avoid Tailwind collisions */
+[data-gn-admin] {
+    --gn-green-50:  #ecfdf5;
+    --gn-green-100: #d1fae5;
+    --gn-green-200: #a7f3d0;
+    --gn-green-300: #6ee7b7;
+    --gn-green-400: #34d399;
+    --gn-green-500: #10b981;
+    --gn-green-600: #059669;
+    --gn-green-700: #047857;
+    --gn-green-800: #065f46;
+    --gn-surface: #f8fafc;
+    --gn-text: #0f172a;
+    --gn-muted: #64748b;
+    --gn-border: #e5e7eb;
+    --gn-danger: #dc2626;
+    --gn-danger-600: #b91c1c;
+    --gn-white: #ffffff;
+  
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: var(--gn-text);
+  }
+  
+  /* Cards */
+  [data-gn-admin] .gn-admin-card {
+    background: var(--gn-white);
+    border: 1px solid var(--gn-border);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow:
+      0 1px 1px rgba(0,0,0,0.03),
+      0 4px 10px rgba(16,185,129,0.06); /* green glow */
+  }
+  
+  /* Toolbar */
+  [data-gn-admin] .gn-admin-toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+    background: var(--gn-green-50);
+    border-color: var(--gn-green-100);
+  }
+  
+  /* Inputs */
+  [data-gn-admin] .gn-admin-input {
+    flex: 1;
+    min-width: 260px;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid var(--gn-border);
+    border-radius: 10px;
+    outline: none;
+    background: var(--gn-white);
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  
+  [data-gn-admin] .gn-admin-input:focus {
+    border-color: var(--gn-green-400);
+    box-shadow: 0 0 0 4px rgba(16,185,129,0.15);
+  }
+  
+  /* Buttons */
+  [data-gn-admin] .gn-admin-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  [data-gn-admin] .gn-admin-btn {
+    height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--gn-green-500);
+    background: linear-gradient(180deg, var(--gn-green-400), var(--gn-green-600));
+    color: var(--gn-white);
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: transform 0.05s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  [data-gn-admin] .gn-admin-btn:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 6px 16px rgba(16,185,129,0.22);
+  }
+  
+  [data-gn-admin] .gn-admin-btn:active {
+    transform: translateY(1px);
+  }
+  
+  /* Ghost variant (secondary) */
+  [data-gn-admin] .gn-admin-btn.ghost {
+    background: var(--gn-white);
+    color: var(--gn-green-700);
+    border-color: var(--gn-green-300);
+  }
+  
+  [data-gn-admin] .gn-admin-btn.ghost:hover {
+    background: var(--gn-green-50);
+  }
+  
+  /* Table container */
+  [data-gn-admin] .gn-admin-tablewrap {
+    padding: 0;
+  }
+  
+  /* Make AdminQualityTable look consistent if it uses .quality-table/.btn/.badge */
+  [data-gn-admin] .quality-table-container {
+    padding: 12px;
+  }
+  
+  [data-gn-admin] .quality-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+  }
+  
+  [data-gn-admin] .quality-table thead th {
+    text-align: left;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--gn-green-800);
+    background: var(--gn-green-50);
+    border-bottom: 1px solid var(--gn-green-200);
+    padding: 10px 12px;
+  }
+  
+  [data-gn-admin] .quality-table tbody td {
+    border-bottom: 1px solid var(--gn-border);
+    padding: 10px 12px;
+    vertical-align: middle;
+  }
+  
+  [data-gn-admin] .quality-table tbody tr:hover {
+    background: #fafafa;
+  }
+  
+  /* Re-skin generic .btn/.secondary/.danger inside the table */
+  [data-gn-admin] .btn {
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--gn-green-500);
+    background: linear-gradient(180deg, var(--gn-green-400), var(--gn-green-600));
+    color: var(--gn-white);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  [data-gn-admin] .btn.secondary {
+    background: var(--gn-white);
+    color: var(--gn-green-700);
+    border-color: var(--gn-green-300);
+  }
+  
+  [data-gn-admin] .btn.danger {
+    border-color: var(--gn-danger);
+    background: linear-gradient(180deg, #f97316, var(--gn-danger));
+  }
+  
+  [data-gn-admin] .btn + .btn {
+    margin-left: 6px;
+  }
+  
+  /* Grade badges A–F */
+  [data-gn-admin] .badge {
+    display: inline-block;
+    min-width: 26px;
+    text-align: center;
+    border-radius: 999px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+  
+  [data-gn-admin] .grade-A { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+  [data-gn-admin] .grade-B { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+  [data-gn-admin] .grade-C { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+  [data-gn-admin] .grade-D { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+  [data-gn-admin] .grade-E { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+  [data-gn-admin] .grade-F { background: #fee2e2; color: #7f1d1d; border-color: #fca5a5; }
+  
+  /* Empty state */
+  [data-gn-admin] .empty {
+    color: var(--gn-muted);
+    background: var(--gn-surface);
+  }
