@@ -129,7 +129,7 @@ export default function CustomersManage() {
       body: rows,
       startY: 20,
       styles: { fontSize: 9 },
-      headStyles: { fillColor: [34, 197, 94] }, 
+      headStyles: { fillColor: [34, 197, 94] },
     });
 
     doc.save("customers.pdf");

@@ -146,8 +146,10 @@
 .customr-badge--invited         { background:#dbeafe; border-color:#bfdbfe; color:#1d4ed8; }
 .customr-badge--default         { background:#f3f5f7; border-color:#e3e8ef; color:#6b7280; }
 
+/* Rows meta */
 .customr-rowsmeta { margin-top: 12px; color:#6b7280; font-size:13px; }
 
+/* Small screens */
 @media (max-width: 720px){
   .customr-btn, .customr-input, .customr-select { width:100%; }
   .customr-table { border-spacing: 0 8px; }
