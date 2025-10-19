@@ -1,16 +1,49 @@
-const Crop = require("../../Model/plantCultivation/CropModel");
+// Controllers/plantCultivation/phenologyController.js
+
+const SeedBatch = require("../../Model/plantCultivation/SeedBatchModel");
+const Crop = require("../../Model/plantCultivation/CropModel"); // baseline (name, baseTemp, stageGDD)
 const ClimateDaily = require("../../Model/plantCultivation/ClimateDailyModel");
 const PhenologyState = require("../../Model/plantCultivation/PhenologyStateModel");
 const PlantingPlan = require("../../Model/plantCultivation/PlantingPlanModel");
 const Task = require("../../Model/plantCultivation/CultivationTaskModel");
 
+/* ------------------------ helpers ------------------------ */
+
 const onlyDate = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 const meanTemp = (tmin, tmax) => (tmin + tmax) / 2;
 
+/**
+ * Resolve crop name for a plan (cache aware).
+ * Prefer plan.seedBatchId -> SeedBatch.cropType/crop,
+ * fall back to plan.cropType or plan.crop (or variety).
+ */
+async function resolveCropName(plan, cache = {}) {
+  if (!plan) return null;
+
+  if (plan.seedBatchId) {
+    const key = String(plan.seedBatchId);
+    if (cache[key] === undefined) {
+      const sb = await SeedBatch.findById(plan.seedBatchId).lean();
+      cache[key] = sb?.cropType || sb?.crop || null;
+    }
+    if (cache[key]) return cache[key];
+  }
+
+  return plan.cropType || plan.crop || plan.variety || null;
+}
+
+/* -------------------- core compute (GDD) -------------------- */
+
 /** Compute GDD for a plan between lastComputedAt (or startDate) and today */
 async function computePlanGDD(plan) {
-  const crop = await Crop.findOne({ name: new RegExp(`^${plan.crop}$`, "i") });
-  if (!crop) return { updated: false, reason: "missing crop baseline" };
+  // resolve crop name from seed batch first
+  const cropName = await resolveCropName(plan);
+  if (!cropName)
+    return { updated: false, reason: "missing crop name (seed batch / plan)" };
+
+  const crop = await Crop.findOne({ name: new RegExp(`^${cropName}$`, "i") });
+  if (!crop)
+    return { updated: false, reason: `missing crop baseline for ${cropName}` };
 
   const today = onlyDate(new Date());
   const start = onlyDate(new Date(plan.startDate));
@@ -19,12 +52,18 @@ async function computePlanGDD(plan) {
   if (!state) {
     state = await PhenologyState.create({
       plan: plan._id,
-      crop: plan.crop,
+      crop: cropName,
       section: plan.section,
       gddSum: 0,
       predictedStage: "none",
       lastComputedAt: null,
     });
+  } else {
+    // keep crop in sync with the seed batch
+    if (state.crop !== cropName) {
+      state.crop = cropName;
+      await state.save();
+    }
   }
 
   const from = state.lastComputedAt
@@ -45,7 +84,7 @@ async function computePlanGDD(plan) {
   }
 
   if (gddAdd === 0) {
-    // fallback: allow manual entry later; skip if no climate
+    // no climate rows to integrate (keep waiting for data)
     return { updated: false, reason: "no climate rows" };
   }
 
@@ -53,12 +92,12 @@ async function computePlanGDD(plan) {
   state.lastComputedAt = today;
 
   // Predict stage by thresholds
-  const T = crop.stageGDD;
+  const T = crop.stageGDD || {};
   let nextStage = "none";
-  if (state.gddSum >= T.emergence) nextStage = "emergence";
-  if (state.gddSum >= T.vegetative) nextStage = "vegetative";
-  if (state.gddSum >= T.flowering) nextStage = "flowering";
-  if (state.gddSum >= T.fruiting) nextStage = "fruiting";
+  if (state.gddSum >= (T.emergence ?? Infinity)) nextStage = "emergence";
+  if (state.gddSum >= (T.vegetative ?? Infinity)) nextStage = "vegetative";
+  if (state.gddSum >= (T.flowering ?? Infinity)) nextStage = "flowering";
+  if (state.gddSum >= (T.fruiting ?? Infinity)) nextStage = "fruiting";
 
   const changed = nextStage !== state.predictedStage;
   state.predictedStage = nextStage;
@@ -96,28 +135,33 @@ async function computePlanGDD(plan) {
   };
 }
 
-/** GET /plant-cultivation/phenology/summary  -> per-plan phenology snapshot */
+/* ------------------------- endpoints ------------------------- */
+
+/** GET /plant-cultivation/phenology/summary  -> per-plan snapshot */
 exports.summary = async (req, res) => {
   try {
-    const plans = await PlantingPlan.find({}); // could filter active-only
+    const plans = await PlantingPlan.find({}).lean(); // or filter "active"
+    const cropCache = {};
     const rows = await PhenologyState.find({
       plan: { $in: plans.map((p) => p._id) },
-    });
+    }).lean();
 
-    // pack with plan info
     const map = new Map(rows.map((r) => [String(r.plan), r]));
-    const data = plans.map((p) => {
-      const r = map.get(String(p._id));
-      return {
-        planId: p._id,
-        crop: p.crop,
-        section: p.section,
-        startDate: p.startDate,
-        gddSum: r?.gddSum ?? 0,
-        predictedStage: r?.predictedStage ?? "none",
-        lastComputedAt: r?.lastComputedAt || null,
-      };
-    });
+    const data = await Promise.all(
+      plans.map(async (p) => {
+        const r = map.get(String(p._id));
+        const cropName = await resolveCropName(p, cropCache);
+        return {
+          planId: p._id,
+          crop: cropName || "—",
+          section: p.section,
+          startDate: p.startDate,
+          gddSum: r?.gddSum ?? 0,
+          predictedStage: r?.predictedStage ?? "none",
+          lastComputedAt: r?.lastComputedAt || null,
+        };
+      })
+    );
 
     res.json({ data, generatedAt: new Date() });
   } catch (e) {
@@ -142,16 +186,19 @@ exports.recomputeAll = async (req, res) => {
   }
 };
 
-/** GET /plant-cultivation/phenology/:planId  -> single plan forecast */
+/** GET /plant-cultivation/phenology/:planId  -> single plan phenology state */
 exports.forPlan = async (req, res) => {
   try {
-    const p = await PlantingPlan.findById(req.params.planId);
+    const p = await PlantingPlan.findById(req.params.planId).lean();
     if (!p) return res.status(404).json({ message: "Plan not found" });
-    const r = await PhenologyState.findOne({ plan: p._id });
+
+    const cropName = await resolveCropName(p);
+    const r = await PhenologyState.findOne({ plan: p._id }).lean();
+
     res.json({
       data: r || {
         plan: p._id,
-        crop: p.crop,
+        crop: cropName || "—",
         section: p.section,
         gddSum: 0,
         predictedStage: "none",
@@ -160,5 +207,97 @@ exports.forPlan = async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Failed" });
+  }
+};
+
+/* --------- Quick Climate Entry + Series for chart visual --------- */
+
+/** POST /plant-cultivation/phenology/climate  (section, date, tmin, tmax) */
+exports.addClimateDaily = async (req, res) => {
+  try {
+    const { section, date, tmin, tmax } = req.body || {};
+    if (!section || !date)
+      return res.status(400).json({ message: "section and date are required" });
+    if (tmin == null || tmax == null)
+      return res.status(400).json({ message: "tmin and tmax are required" });
+
+    const day = new Date(date);
+    day.setHours(0, 0, 0, 0);
+
+    await ClimateDaily.updateOne(
+      { section, date: day },
+      { $set: { tmin: Number(tmin), tmax: Number(tmax) } },
+      { upsert: true }
+    );
+
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Failed to save climate" });
+  }
+};
+
+/** GET /plant-cultivation/phenology/series/:planId  -> GDD series for chart */
+exports.seriesForPlan = async (req, res) => {
+  try {
+    const planId = req.params.planId;
+    const plan = await PlantingPlan.findById(planId).lean();
+    if (!plan) return res.status(404).json({ message: "Plan not found" });
+
+    const cropName = await resolveCropName(plan);
+    if (!cropName)
+      return res
+        .status(400)
+        .json({ message: "No crop name (seed batch / plan)" });
+
+    const crop = await Crop.findOne({
+      name: new RegExp(`^${cropName}$`, "i"),
+    }).lean();
+    if (!crop)
+      return res
+        .status(400)
+        .json({ message: `No crop baseline for ${cropName}` });
+
+    const start = new Date(plan.startDate);
+    start.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const rows = await ClimateDaily.find({
+      section: plan.section,
+      date: { $gte: start, $lte: today },
+    })
+      .sort({ date: 1 })
+      .lean();
+
+    let cum = 0;
+    const data = rows.map((r) => {
+      const mean = meanTemp(r.tmin, r.tmax);
+      const gdd = Math.max(0, mean - crop.baseTemp);
+      cum += gdd;
+      return {
+        date: r.date,
+        tmin: r.tmin,
+        tmax: r.tmax,
+        mean: Number(mean.toFixed(1)),
+        gdd: Number(gdd.toFixed(1)),
+        cum: Number(cum.toFixed(1)),
+      };
+    });
+
+    res.json({
+      data,
+      thresholds: crop.stageGDD,
+      baseTemp: crop.baseTemp,
+      meta: {
+        planId: plan._id,
+        crop: cropName,
+        section: plan.section,
+        startDate: plan.startDate,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Failed to build series" });
   }
 };

@@ -47,5 +47,7 @@ router.get("/metrics", analytics.metrics);
 router.get("/phenology/summary", phenology.summary);
 router.post("/phenology/recompute", phenology.recomputeAll);
 router.get("/phenology/:planId", phenology.forPlan);
+router.post("/phenology/climate", phenology.addClimateDaily);
+router.get("/phenology/series/:planId", phenology.seriesForPlan);
 
 module.exports = router;
