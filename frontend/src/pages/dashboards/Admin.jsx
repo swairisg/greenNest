@@ -99,6 +99,7 @@ export default function Admin() {
           
           <Link to="/visits/bookings">Customers & Buyers</Link>
           <Link to="/orders">Order Management</Link>
+          <Link to="/admin/quality">Quality Control</Link>
         </nav>
         <div className="gn-admin-sidefooter">
           <small>© {new Date().getFullYear()} GreenNest</small>

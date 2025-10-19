@@ -1,0 +1,79 @@
+/* Scoped wrapper to prevent Tailwind interference */
+.quality-detail-card {
+    all: revert;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(86, 184, 71, 0.1);
+    color: #0f172a;
+    max-width: 800px;
+    margin: 30px auto;
+  }
+  
+  /* Header */
+  .quality-detail-card h2 {
+    color: #56b847;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  
+  /* Table styling */
+  .quality-detail-card table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .quality-detail-card th {
+    background: #f8fafc;
+    text-align: left;
+    font-weight: 500;
+    color: #475569;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .quality-detail-card td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  
+  /* Grade badges */
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: white;
+  }
+  
+  .grade-A { background-color: #56b847; }
+  .grade-B { background-color: #82c91e; }
+  .grade-C { background-color: #fab005; }
+  .grade-D { background-color: #fa5252; }
+  .grade-E { background-color: #e03131; }
+  .grade-F { background-color: #c92a2a; }
+  
+  /* Readings box */
+  .quality-detail-card pre {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #334155;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .quality-detail-card {
+      padding: 14px;
+    }
+    .quality-detail-card th {
+      width: 130px;
+    }
+  }

@@ -1,30 +1,35 @@
 // src/Components/qualityControl/api/qualityApi.js
-import { api } from "./axios";
+import api from "../../../api"; // ✅ shared axios singleton
 
-// Backend mounts at /api/quality
-const base = "/api/quality";
+const getBase = (role = "farmer") =>
+  role === "admin" ? "/api/admin/quality" : "/api/farmer/quality";
 
-export const listQuality = async () => {
-  const { data } = await api.get(base);
-  return data.items ?? [];
+export const listQuality = async (role = "farmer", params = {}, config = {}) => {
+  const { data } = await api.get(getBase(role), { params, ...config });
+  return data.items ?? []; // farmer returns {items}; admin may return pagination
 };
 
-export const createQuality = async (payload) => {
-  const { data } = await api.post(base, payload);
-  return data.item;
+export const createQuality = async (payload, role = "farmer", config = {}) => {
+  const { data } = await api.post(getBase(role), payload, config);
+  return data.item ?? data;
 };
 
-export const getQuality = async (id) => {
-  const { data } = await api.get(`${base}/${id}`);
-  return data.item;
+export const getQuality = async (id, role = "farmer", config = {}) => {
+  const { data } = await api.get(`${getBase(role)}/${id}`, config);
+  return data.item ?? data;
 };
 
-export const updateQuality = async (id, payload) => {
-  const { data } = await api.put(`${base}/${id}`, payload);
-  return data.item;
+export const updateQuality = async (id, payload, role = "admin", config = {}) => {
+  const { data } = await api.patch(`${getBase(role)}/${id}`, payload, config);
+  return data.item ?? data;
 };
 
-export const deleteQuality = async (id) => {
-  const { data } = await api.delete(`${base}/${id}`);
-  return data.item;
+export const deleteQuality = async (id, role = "farmer", config = {}) => {
+  const { data } = await api.delete(`${getBase(role)}/${id}`, config);
+  return data.item ?? data;
+};
+
+export const updateQualityGrade = async (id, payload, config = {}) => {
+  const { data } = await api.patch(`/api/admin/quality/${id}/grade`, payload, config);
+  return data.item ?? data;
 };
