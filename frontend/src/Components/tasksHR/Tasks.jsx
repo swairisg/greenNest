@@ -5,7 +5,7 @@ import api from "../../api";
 import { useHRChrome } from "./HRLayout";
 import "./Employees.css"; // reuse list/table/button styles
 import "./Tasks.css";     // keep visuals parallel to TasksNew form
-import "../../PlainReset.css";
+
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
