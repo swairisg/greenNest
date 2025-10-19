@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
-import "./HRLayout.css"; // make sure the CSS from earlier is present
+import "./HRLayout.css";
 
 const ChromeCtx = createContext({ setRight: () => {}, clearRight: () => {} });
 export const useHRChrome = () => useContext(ChromeCtx);
@@ -57,28 +57,64 @@ export default function HRLayout() {
           <div className="hr-brand">GreenNest • HR & Task Manager</div>
 
           <nav className="hr-nav">
-            <NavLink to="/hr" end className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+            {/* Employees is the default (/hr) */}
+            
+
+            {/* Overview now lives at /hr/overview */}
+            <NavLink
+              to="/hr/overview"
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Overview
             </NavLink>
-            <NavLink to="/hr/employees" className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+
+            <NavLink
+              to="/hr"
+              end
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Employees
             </NavLink>
-            <NavLink to="/hr/tasks" className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+
+            <NavLink
+              to="/hr/tasks"
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Tasks
             </NavLink>
-            <NavLink to="/hr/attendance" className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+
+            <NavLink
+              to="/hr/attendance"
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Attendance & Shifts
             </NavLink>
-            <NavLink to="/hr/payroll" className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+
+            <NavLink
+              to="/hr/payroll"
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Payroll
             </NavLink>
-            <NavLink to="/hr/performance" className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+
+            <NavLink
+              to="/hr/performance"
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Performance
             </NavLink>
-            <NavLink to="/hr/reports" className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+
+            <NavLink
+              to="/hr/reports"
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Reports & Exports
             </NavLink>
-            <NavLink to="/hr/settings" className={({isActive}) => `hr-navlink ${isActive ? "active" : ""}`}>
+
+            <NavLink
+              to="/hr/settings"
+              className={({ isActive }) => `hr-navlink ${isActive ? "active" : ""}`}
+            >
               Settings
             </NavLink>
           </nav>
@@ -87,17 +123,27 @@ export default function HRLayout() {
             <h4>Quick create</h4>
             <Link to="/hr/employees/new">+ New Employee</Link>
             <Link to="/hr/tasks/new">+ New Task</Link>
-            <Link to="/hr/payroll/new">+ New Payrun</Link>
+            {/* If you don't have /hr/payroll/new yet, you can link to /hr/payroll */}
+            <Link to="/hr/payroll">+ New Payrun</Link>
           </div>
         </aside>
 
         {/* Main area */}
         <main className="hr-main">
-          {/* Top bar (right slot or user box + logout) */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-            <div /> {/* left spacer to keep right aligned */}
+          {/* Top bar */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
+            <div /> {/* spacer */}
             {rightSlot ? (
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>{rightSlot}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                {rightSlot}
+              </div>
             ) : (
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div
@@ -124,9 +170,13 @@ export default function HRLayout() {
                       fontWeight: 700,
                     }}
                   >
-                    {String(user?.name || user?.email || "U").slice(0, 1).toUpperCase()}
+                    {String(user?.name || user?.email || "U")
+                      .slice(0, 1)
+                      .toUpperCase()}
                   </div>
-                  <span style={{ fontSize: 13, color: "#065f46", fontWeight: 600 }}>
+                  <span
+                    style={{ fontSize: 13, color: "#065f46", fontWeight: 600 }}
+                  >
                     {user?.name || user?.email}
                   </span>
                 </div>
