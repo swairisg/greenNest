@@ -100,9 +100,17 @@ app.use("/api", visitBookingRoutes);
 const contactRoutes = require("./Routes/customers/contactUs/contactus");
 app.use(contactRoutes);
 
+
+const profileOrders = require("./Routes/customers/profileOrder"); 
+app.use("/api/profileorders", profileOrders); 
+
+const path = require("path");
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // Customers API
 const customersRouter = require("./Routes/customers/customerRoute");
 app.use("/api/customers", customersRouter);
+
 
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
