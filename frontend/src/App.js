@@ -85,6 +85,8 @@ import SeedsPage from "./Components/plantCultivation/SeedsPage";
 import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
 import GrowthPage from "./Components/plantCultivation/GrowthPage";
+import CultivationTasksAndCharts from "./Components/plantCultivation/CultivationTasksAndCharts";
+import PhenologyHome from "./Components/plantCultivation/PhenologyHome";
 
 import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
 
@@ -198,8 +200,19 @@ export default function App() {
                   path="/farmer/cultivation/growth"
                   element={<GrowthPage />}
                 />
+                <Route
+                  path="/farmer/cultivation/analytics"
+                  element={<CultivationTasksAndCharts />}
+                />
+                <Route
+                  path="/farmer/cultivation/phenology"
+                  element={<PhenologyHome />}
+                />
               </Route>
             </Route>
+
+
+            
 
             <Route path="/climate" element={<ClimateMonitoring />} />
 
