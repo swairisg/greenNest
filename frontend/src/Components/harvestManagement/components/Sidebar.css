@@ -20,7 +20,6 @@
   pointer-events:none;
 }
 
-/* ===== Header bar ===== */
 .harvest_sidebar-header{
   height:60px;
   padding:20px;
@@ -44,21 +43,24 @@
 }
 
 /* Link/button items generated from menuItems */
+/* Link/button items generated from menuItems */
 .harvest_nav-item{
   display:flex;
   align-items:center;
   width:100%;
-  padding:12px 20px;
+  padding:14px 18px;     /* was 1px 1px — this caused the “compressed” look */
+  min-height:48px;       /* keep a comfy row height */
 
   background:#16a34a;
   border:none;
-  text-decoration:none;         /* remove Link underline */
-  color:#ffffff;                /* default nav text */
+  text-decoration:none;
+  color:#ffffff;
 
   cursor:pointer;
   transition:background .2s ease, color .2s ease, transform .12s ease;
   outline: none;
 }
+
 
 /* Hover/active/focus states */
 .harvest_nav-item:hover{
@@ -161,7 +163,6 @@
 @media (prefers-reduced-motion: reduce){
   .harvest_sidebar, .harvest_nav-item{ transition:none; }
 }
-/* === FINAL OVERRIDE: make sidebar green, no matter what === */
 html body #root .harvest_sidebar.harvest_sidebar{
   background:#22c55e !important;
   background-color:#22c55e !important; /* covers longhand overrides */

@@ -23,8 +23,9 @@
     "moment-timezone": "^0.6.0",
     "mongoose": "^8.18.3",
     "multer": "^2.0.2",
-    "pdfkit": "^0.17.2",
     "streamifier": "^0.1.1",
+    "node-cron": "^4.2.1",
+    "pdfkit": "^0.17.2",
     "twilio": "^5.10.3"
   },
   "devDependencies": {

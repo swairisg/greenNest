@@ -1,5 +1,7 @@
+// backend/Controllers/customers/visitBookingcontroller.js
 const VisitBooking = require("../../Model/customers/VisitBookingModel");
 
+/* ---------- Helpers & validation ---------- */
 function isPastDate(d) {
   const dt = new Date(d);
   if (Number.isNaN(dt.getTime())) return true;
@@ -12,7 +14,7 @@ const SLOT_OPTIONS = [
   "09:00-10:00","10:00-11:00","11:00-12:00",
   "13:00-14:00","14:00-15:00","15:00-16:00"
 ];
-const isEmail = (v="") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v));
+const isEmail = (v = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v));
 
 function validateBooking(payload) {
   const errs = [];
@@ -26,7 +28,6 @@ function validateBooking(payload) {
   if (!isPhone(phone)) errs.push("Valid phone number is required.");
   if (!preferredDate) errs.push("Preferred date is required.");
   else if (isPastDate(preferredDate)) errs.push("Preferred date cannot be in the past.");
-
   if (!timeSlot || !SLOT_OPTIONS.includes(timeSlot)) errs.push("Please select a valid time slot.");
 
   const count = Number(visitorsCount);
@@ -40,8 +41,18 @@ function validateBooking(payload) {
   return errs;
 }
 
-
-const legacyMap = { new: "pending", approved: "confirmed" };
+/* ---------- Status normalization ----------
+   Your model enum is ["new","approved"].
+   Accept legacy/alias inputs and map them to canonical values.
+------------------------------------------------ */
+const aliasMap = {
+  pending: "new",
+  new: "new",
+  approve: "approved",
+  confirmed: "approved",
+  confirm: "approved",
+  approved: "approved",
+};
 
 function normalizeStatusForDB(nextStatus) {
   if (!nextStatus) return null;
@@ -50,16 +61,20 @@ function normalizeStatusForDB(nextStatus) {
   const enums = (VisitBooking.schema.path("status")?.enumValues) || [];
   if (enums.includes(ui)) return ui;
 
-  const mapped = legacyMap[ui];
+  const mapped = aliasMap[ui];
   if (mapped && enums.includes(mapped)) return mapped;
 
   return { error: `Invalid status '${nextStatus}'. Allowed: ${enums.join(", ")}` };
 }
 
+/* ---------- Controllers ---------- */
+
+// Public create (with honeypot `website`)
 exports.createBooking = async (req, res) => {
   try {
     const payload = req.body;
 
+    // Honeypot: if filled, silently accept to trap bots
     if (payload.website && String(payload.website).trim()) {
       return res.status(200).json({ ok: true });
     }
@@ -77,7 +92,8 @@ exports.createBooking = async (req, res) => {
       timeSlot: payload.timeSlot,
       visitorsCount: Number(payload.visitorsCount),
       purpose: payload.purpose || "",
-      agreeToTerms: true, 
+      agreeToTerms: true, // already validated
+      // status defaults to "new" per model
     });
 
     return res.status(201).json({ data: doc, message: "Booking submitted" });
@@ -87,6 +103,7 @@ exports.createBooking = async (req, res) => {
   }
 };
 
+// List (optionally by email)
 exports.listBookings = async (req, res) => {
   try {
     const filter = {};
@@ -103,6 +120,7 @@ exports.listBookings = async (req, res) => {
   }
 };
 
+// Get one
 exports.getBookingById = async (req, res) => {
   try {
     const doc = await VisitBooking.findById(req.params.id);
@@ -114,6 +132,7 @@ exports.getBookingById = async (req, res) => {
   }
 };
 
+// Admin update (supports status + a few fields)
 exports.updateBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -139,7 +158,7 @@ exports.updateBooking = async (req, res) => {
       if (norm && norm.error) {
         return res.status(400).json({ message: norm.error });
       }
-      payload.status = norm; 
+      payload.status = norm; // canonical enum value ("new" | "approved")
     }
 
     const doc = await VisitBooking.findByIdAndUpdate(id, payload, {
@@ -155,6 +174,7 @@ exports.updateBooking = async (req, res) => {
   }
 };
 
+// Approve shortcut (POST /:id/approve)
 exports.approveBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -178,6 +198,7 @@ exports.approveBooking = async (req, res) => {
   }
 };
 
+// Delete
 exports.deleteBooking = async (req, res) => {
   try {
     const { id } = req.params;

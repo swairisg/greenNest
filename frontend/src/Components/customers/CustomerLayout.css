@@ -1,0 +1,55 @@
+/* Frame */
+.harvest_layout-frame {
+  min-height: 100vh;
+}
+
+/* Topbar */
+.harvest_layout-topbar {
+  position: fixed;
+  inset: 0 0 auto 0;           /* top:0; right:0; left:0 */
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 900;
+}
+
+/* Title */
+.harvest_layout-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #32cd32;
+}
+
+/* Menu button */
+.harvest_layout-menu-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+
+/* Main content */
+.harvest_layout-main {
+  padding: calc(10px + 16px) 16px 24px 16px;  /* topbar height + 16px */
+  margin-left: 250px;                         /* sidebar width */
+  transition: margin-left 220ms ease;
+}
+
+/* Full-width mode when sidebar is hidden */
+.harvest_layout-main.harvest_layout-main--full {
+  margin-left: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .harvest_layout-main { margin-left: 0; }
+}

@@ -35,6 +35,7 @@ import BookVisitSuccess from "./Components/customers/BookVisit/BookVisitSuccess"
 import CustomerDashboard from "./Components/customers/CustomerDashboard/CustomerDashboard";
 import ContactUs from "./Components/customers/ContactUs/ContactUs";
 import Viewcontactus from "./Components/customers/ContactUs/ViewContactUs/Viewcontactus";
+import CustomersManage from "./Components/customers/customermanage/CustomersManage";
 
 import HRLayout from "./Components/tasksHR/HRLayout";
 import HROverview from "./Components/tasksHR/Overview";
@@ -44,6 +45,7 @@ import HRTasks from "./Components/tasksHR/Tasks";
 import HRTasksNew from "./Components/tasksHR/TasksNew";
 import HRAttendance from "./Components/tasksHR/Attendance";
 import HRPayroll from "./Components/tasksHR/Payroll";
+import PayrunView from "./Components/tasksHR/PayrunView";
 import HRPerformance from "./Components/tasksHR/Performance";
 import HRReports from "./Components/tasksHR/Reports";
 import HRSettings from "./Components/tasksHR/Settings";
@@ -63,6 +65,12 @@ import QualityCreate from "./Components/qualityControl/QualityCreate";
 import QualityDetail from "./Components/qualityControl/QualityDetail";
 import QualityEdit from "./Components/qualityControl/QualityEdit";
 
+import AdminQualityList from "./Components/qualityControl/AdminQualityList";
+import AdminQualityDetail from "./Components/qualityControl/AdminQualityDetail"; // the page that renders details + AdminGradePanel
+import AdminQualityEdit from "./Components/qualityControl/AdminQualityEdit";
+
+
+
 import Cart from "./Components/cart/Cart";
 import OrderList from "./Components/finance/Orders/OrderList";
 import OrderDetail from "./Components/finance/Orders/OrderDetail";
@@ -74,8 +82,12 @@ import SeedsPage from "./Components/plantCultivation/SeedsPage";
 import LandPrepPage from "./Components/plantCultivation/LandPrepPage";
 import PlansPage from "./Components/plantCultivation/PlansPage";
 import GrowthPage from "./Components/plantCultivation/GrowthPage";
+import CultivationTasksAndCharts from "./Components/plantCultivation/CultivationTasksAndCharts";
+import PhenologyHome from "./Components/plantCultivation/PhenologyHome";
 
 import ClimateMonitoring from "./Components/climateCheck/ClimateMonitoring";
+import VisitBookingsTable from "./Components/customers/CustomerDashboard/components/VisitBookingsTable";
+import CustomerLayout from "./Components/customers/CustomerLayout";
 
 function Layout({ children }) {
   const location = useLocation();
@@ -96,6 +108,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Layout>
+  
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/welcome" element={<Landing />} />
@@ -114,16 +127,25 @@ export default function App() {
                 <Route path="/admin" element={<Admin />} />
               </Route>
 
-              {/* HR */}
               <Route element={<RequireRole roles={["hr_manager", "admin"]} />}>
                 <Route path="/hr" element={<HRLayout />}>
-                  <Route index element={<HROverview />} />
+                  {/* Default page when visiting /hr */}
+                  <Route index element={<HREmployees />} />
+
+                  {/* Keep overview accessible here */}
+                  <Route path="overview" element={<HROverview />} />
+
                   <Route path="employees" element={<HREmployees />} />
                   <Route path="employees/new" element={<HREmployeesNew />} />
+
                   <Route path="tasks" element={<HRTasks />} />
                   <Route path="tasks/new" element={<HRTasksNew />} />
+
                   <Route path="attendance" element={<HRAttendance />} />
+
                   <Route path="payroll" element={<HRPayroll />} />
+                  <Route path="payroll/:id" element={<PayrunView />} />
+
                   <Route path="performance" element={<HRPerformance />} />
                   <Route path="reports" element={<HRReports />} />
                   <Route path="settings" element={<HRSettings />} />
@@ -137,6 +159,7 @@ export default function App() {
               <Route element={<RequireRole roles={["inventory_manager"]} />}>
                 <Route path="/inventory" element={<InventoryManagement />} />
               </Route>
+
               <Route element={<RequireRole roles={["product_manager"]} />}>
                 <Route path="/products" element={<Product />} />
               </Route>
@@ -145,17 +168,42 @@ export default function App() {
               <Route element={<RequireRole roles={["farmer", "specialist"]} />}>
                 <Route path="/farmer" element={<Farmer />} />
                 <Route path="/farmer/cultivation" element={<SectionHome />} />
-                <Route path="/farmer/cultivation/land" element={<LandPrepPage />} />
-                <Route path="/farmer/cultivation/seeds" element={<SeedsPage />} />
-                <Route path="/farmer/cultivation/plans" element={<PlansPage />} />
-                <Route path="/farmer/cultivation/growth" element={<GrowthPage />} />
+
+              
+                <Route
+                  path="/farmer/cultivation/land"
+                  element={<LandPrepPage />}
+                />
+                <Route
+                  path="/farmer/cultivation/seeds"
+                  element={<SeedsPage />}
+                />
+                <Route
+                  path="/farmer/cultivation/plans"
+                  element={<PlansPage />}
+                />
+                <Route
+                  path="/farmer/cultivation/growth"
+                  element={<GrowthPage />}
+                />
+                <Route
+                  path="/farmer/cultivation/analytics"
+                  element={<CultivationTasksAndCharts />}
+                />
+                <Route
+                  path="/farmer/cultivation/phenology"
+                  element={<PhenologyHome />}
+                />
               </Route>
             </Route>
 
-            {/* Climate */}
-            <Route path="/climate" element={<ClimateMonitoring />} />
 
-            {/* Harvest */}
+            
+
+          <Route path="/climate" element={<ClimateMonitoring />} />
+
+             {/*harvest part*/}
+
             <Route path="/addharvestschedules" element={<AddSchedule />} />
             <Route path="/viewharvestschedules/:id" element={<UpdateSchedule />} />
             <Route path="/AddYieldRecord/:id" element={<AddYieldRecord />} />
@@ -181,12 +229,77 @@ export default function App() {
             <Route path="/admin/products/dashboard" element={<ProductCatalogDashboard />} />
 
             {/* Quality */}
+            <Route path="/admin" element={<Admin />} />
+
+              {/*<Route
+              path="/PestDetectDashboard"
+              element={<PestDetectDashboard />}
+            />
+            <Route path="/PestDetectDisplay" element={<PestDetectDisplay />} />
+            <Route
+              path="/pests/farmer"
+              element={<PestDetectAdd role="farmer" />}
+            />
+            <Route
+              path="/pests/:id/update"
+              element={<PestDetectAdd role="specialist" />}
+            /> */}
+
+            {/* Product Catalog (Customer)
+            <Route path="/catalog" element={<CatalogPage />} />
+
+            Product Catalog (Admin) 
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route
+              path="/admin/products/new"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/:id/edit"
+              element={<ProductCatalogForm />}
+            />
+            <Route
+              path="/admin/products/dashboard"
+              element={<ProductCatalogDashboard />}
+            /> */}
+
+            <Route
+              path="*"
+              element={<div style={{ padding: 16 }}>404: Not found</div>}
+            />
+
+            <Route path="*" element={<Navigate to="/auth/login" replace />} />
+
+            {/*customer and buyer management*/}
+            <Route path="/visit/book" element={<BookVisit />} />
+            <Route path="/visit/success" element={<BookVisitSuccess />} />
+
+            <Route element={<CustomerLayout />}>
+            <Route path="/admin/customerdashboard" element={<CustomerDashboard />} />
+            <Route path="/visits/bookings" element={<VisitBookingsTable />} />
+             <Route path="/admin/customers" element={<CustomersManage />} />
+            </Route> 
+
+            {/*customer profile*/}
+            <Route path="/profile" element={<CustomerProfile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/viewcontactus" element={<Viewcontactus />} />            
+            
+
+
+
+            {/* Quality Control (matches backend /api/quality) */}
             <Route path="/quality" element={<QualityList />} />
             <Route path="/quality/new" element={<QualityCreate />} />
             <Route path="/quality/:id" element={<QualityDetail />} />
             <Route path="/quality/:id/edit" element={<QualityEdit />} />
 
-            {/* Orders & Cart */}
+            <Route path="/admin/quality" element={<AdminQualityList />} />
+            <Route path="/admin/quality/:id" element={<AdminQualityDetail />} />
+            <Route path="/admin/quality/:id/edit" element={<AdminQualityEdit />} />
+
+            {/* Orders */}
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/:id" element={<OrderDetail />} />
             <Route path="/cart" element={<Cart />} />
