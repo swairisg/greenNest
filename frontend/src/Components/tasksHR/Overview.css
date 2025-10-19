@@ -1,0 +1,73 @@
+/* PAGE LAYOUT */
+.overview-gap {
+  display: grid;
+  gap: 20px;
+}
+
+/* KPIs */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.kpi-card {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+.kpi-card .kpi-label { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+.kpi-card .kpi-value { font-size: 28px; font-weight: 700; color: #065f46; }
+
+/* CHARTS */
+.chart-grid {
+  display: grid;
+  /* Each card gets at least 520px width; page will scroll vertically on small screens */
+  grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+  gap: 18px;
+}
+
+.chart-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px 14px;
+  /* give charts breathing room */
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.chart-title {
+  margin: 0;
+  font-size: 18px;
+  color: #065f46;
+}
+
+/* The area where ResponsiveContainer mounts the chart */
+.chart-body {
+  flex: 1 1 auto;
+  min-height: 320px; /* <-- charts will use all this height */
+}
+
+/* Recharts polish */
+.recharts-default-tooltip {
+  border-radius: 8px !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 6px 16px rgba(16, 24, 40, 0.08) !important;
+  font-size: 12px !important;
+}
+.recharts-legend-item-text { font-size: 12px; color: #374151; }
+
+/* Make it single-column on very narrow screens */
+@media (max-width: 560px) {
+  .chart-grid { grid-template-columns: 1fr; }
+}

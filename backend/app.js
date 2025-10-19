@@ -11,6 +11,8 @@ const { ensureAuth, requireRoles } = require("./middleware/auth");
 
 
 const cors = require("cors");
+const cron = require("node-cron");
+const phenology = require("./Controllers/plantCultivation/phenologyController");
 
 // temporary minimal users router to prevent crash
 const { Router } = require("express");
@@ -30,6 +32,11 @@ app.use(
 );
 app.use(express.json());
 
+//chatbot
+const customerChatRoutes = require("./Routes/customers/chatbot/customerChat");
+app.use("/api/customer-chat", customerChatRoutes);
+
+
 //harvest
 const harvestRouter = require("./Routes/harvestManagement/harvest");
 app.use("/HarvestSchedules", harvestRouter);
@@ -42,6 +49,8 @@ app.use("/hr", hrRoutes);
 
 const plantCultRoutes = require("./Routes/plantCultivation");
 app.use("/plant-cultivation", plantCultRoutes);
+
+
 
 //customer
 const publicVisitRoutes = require("./Routes/customers/visitBooking");
@@ -57,6 +66,11 @@ app.use("/api", visitBookingRoutes);
 
 const contactRoutes = require("./Routes/customers/contactUs/contactus");
 app.use(contactRoutes);
+
+// --- Customers API ---
+const customersRouter = require("./Routes/customers/customerRoute");
+app.use("/api/customers", customersRouter); 
+
 
 // routes
 const pestRoutes = require("./Routes/pestControl/PestDetectRoute");
@@ -124,7 +138,6 @@ app.use("/api/inventory-alerts", InventoryAlerts);
 const reportRoutes = require("./Routes/inventory/ReportRoute");
 app.use("/api/reports", reportRoutes);
 
-//==========climate routes============
 // Climate routes
 const climateRoutes = require("./Routes/climateCheck/ClimateRoutes");
 app.use("/api/climate", climateRoutes);
@@ -132,11 +145,13 @@ app.use("/api/climate", climateRoutes);
 const automationRoutes = require("./Routes/climateCheck/automationRoutes");
 app.use("/api/automation", automationRoutes);
 const climateAlerts = require("./Routes/climateCheck/AlertRoutes");
-const climateAlertService = require('./utils/climateAlertService');
+const climateAlertService = require("./utils/climateAlertService");
 app.use("/api/climate-alerts", climateAlerts);
-const whatsappService = require('./utils/WhatsAppService');
+const whatsappService = require("./utils/WhatsAppService");
 // External data
-const { fetchAndStoreExternalData } = require("./Controllers/climateCheck/ClimateController");
+const {
+  fetchAndStoreExternalData,
+} = require("./Controllers/climateCheck/ClimateController");
 app.post("/api/fetch-external", fetchAndStoreExternalData);
 
 // ---------- Root route ----------
@@ -178,6 +193,33 @@ mongoose
     // Ensure indexes are in place (safe to call on every boot)
     await User.syncIndexes();
     await EmployeeProfile.syncIndexes();
+
+    // ---- Phenology (GDD) nightly recompute ----
+    // Tiny wrapper because the controller method is an Express handler (req,res)
+    const runPhenologyRecompute = async (reason = "manual/boot") => {
+      try {
+        console.log(`[Phenology] Recompute start (${reason})`);
+        // call controller with dummy req/res to reuse its logic
+        await phenology.recomputeAll(
+          {}, // req
+          {
+            json: (payload) =>
+              console.log(
+                "[Phenology] Recompute OK:",
+                payload?.at || new Date().toISOString()
+              ),
+          }
+        );
+        console.log("[Phenology] Recompute done");
+      } catch (e) {
+        console.error("[Phenology] Recompute failed:", e?.message || e);
+      }
+    };
+
+    cron.schedule("15 2 * * *", () => runPhenologyRecompute("cron"), {
+      timezone: "Asia/Colombo",
+    });
+    console.log("Phenology cron scheduled: 02:15 Asia/Colombo daily");
 
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);

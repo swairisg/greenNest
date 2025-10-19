@@ -5,6 +5,8 @@ const seed = require("../../Controllers/plantCultivation/seedController");
 const land = require("../../Controllers/plantCultivation/landPrepController");
 const plan = require("../../Controllers/plantCultivation/planController");
 const growth = require("../../Controllers/plantCultivation/growthController");
+const analytics = require("../../Controllers/plantCultivation/analyticsController");
+const phenology = require("../../Controllers/plantCultivation/phenologyController");
 
 const router = express.Router();
 
@@ -38,5 +40,14 @@ router.post("/plans/:planId/logs", growth.create);
 router.get("/plans/:planId/logs/:logId", growth.get);
 router.patch("/plans/:planId/logs/:logId", growth.update);
 router.delete("/plans/:planId/logs/:logId", growth.remove);
+
+router.get("/metrics", analytics.metrics);
+
+// Phenology & Autopilot
+router.get("/phenology/summary", phenology.summary);
+router.post("/phenology/recompute", phenology.recomputeAll);
+router.get("/phenology/:planId", phenology.forPlan);
+router.post("/phenology/climate", phenology.addClimateDaily);
+router.get("/phenology/series/:planId", phenology.seriesForPlan);
 
 module.exports = router;
